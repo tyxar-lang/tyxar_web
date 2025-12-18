@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href=".images/langx.ico" type="image/x-icon" >
+    <title>LangX Programming Language</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <header id="header"></header>
+    <!-- Main Content -->
+    <main>
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="container">
+                <div class="hero-content">
+                    <h1>LangX</h1>
+                    <h2>Modern Programming Language</h2>
+                    <p>
+                        The Human-to-Machine Communication Bridge, designed to be simple and easy to read and write, just as one naturally does so with English
+                    </p>
+                    <div class="hero-buttons">
+                        <a href="download" class="btn btn-primary">Download LangX</a>
+                        <a href="docs" class="btn btn-secondary">Documentation</a>
+                    </div>
+                    <div class="version-info" style="margin-top: 30px; font-size: 15px; opacity: 0.9;">
+                        Latest stable version: <strong>v1.4.0</strong> • Released June 2025 •
+                        <a href="docs/changelog" style="color: var(--accent-blue); text-decoration: underline;">View
+                            changelog</a>
+                    </div>
+                </div>
+                <div class="code-example">
+                    <pre><code>
+Variables:
+The color is 'red'
+the number is '2' as a digit
+the state is the detailed state id for each tence in the color
+the greeting is "Hello, World!"
+the name is ""
+
+write the detailed state id for "hey"
+
+write the state id for the number
+
+write the number
+
+write the greeting
+
+write the color
+
+
+input the name 'Name: '   
+
+write the name
+                    </code></pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section class="features">
+            <div class="container">
+                <h2>Why LangX?</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">⚡</div>
+                        <h3>High Performance</h3>
+                        <p>Near-native execution speed with zero-cost abstractions and efficient memory management.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🛡️</div>
+                        <h3>Memory Safe</h3>
+                        <p>Advanced ownership system prevents common bugs while maintaining performance.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🔧</div>
+                        <h3>Enterprise Ready</h3>
+                        <p>Built-in tooling for large codebases and team development workflows.</p>
+                    </div>
+                   <!-- <div class="feature-card">
+                        <div class="feature-icon">🌐</div>
+                        <h3>Cross-Platform</h3>
+                        <p>Compile to multiple targets including WebAssembly, mobile, and embedded systems.</p>
+                    </div>
+                </div>-->
+            </div>
+        </section>
+
+        <!-- Use Cases -->
+       <!-- <section class="use-cases">
+            <div class="container">
+                <h2>Ideal For</h2>
+                <div class="cases-grid">
+                    <div class="case-item">
+                        <h3>Financial Systems</h3>
+                        <p>High-frequency trading, risk analysis, and banking applications</p>
+                    </div>
+                    <div class="case-item">
+                        <h3>Game Development</h3>
+                        <p>Game engines, server backends, and performance-critical components</p>
+                    </div>
+                    <div class="case-item">
+                        <h3>Web Services</h3>
+                        <p>High-throughput APIs, microservices, and distributed systems</p>
+                    </div>
+                    <div class="case-item">
+                        <h3>Embedded Systems</h3>
+                        <p>IoT devices, robotics, and resource-constrained environments</p>
+                    </div>
+                </div>
+            </div>
+        </section> -->
+
+        <!-- CTA Section -->
+        <section class="cta">
+            <div class="container">
+                <h2>Ready to get started with LangX?</h2>
+                <p>Join thousands of developers building the next generation of applications.</p>
+                <div class="cta-buttons">
+                    <a href="download" class="btn btn-primary">Download Now</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer id="footer"></footer>
+
+    <!-- Load your main script file -->
+
+    <!-- Scripts -->
+    <script src="script.js"></script>
+    <script>
+        // Function to load external HTML content
+            function loadHTML(url, elementId) {
+                fetch(url)
+                    .then(response => response.text())
+                    .then(data => {
+                        document.getElementById(elementId).innerHTML = data;
+
+                        // --- CRITICAL STEP ---
+                        // Re-run initialization to catch the *new* links in the footer 
+                        // AND the sidebar links (since they use the global selector now)
+                        initializeContentLoader();
+                    })
+                    .catch(err => console.error(`Error loading ${url}:`, err));
+            }
+
+            // Call these functions when the main page loads:
+            document.addEventListener('DOMContentLoaded', (event) => {
+                // Load Header, Footer, and Sidebar
+                loadHTML('header.html', 'header');
+                loadHTML('footer.html', 'footer');
+
+                // If sidebar is only used in the 'doc' index.html, call it conditionally:
+                if (document.getElementById('sidebar')) {
+                    loadHTML('docs/sidebar.html ', 'sidebar');
+                }
+            });
+    </script>
+</body>
+
+</html>

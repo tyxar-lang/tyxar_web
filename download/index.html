@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href=".images/langx.ico" type="image/x-icon">
+    <title>Download - LangX Programming Language</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+    <!-- Header -->
+    <header id="header"></header>
+
+    <!-- Main Content -->
+    <main>
+
+        <!-- Hero / Download Section -->
+        <section class="hero" style="padding: 140px 0 100px;">
+            <div class="container">
+                <div class="hero-content">
+                    <h1>Download Blade IDE</h1>
+                    <p style="font-size: 22px; max-width: 700px;">
+                        The official integrated development environment for LangX.<br>
+                        Write, run, and manage LangX projects with a modern, powerful editor built from the ground up.
+                    </p>
+
+                    <div class="cta-buttons" style="margin-top: 40px; justify-content: center;">
+                        <a href="/downloads/windows" class="btn btn-primary"
+                            style="font-size: 18px; padding: 16px 36px;">
+                            Download for Windows
+                        </a>
+                        <a href="/downloads/macos" class="btn btn-primary"
+                            style="font-size: 18px; padding: 16px 36px;">
+                            Download for macOS
+                        </a>
+                        <a href="/downloads/linux" class="btn btn-primary"
+                            style="font-size: 18px; padding: 16px 36px;">
+                            Download for Linux
+                        </a>
+                    </div>
+
+                    <div class="version-info" style="margin-top: 30px; font-size: 15px; opacity: 0.9;">
+                        Latest stable version: <strong>v1.4.0</strong> • Released June 2025 •
+                        <a href="docs/changelog" style="color: var(--accent-blue); text-decoration: underline;">View
+                            changelog</a>
+                    </div>
+
+                    <p style="margin-top: 50px; font-size: 16px; opacity: 0.9;">
+                        Blade IDE includes the full LangX compiler, runtime, package manager, and real-time
+                        English-to-code intelligence.<br>
+                        No separate installation required — everything works out of the box.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- Features Grid -->
+        <section class="features">
+            <div class="container">
+                <h2 style="text-align: center; color: var(--metal-dark);">Why Choose Blade?</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">💬</div>
+                        <h3>Write Code in English</h3>
+                        <p>LangX lets you program using full, readable English sentences — no cryptic syntax.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">⚡</div>
+                        <h3>Real-Time Execution</h3>
+                        <p>See your program run instantly as you type. No compile-wait-run cycle.</p>
+                    </div>
+                    <!-- <div class="feature-card">
+                    <div class="feature-icon">AI-Powered</div>
+                    <h3>Smart Autocomplete</h3>
+                    <p>Context-aware suggestions that understand your intent — not just keywords.</p>
+                </div>          -->
+                      <div class="feature-card">
+                    <div class="feature-icon">🐛</div>
+                    <h3>Integrated Debugging Tools</h3>
+                    <p>Step through your code, inspect variables, and fix issues without leaving the IDE.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">💻</div>
+                    <h3>One IDE, All Platforms</h3>
+                    <p>Windows, macOS, and Linux — same experience, same performance.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📦</div>
+                    <h3>Built-in Package System</h3>
+                    <p>Install libraries with natural commands: <code>install web framework</code></p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔧</div>
+                    <h3>Fully Customizable</h3>
+                    <p>Blade is highly customizable. Themes, plugins, and core can be tailored to your workflow.</p>
+                </div>
+            </div>
+            </div>
+        </section>
+
+
+
+        <!-- Final CTA -->
+        <section class="cta">
+            <div class="container">
+                <h2>Start Coding in English Today</h2>
+                <p>Join the next generation of developers who write code the way they think.</p>
+                <div class="cta-buttons">
+                    
+                    <a href="docs/get-started" class="btn btn-secondary">Read the Guide →</a>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer id="footer"></footer>
+
+    <!-- Scripts -->
+    <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            fetch('../header.html').then(r => r.text()).then(h => document.getElementById('header').innerHTML = h);
+            fetch('footer.html').then(r => r.text()).then(f => document.getElementById('footer').innerHTML = f);
+        });
+    </script>
+</body>
+
+</html>

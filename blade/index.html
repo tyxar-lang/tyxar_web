@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href=".images/langx.ico" type="image/x-icon">
+    <title>BLADE - Beginner Language Accelerated Development Environment</title>
+    <link rel="stylesheet" href="../styles.css">
+</head>
+
+<body>
+    <!-- Header -->
+    <header id="header"></header>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="container">
+                <div class="hero-content">
+                    <h1>Blade</h1>
+                    <h2>Beginner Language Accelerated Development Environment</h2>
+                    <p>
+                        "Write English. Cut through silicon."
+                    </p>
+                    <p>
+                        Official lock-in: LANGX | BLADE
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section class="features">
+            <div class="container">
+                <h2>Key Features</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">🚀</div>
+                        <h3>Accelerated Development</h3>
+                        <p>Streamline your coding process with intuitive tools designed for rapid prototyping and development in LangX.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🔧</div>
+                        <h3>Integrated Tools</h3>
+                        <p>Built-in debugging, syntax highlighting, and project management tools tailored for LangX development.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🌐</div>
+                        <h3>Cross-Platform</h3>
+                        <p>Run Blade on Windows, macOS, and Linux, ensuring a consistent development experience everywhere.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Mission Section -->
+        <section class="use-cases">
+            <div class="container">
+                <h2>Our Mission</h2>
+                <div style="max-width: 800px; margin: 0 auto; text-align: left;">
+                    <p style="font-size: 18px; line-height: 1.8; margin-bottom: 30px; color: #e2e8f0;">
+                        Blade is the official IDE for LangX, designed to accelerate the development process for programmers of all levels.
+                        By integrating seamlessly with LangX's English-like syntax, Blade empowers developers to focus on creativity
+                        rather than syntax struggles.
+                    </p>
+                    <p style="font-size: 18px; line-height: 1.8; margin-bottom: 30px; color: #e2e8f0;">
+                        Whether you're a beginner taking your first steps in programming or an experienced developer building complex applications,
+                        Blade provides the tools and environment to bring your ideas to life efficiently.
+                    </p>
+                    <p style="font-size: 18px; line-height: 1.8; margin-bottom: 30px; color: #e2e8f0;">
+                        As part of the LANGX | BLADE ecosystem, Blade ensures that writing code feels as natural as writing in English,
+                        cutting through the barriers of traditional programming.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Values Section -->
+        <section class="features" style="background: #f7fafc;">
+            <div class="container">
+                <h2>Core Values</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">🎓</div>
+                        <h3>Beginner-Friendly</h3>
+                        <p>Designed with beginners in mind, Blade simplifies the learning curve and makes programming approachable.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">⚡</div>
+                        <h3>Efficiency</h3>
+                        <p>Accelerate your development workflow with powerful features that save time and reduce errors.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🔗</div>
+                        <h3>Integration</h3>
+                        <p>Seamlessly integrated with LangX, providing a cohesive environment for language and development.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quotes Section -->
+        <section id="quotes">
+            <h1>Inspirational Quotes</h1>
+            <div class="scrolling_quotes">
+                <p>"The best error message is the one that never shows up." – Thomas Fuchs</p>
+                <p>"Programming isn't about what you know; it's about what you can figure out." – Chris Pine</p>
+                <p>"Code is like humor. When you have to explain it, it's bad." – Cory House</p>
+                <p>"Blade: Where English meets execution." – LangX Team</p>
+                <p>"First, solve the problem. Then, write the code." – John Johnson</p>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="cta">
+            <div class="container">
+                <h2>Start Developing with Blade</h2>
+                <p>Download Blade and begin your journey in accelerated development with LangX.</p>
+                <div class="cta-buttons">
+                    <a href="download" class="btn btn-primary">Download Blade</a>
+                    <a href="docs" class="btn btn-secondary">Explore Documentation</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer id="footer"></footer>
+
+    <!-- Scripts -->
+    <script src="../script.js"></script>
+    <script>
+        // Function to load external HTML content
+        function loadHTML(url, elementId) {
+            fetch(url)
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById(elementId).innerHTML = data;
+
+                    // --- CRITICAL STEP ---
+                    // Re-run initialization to catch the *new* links in the footer 
+                    // AND the sidebar links (since they use the global selector now)
+                    initializeContentLoader();
+                })
+                .catch(err => console.error(`Error loading ${url}:`, err));
+        }
+
+        // Call these functions when the main page loads:
+        document.addEventListener('DOMContentLoaded', (event) => {
+            // Load Header, Footer, and Sidebar
+            loadHTML('../header.html', 'header');
+            loadHTML('../footer.html', 'footer');
+
+            // If sidebar is only used in the 'doc' index.html, call it conditionally:
+            if (document.getElementById('sidebar')) {
+                loadHTML('doc/ ', 'sidebar');
+            }
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const scrollingQuotes = document.querySelector('.scrolling_quotes');
+            if (scrollingQuotes) {
+                const quotes = scrollingQuotes.innerHTML;
+                scrollingQuotes.innerHTML = quotes + quotes;
+                let scrollPosition = 0;
+                const speed = 1;
+                function animate() {
+                    scrollPosition += speed;
+                    if (scrollPosition >= scrollingQuotes.scrollWidth / 2) {
+                        scrollPosition = 0;
+                    }
+                    scrollingQuotes.style.transform = `translateX(-${scrollPosition}px)`;
+                    requestAnimationFrame(animate);
+                }
+                animate();
+            }
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,443 @@
+Tyxer_1
+
+
+Content:
+    COMMENTS
+    OUTPUTS
+    VARIABLES
+    INPUTS
+    STATE IDENTIFICATION
+    TEXT MANIPULATION
+
+
+Tyxer_1.0.0 (UPDATED)
+---------------------------------------------------------------------------------------------------------------------------------
+1 - COMMENTS
+
+Comments on code are ignored, and can be used for annotations as well as debugging.
+Comments need '#' on both sides. This applies to both single and multiple lines alike.
+
+Examples:
+
+    # This is a Comment. #
+
+    # This is a 
+    Multilined Comment. #
+---------------------------------------------------------------------------------------------------------------------------------
+
+
+---------------------------------------------------------------------------------------------------------------------------------
+2 - OUTPUTS
+
+In order to output text to the screen, the Command_Word - 'write' is used (Case Sensitive).
+Content to be displayed on screen come immediately after the Command_Word - 'write'.
+
+Cases where 'write' could be used, with respective examples:
+    - Strings:
+        Strings to be displayed are encased in QOUTATION_MARKS - "" or ''
+        Examples:
+
+            write "HellO, World!"
+            write 'Hey, there'
+
+            Output:
+
+                Hello, World!
+                Hey, there
+    
+    - Variables(See Rule ?):
+        Variables to be displayed are placed immediately after the 'write' Command_Word.
+        Variables to be dispalyed along side hard-coded strings are encased in SQUARE_BRACKETS - []
+            This is to be done within the QOUTATION_MARKS of the string.
+        (Making sure that "The" or "the" is always accompanied by any variable name.)
+        Examples:
+
+            write the answer
+            write "Your user name is [the user_name]. Welcome, [the user_name]!"
+
+            Output:
+            (Given that the variavles "answer" and "user_name" are 10 and "JackP" respectively)
+
+                10
+                Your user name is JackP. Welcome, JackP!
+
+    - State Idetification(See Rule ?)
+        Outputing State Identification would display the state of the value it is identifying.
+
+            Examples:
+
+                write the state id for "Chemistry"
+                write the detailed state id for "Chemistry"
+                write the detailed state id for each typo in "Chemistry" # Or 'term' or 'tence' #
+                write the state if for the name
+                write the detailed state id for the name
+                write the detailed state id for each typo in the name # Or 'term' or 'tence' #
+
+                Output:
+                (Given that the variable 'name' is 'Albert')
+
+                    Phrase
+                    'Chemistry' is a Phrase
+                    'C' is a Letter
+                    'h' is a Letter
+                    'e' is a Letter
+                    'm' is a Letter
+                    'i' is a Letter
+                    's' is a Letter
+                    't' is a Letter
+                    'r' is a Letter
+                    'y' is a Letter
+                    Phrase
+                    'Albert' is a Phrase
+                    'A' is a Letter
+                    'l' is a Letter
+                    'b' is a Letter
+                    'e' is a Letter
+                    'r' is a Letter
+                    't' is a Letter
+
+    - Adjusting Text Case(See Rule ?)
+        When the text case is set to be adjusted with a display to the screen, it is displayed just as it has been intended.
+
+            Examples:
+
+                write to adjust "Hello, there!" to CAPS
+                write to adjust "Hello, there!" to Capital
+                write to adjust "Hello, there!" to plain
+                write to adjust "Hello, there!" to Capital at point 3,7
+                write to adjust "Hello, there!" to plain at point 4,9
+                write to adjust the mood to CAPS
+                write to adjust the mood to Capital
+                write to adjust the mood to plain
+                write to adjust the mood to Capital at point 2
+                write to adjust the mood to plain at point 4
+
+                    Output:
+                    (Given that the variable 'mood' is 'Excited')
+
+                        HELLO, THERE!
+                        
+---------------------------------------------------------------------------------------------------------------------------------
+
+
+Tyxer_1.0.1
+---------------------------------------------------------------------------------------------------------------------------------
+3 - VARIABLES
+
+At the start of the code, variables listed out under the umbrella "variables:"
+This includes all variables, whether they have assigned data or not
+"variables:" must not be indented
+
+4: To assign data to variables, use "is"
+
+5: To show the variable name, use "the" or "The" interchangeably before the variable name. If the variable name is more than one word, underscores"_" are put between the words to merge the words ans one variable name
+
+6: Empty variables have empty quotation marks instead of data for vacancy "" or ''
+
+7: Data assigned to variables are written immediately after "is" and in qoutation marks "" or ''. All in the quotation marks are saved as data. TYXER can understand variables that contain sectences especially when its hardcoded
+
+
+
+8: To assign multiple data to multiple variables, a semi column ";" is used to differenciate between variables.
+
+9: Variables can be written on the same line as the unbrella or the next line, or one variable per line. Indentation is only for neatness here and does not matter.
+
+10: To define the state of a variable, the term "as a " is used to link the variable to the state.*
+the states are(for now):
+
+as a phrase for strings
+as a number for numbers(generic)
+--> as a calc for arithmetic calculations(to give answers)
+as a decimal for decimal numbers
+as a digit for integers (whole numbers)
+as a letter for individual alphabets
+--> as a symbol for symbols
+as a constant for constants -constants cannot ne changes at all even when using "to change" it is a constant, it cannot change-
+--> as a boolean for booleans - all of these(must have capital first letters) These include:
+Yes/No
+True/False
+Positive/Negative
+Right/Left
+North/South
+West/East
+Foward/Backward
+Fore/Hind
+Black/While
+Up/ Down
+Front/Back
+Upward/Downward
+Good/Bad
+Pure/Evil
+
+
+Please ensure they are all spelt correctly
+and they have all their first letters as capitals
+
+
+EXAMPLE:
+
+variables: The type is "" as a phrase; the colour is 'blue' as a phrase; the size is '13' as a number; The colour_shade is "red" as a phrase
+
+OR
+
+
+variables:
+ The type is '' as a phrase; the colour is "blue" as a phrase; the size is "13" as a number; The colour_shade is "red" as a phrase
+
+OR
+
+ The type is "" as a phrase; 
+the colour is 'blue' as a phrase; 
+the size is '13' as a number;
+ The colour_shade is 'red' as a phrase;
+ the idea is False as a bool 
+
+
+* If the state of the variable is not declared, TYXER automatically discerns the state.
+letters are strings and numbers are integers, but letters and numbers together are strings.
+
+--> booleans do not have qoutation marks around them. if so then they are words not booleans
+Example:
+
+
+ the colour is "blue"; -string-
+the size is "13"; -integer-
+ The answer is "twenty7"; -string-
+The idea is True -bool-
+
+11: To output a data in a variable, use "write" with the variable name. "The " or "the" is also needed here to indicate the variable name that follows. No qoutation marks here since we dont want the avriable name to be output.
+
+Example:
+write the colour
+
+rule 12:
+
+To output a variable or variables within hardcoded text, quotation marks are used for the text. Then brackets are used to house the variable. "the" or "The" is needed
+
+example:
+
+write "Hello, (The name). How are you?"
+
+out put: Hello, Peter. How are you?
+
+OR
+
+write "You have chosen (the colour) and (the size)."
+
+output:  You have chosen green and xxl
+
+Tyxer_1.0.2
+INPUTS
+13: To input data to a variable, the command "Input" is used. It must always start with a capital "I".
+
+14: To show what variable the input would be stored *in, the variable name would be after the input. "The" or "the" is needed!
+
+15: Optional, but make provision for it! : To prompt the user to input or to show what the variable name for the input is, quotation marks "" or '' are used to store the text to be output
+
+* The state of the input would be declared in the variable umbrella, beside the variable for that input. If not stated, the input is discerned automatically. So, if the variable is a "as a phrase" the input would be treated as a string etc
+
+Examples
+
+Input the type
+
+OR
+
+Input the type 'Type is: '
+
+output:  Type is: 
+
+OR
+
+Input the type "What is your prefered type? "
+
+Rule 16: Inputs can be used to reassign data to a variable or change/update data in a variable. "to change" would be before the variable name and the input prompt in quotation marks. This is to change or update data in a variable
+This means that data in a variable cannot be changed by a user when using the program unless the code allows it(no overwriting unless intended)*
+if there is a variable data stored in the variable, and there is a line that writes an input to that variable, without "to change", there is a logic error tell the user what is wrong
+
+Example:
+
+variables:
+the type is 'xl' as a phrase.
+
+Input to change the type "Type is: "
+
+output:  Type is:
+
+OR 
+
+variables:
+the type is 'xl' as a phrase.
+
+Input to change the type
+
+output: 
+
+
+If:
+
+variables:
+the type is 'xl' as a phrase.
+
+Input the type(Type is: )
+
+output
+
+TYXER ain't happy: Logic error...
+
+* this will not work for constant variables(as a const)
+
+
+
+STATE IDENTIFICATION
+
+17: To find the state of data, the term "State id" or "state id", followed by "for" to indicate what we are finding.
+
+18: "state id" or "State id" can be used to find the state of individual characters and words. "typo" is used for individual characters and "term" is used for groups of characters(words).
+To find the state of groups of words (sectences), "tence" is used.
+
+19: If "typo", "term" or "tence" is not identified, TYXER discerns which to use based on the data, whether it is a character, word or sentence
+
+20: ":" is always needed before the data that we need to find its state. It indicates that what follows is the data.
+
+Examples:
+State id for term:
+State id for typo:
+State id for tence:
+
+OR
+
+state id for term:
+state id for typo:
+state id for tence:
+
+21: If the data is hardcoded, it is nested in qoutation marks "" or ''
+    Example:
+         State id for term: "ant"
+
+22: If we are finding the state of data, which is in a variable, no need for qoutation marks
+    Booleans also do not use qoutation marks
+    Example:
+        state id for term: the size
+        state id for: the size (see rule 19)
+        state id for: False(must be capital first letter and also listed in the bool, else, it is a syntax error)
+
+To output the state, we "write" and then the syntax for state IDENTIFICATION (rules 17-22)
+
+Examples:
+
+write state id for term: "great"
+
+    output: phrase
+
+write State id for typo: "i"
+
+    Output: Letter
+
+write state id for typo: "7"
+
+    Output: Number
+
+write State id for term: "8.3"
+
+    Output: Decimal
+
+write state id for typo: "£"   *
+
+    Output: Symbol
+
+write state id for term: Right
+
+    Output: Boolean
+
+write state id for tence: "The answer is 7."
+
+    Output: phrase
+            phrase
+            phrase
+            Number
+            Symbol
+
+* Only "typo" can be used for data that its state is unknown, a tence or a term, it gets each individual character (ignoring spaces) and finds its state
+Which means Term can be used only for terms, tence canbe used only for sentences, but typo can be used for all.
+if term and tence are used incorrectly, it is an error
+ Example: 
+    write state id for typo: "8.3b"
+
+        Output: Number
+                Symbol
+                Number
+                Letter
+
+24: a state could be set as a variable using the normal format (rules 4-9). However the state of this variable cannot be set using "as a" is is a syntax error*
+
+Example: 
+    The test is state id for term : "Great" 
+Data stored:  phrase
+
+    the idea is state id for: True
+Data stored:  Boolean
+
+25: For a more detailed state identification, "detailed" or "Detailed" is to be before the "state id"
+
+Example:
+ write detailed state id for tence: "the ant"
+
+ Output:  
+        "the" is a phrase
+        "ant" is a phrase
+
+    The name is detailed state id for: "i"
+
+Data stored: "i" is a letter
+
+    write detailed State id for: "!z36x"
+
+    Output:
+     "!z36x" is a phrase (this is treated as a string)
+
+*  The data for this could be held in another variable 
+    Example: 
+        The colour is "red";
+        The state is state id for term: The colour;
+        the idea is Right;
+        the path is state id for term: the idea
+
+        data stored for state: phrase
+        data stored for path: Boolean
+
+        If the variable holding the data is the variable with the state id, there is a logic error
+         In the example below it is because the variable "colour" is declared as the state id for an undeclared variable, because colour hasn't been declared yet
+         Similarly variables with data in them need to be declared before having a variable with its data being the state id of an already existing variable
+        if the variable is empty, the state id is "NONE"
+        Example: 
+          The colour is state id for : The colour  
+
+          TYXER aint happy: loggic error.... 
+
+
+          The colour is "red";
+          The name is state id for: the colour   - good example-
+
+            - bad example-
+            the name is state id for: the house_type;
+            the house_type is "duplex"
+
+        TYXER aint happy: ...........
+
+        The name is ""
+        write state id for : the name
+          
+          output: 
+             NONE
+
+26: If the form (term typo or tence) of data is unknown, only 2 things can be done
+ Use typo or leave it blank. This is helpful because a user can input a character, a term or a tence, and it will not work if term is hardcoded and the user inputs a character
+
+ Example: State id for typo : user_responce
+  OR
+            State id for: the user_responce
+
+
+TEXT MANIPULATION
+
+27:

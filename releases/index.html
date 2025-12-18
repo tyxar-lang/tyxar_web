@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href=".images/langx.ico" type="image/x-icon">
+    <title>Releases - LangX Programming Language</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+    <header id="header"></header>
+
+    <main>
+
+        <!-- Hero -->
+        <section class="hero" style="padding: 120px 0 100px;">
+            <div class="container">
+                <div class="hero-content">
+                    <h1>LangX Releases</h1>
+                    <p style="font-size: 22px; max-width: 700px;">
+                        Download the latest stable version of LangX and Blade IDE.<br>
+                        All releases are thoroughly tested and ready for production use.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- Current Stable Release -->
+        <section class="features">
+            <div class="container">
+                <h2 style="text-align: center; margin-bottom: 20px;">Current Stable Release</h2>
+                <div style="max-width: 800px; margin: 0 auto 60px; text-align: center;">
+                    <div style="font-size: 72px; font-weight: 800; color: var(--accent-blue); margin-bottom: 16px;">
+                        v1.0.0
+                    </div>
+                    <p style="font-size: 20px; color: var(--metal-medium);">
+                        <strong>Released:</strong> 13 November 2025<br>
+                        The first official stable release of LangX and Blade IDE.
+                    </p>
+                    <div style="margin-top: 30px;">
+                        <a href="download" class="btn btn-primary" style="font-size: 18px; padding: 16px 40px;">
+                            Download v1.0.0
+                        </a>
+                    </div>
+                </div>
+
+                <div class="features-grid"
+                    style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; max-width: 1000px; margin: 0 auto;">
+                    <div class="feature-card">
+                        <h3 style="color: var(--accent-blue-dark);">LangX Language</h3>
+                        <ul style="text-align: left; margin-top: 16px; color: var(--metal-medium);">
+                            <li>First stable specification</li>
+                            <li>Full English syntax support</li>
+                            <li>Native compilation to machine code</li>
+                            <li>Built-in package manager</li>
+                            <li>Zero-cost abstractions</li>
+                        </ul>
+                    </div>
+                    <div class="feature-card">
+                        <h3 style="color: var(--accent-blue-dark);">Blade IDE</h3>
+                        <ul style="text-align: left; margin-top: 16px; color: var(--metal-medium);">
+                            <li>Official cross-platform editor</li>
+                            <li>Real-time execution engine</li>
+                            <li>Smart English autocomplete</li>
+                            <li>Integrated debugger</li>
+                            <li>Extension marketplace ready</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+
+        <!-- Previous / Future Releases (Ready for the future) -->
+        <section class="features">
+            <div class="container">
+                <h2 style="text-align: center; margin-bottom: 40px;">Release History</h2>
+                <div style="max-width: 800px; margin: 0 auto; text-align: center;">
+                    <p style="color: var(--metal-medium); font-size: 18px; margin-bottom: 40px;">
+                        v1.0.0 is the first public release.<br>
+                        <strong>Next major release:</strong> v1.2.0 — May 2026
+                    </p>
+
+                    <div
+                        style="background: white; padding: 40px; border-radius: 12px; box-shadow: 0 4px 16px rgba(0,0,0,0.05);">
+                        <h3 style="margin-bottom: 20px; color: var(--metal-dark);">All Releases</h3>
+                        <table style="width: 100%; border-collapse: collapse; font-size: 16px;">
+                            <thead>
+                                <tr style="border-bottom: 2px solid #e2e8f0;">
+                                    <th style="text-align: left; padding: 12px 0;">Version</th>
+                                    <th style="text-align: left; padding: 12px 0;">Release Date</th>
+                                    <th style="text-align: left; padding: 12px 0;">Status</th>
+                                    <th style="text-align: left; padding: 12px 0;">Download</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr style="border-bottom: 1px solid #e2e8f0;">
+                                    <td style="padding: 16px 0; font-weight: 600;">v1.0.0</td>
+                                    <td style="padding: 16px 0;">13 November 2025</td>
+                                    <td style="padding: 16px 0;"><strong style="color: #48bb78;">Active Support</strong>
+                                    </td>
+                                    <td style="padding: 16px 0;"><a href="download"
+                                            style="color: var(--accent-blue);">Download →</a></td>
+                                </tr>
+                                <!-- Future rows will go here automatically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- Final CTA -->
+        <section class="cta">
+            <div class="container">
+                <h2>Get Started with LangX v1.0.0</h2>
+                <p>The most natural programming experience ever built.</p>
+                <div class="cta-buttons">
+                    <a href="download" class="btn btn-primary">Download Blade IDE</a>
+                    <a href="docs/get-started" class="btn btn-secondary">Read Documentation →</a>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer id="footer"></footer>
+
+    <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            fetch('../header.html').then(r => r.text()).then(h => document.getElementById('header').innerHTML = h);
+            fetch('footer.html').then(r => r.text()).then(f => document.getElementById('footer').innerHTML = f);
+        });
+    </script>
+</body>
+
+</html>

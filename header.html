@@ -1,0 +1,204 @@
+<!-- ../header.html -->
+<div class="container">
+
+        <div style="display:flex;" class="logo">
+            <a href="/">
+                
+            <img src="/tyxar_web/.images/langx.png" alt="LangX Logo">
+            <h1>LangX</h1>
+        </a>
+        </div>
+        
+    
+    <div class="header-bottom">
+        <div class="search-container">
+            <input type="text" class="search-bar" placeholder="  Search...">
+            <span class="clear-icon">×</span>
+            <span class="search-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                </svg>
+            </span>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="/tyxar_web/index.html">Home</a></li>
+                <li><a href="/tyxar_web/blade">BLADE</a></li>
+                <li><a href="/tyxar_web/docs">Documentation</a></li>
+                <li><a href="/tyxar_web/releases">Releases</a></li>
+                <li><a href="/tyxar_web/download">Download</a></li>
+                <li><a href="/tyxar_web/community">Community</a></li>
+                <li><a href="/tyxar_web/about">About</a></li>
+                <li><a href="/tyxar_web/account" class="account-link">Sign In</a></li>
+            </ul>
+        </nav>
+        <a href="/tyxar_web/menu" class="hamburger">☰</a>
+    </div>
+    <!--<div style="background-color: azure; padding: 20px; border-radius: 20px;">
+        <h1>NEWS</h1>
+        <p>some news here</p>
+    </div> -->
+</div>
+
+<style>
+    header {
+        background: linear-gradient(135deg, #2a3439 0%, #4a5568 100%);
+        padding: 1rem 2rem;
+        width: 100%;
+        top: 0;
+        z-index: 1000;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: center;
+        min-height: 150px;
+    }
+    
+
+    .logo img {
+        height: 70px;
+        padding-right: 20px;
+    }
+    .logo a {
+        margin-left: 10px;
+        color: white;
+        font-size: 20px;
+        align-self: center;
+        text-decoration: none !important;
+        display:flex;
+        align-items:center;
+    }
+    .header-bottom {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        padding-top: 1rem;
+        border-top: 1px solid #6dafff;
+        padding-bottom: 10px;
+        
+    }
+
+    .search-container {
+        position: relative;
+        display: flex;
+        align-items: center;
+    }
+
+    .search-bar {
+        padding: 0.5rem 3rem 0.5rem 1rem;
+        border: none;
+        border-radius: 20px;
+        background: rgba(0, 0, 0, 0.812);
+        color: white;
+        width: 200px;
+    }
+
+    .search-icon {
+        position: absolute;
+        right: 10px;
+        color: #6dafff;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 20px;
+        height: 20px;
+    }
+
+    .search-icon svg {
+        width: 16px;
+        height: 16px;
+    }
+
+    .clear-icon {
+        position: absolute;
+        right: 35px;
+        color: #6dafff;
+        cursor: pointer;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        width: 20px;
+        height: 20px;
+        font-size: 18px;
+        line-height: 1;
+    }
+
+    nav ul {
+        display: flex;
+        list-style: none;
+    }
+
+    nav ul li {
+        margin: 0 1rem;
+        display:flex;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    }
+
+    nav ul li a {
+        color: white;
+        text-decoration: none;
+        transition: color 0.3s;
+    }
+
+    nav ul li a:hover {
+        color: #6dafff;
+    }
+
+    .account-link {
+        padding: 1rem 2rem;
+        border: 2px solid rgb(255, 255, 255);
+        transition: box-shadow 0.3s;
+    }
+
+    .account-link:hover {
+        color: #6dafff;
+        box-shadow: 0 0 10px white;
+    }
+
+    /* Hamburger Menu Icon */
+    .hamburger {
+        display: none;
+        font-size: 2rem;
+        color: white;
+        cursor: pointer;
+        text-decoration: none;
+    }
+
+    .hamburger:hover {
+        color: #6dafff;
+    }
+
+    /* Responsive Design for Mobile */
+    @media (max-width: 1060px) {
+        header {
+            padding: 1rem;
+        }
+
+        .logo img {
+            height: 50px;
+        }
+
+        .header-bottom {
+            flex-direction: row;
+            gap: 1rem;
+        }
+
+        .search-container {
+            flex: 1;
+        }
+
+        .search-bar {
+            width: 100%;
+        }
+
+        nav {
+            display: none;
+        }
+
+        .hamburger {
+            display: block;
+        }
+    }
+</style>

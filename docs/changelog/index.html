@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href=".images/langx.ico" type="image/x-icon">
+    <title>Get-Started - Documentation</title>
+    <link rel="stylesheet" href="../styles.css">
+</head>
+
+<body>
+    <header id="header"></header>
+
+    <div class="docs">
+        <div class="sidebar">
+            <div id="sidebar"></div>
+        </div>
+        <div id="content" class="content">
+
+
+
+            <div class="content-wrapper">
+                <h1>ChangeLog</h1>
+                <section id="v1_1.0">
+                    <h2>Installation</h2>
+                    <p>LangX is easy to install and get started with. Follow these steps to set up LangX on your system.
+                    </p>
+
+                    <h3>Windows</h3>
+                    <pre><code># Download the installer from the downloads page
+# Run the installer and follow the setup wizard
+# Verify installation by running:
+langx --version</code></pre>
+
+                    <h3>macOS</h3>
+                    <pre><code># Using Homebrew
+brew install langx
+
+# Or download from the downloads page
+# Verify installation:
+langx --version</code></pre>
+
+                    <h3>Linux</h3>
+                    <pre><code># Using package manager
+sudo apt-get install langx
+
+# Or download from the downloads page
+# Verify installation:
+langx --version</code></pre>
+                </section>
+
+                <section id="quick-start">
+                    <h2>Quick Start</h2>
+                    <p>Let's write your first LangX program!</p>
+
+                    <h3>Your First Program</h3>
+                    <p>Create a file named <code>hello.langx</code>:</p>
+                    <pre><code>print("Hello, World!")</code></pre>
+
+                    <p>Run it with:</p>
+                    <pre><code>langx hello.langx</code></pre>
+
+                    <h3>Basic Syntax</h3>
+                    <p>LangX has a clean and intuitive syntax. Here are some basics:</p>
+                    <pre><code># Variables
+name = "LangX"
+version = 1.0
+
+# Functions
+func greet(name) {
+    return "Hello, " + name
+}
+
+# Call function
+print(greet(name))</code></pre>
+                </section>
+
+                <section>
+                    <h2>Next Steps</h2>
+                    <p>Now that you have LangX installed and have written your first program, check out:</p>
+                    <ul>
+                        <li>Language Basics - Learn about variables, data types, and operators</li>
+                        <li>Control Flow - Understand conditionals, loops, and functions</li>
+                        <li>Advanced Topics - Explore modules, classes, and error handling</li>
+                    </ul>
+                </section>
+            </div>
+
+        </div>
+
+
+
+        <!-- Scripts -->
+        <script src="script.js"></script>
+        <script>
+
+            document.addEventListener('DOMContentLoaded', () => {
+                const docsContainer = document.querySelector('.docs');
+                const contentArea = document.querySelector('.content');
+
+                if (!docsContainer || !contentArea) return;
+
+                // Create sidebar if missing
+                let sidebar = document.querySelector('.sidebar');
+                if (!sidebar) {
+                    sidebar = document.createElement('div');
+                    sidebar.className = 'sidebar';
+                    docsContainer.insertBefore(sidebar, contentArea);
+                }
+
+                fetch('sidebar.html')
+                    .then(r => { if (!r.ok) throw Error(r.status); return r.text(); })
+                    .then(html => {
+                        sidebar.innerHTML = html;
+
+                        // Only run on mobile/tablet
+                        if (window.innerWidth > 1023) return;
+
+                        // Floating toggle button
+                        const btn = document.createElement('button');
+                        btn.innerHTML = 'Menu';
+                        btn.setAttribute('aria-label', 'Toggle navigation');
+                        Object.assign(btn.style, {
+                            position: 'fixed',
+                            left: '16px',
+                            width: '56px',
+                            height: '56px',
+                            background: 'white',
+                            color: 'var(--metal-dark)',
+                            border: 'none',
+                            borderRadius: '12px',
+                            fontSize: '28px',
+                            fontWeight: 'bold',
+                            cursor: 'pointer',
+                            zIndex: '1001',
+                            boxShadow: '0 4px 20px rgba(0,0,0,0.2)',
+                            transition: 'all 0.3s ease',
+                        });
+                        document.body.appendChild(btn);
+
+                        const MIN_TOP = 160;   // Starting position when page is at top
+                        const STICKY_TOP = 10;   // Final sticky position when scrolled
+                        const OPEN_TOP = 10;   // Force to 10px when sidebar is open
+
+                        let isOpen = false;
+
+                        const updateButton = () => {
+                            isOpen = sidebar.classList.contains('open');
+                            btn.innerHTML = isOpen ? '×' : '☰';
+                            btn.style.background = isOpen ? 'var(--accent-blue)' : 'white';
+                            btn.style.color = isOpen ? 'white' : 'var(--metal-dark)';
+
+                            // When sidebar is open → force button to 10px immediately
+                            if (isOpen) {
+                                btn.style.top = `${OPEN_TOP}px`;
+                            } else {
+                                // Normal smart sticky behavior
+                                const scrolled = window.scrollY;
+                                let top = MIN_TOP - scrolled;
+                                top = Math.max(STICKY_TOP, Math.min(MIN_TOP, top));
+                                btn.style.top = `${top}px`;
+                            }
+                        };
+
+                        // Toggle sidebar
+                        btn.onclick = e => {
+                            e.stopPropagation();
+                            sidebar.classList.toggle('open');
+                            updateButton();
+                        };
+
+                        // Close when clicking outside
+                        document.addEventListener('click', e => {
+                            if (isOpen && !sidebar.contains(e.target) && !btn.contains(e.target)) {
+                                sidebar.classList.remove('open');
+                                updateButton();
+                            }
+                        });
+
+                        // Close with Escape
+                        document.addEventListener('keydown', e => {
+                            if (e.key === 'Escape' && isOpen) {
+                                sidebar.classList.remove('open');
+                                updateButton();
+                            }
+                        });
+
+                        // Scroll handler — only affects position when sidebar is closed
+                        const handleScroll = () => {
+                            if (!isOpen) updateButton();
+                        };
+
+                        window.addEventListener('scroll', handleScroll);
+
+                        // Initial setup
+                        updateButton();
+                        handleScroll();
+                    })
+                    .catch(err => {
+                        console.error('Sidebar failed:', err);
+                        sidebar.innerHTML = '<p style="color:red;padding:20px;">Sidebar failed to load</p>';
+                    });
+            });
+            // Load footer and sidebar
+            // Load footer and sidebar
+            fetch('footer.html')
+                .then(response => response.text())
+                .then(data => {
+                    const f = document.getElementById('footer'); if (f) f.innerHTML = data;
+                })
+                .catch(err => console.error('Error loading footer:', err));
+
+            fetch('../header.html')
+                .then(response => response.text())
+                .then(data => {
+                    const f = document.getElementById('header'); if (f) f.innerHTML = data;
+                })
+                .catch(err => console.error('Error loading footer:', err));
+
+            fetch('sidebar.html')
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('sidebar').innerHTML = data;
+                    // Initialize content loader after sidebar is loaded
+                    setTimeout(() => {
+                        initializeContentLoader();
+                    }, 100);
+                })
+                .catch(err => {
+                    console.error('Error loading sidebar:', err);
+                });
+        </script>
+</body>
+
+</html>

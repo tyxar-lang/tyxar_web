@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href=".images/langx.ico" type="image/x-icon">
+    <title>Search Results - LangX Programming Language</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .search-results-page {
+            padding: 60px 0 100px;
+            min-height: 60vh;
+        }
+        
+        .search-results-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .search-results-header {
+            margin-bottom: 40px;
+        }
+        
+        .search-results-header h1 {
+            font-size: 36px;
+            color: var(--metal-dark);
+            margin-bottom: 10px;
+        }
+        
+        .search-query-display {
+            font-size: 18px;
+            color: var(--metal-medium);
+            margin-bottom: 30px;
+        }
+        
+        .search-query-display strong {
+            color: var(--accent-blue);
+            font-weight: 600;
+        }
+        
+        .search-results-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .search-result-card {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .search-result-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+            border-color: var(--accent-blue);
+        }
+        
+        .search-result-card-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--metal-dark);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .search-result-card-title svg {
+            width: 20px;
+            height: 20px;
+            color: var(--accent-blue);
+            flex-shrink: 0;
+        }
+        
+        .search-result-card-url {
+            font-size: 14px;
+            color: var(--accent-blue);
+            margin-bottom: 12px;
+            word-break: break-all;
+        }
+        
+        .search-result-card-snippet {
+            font-size: 15px;
+            color: var(--metal-medium);
+            line-height: 1.6;
+        }
+        
+        .search-result-card-snippet .highlight {
+            background: rgba(99, 179, 237, 0.2);
+            color: var(--accent-blue-dark);
+            font-weight: 600;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+        
+        .no-results {
+            text-align: center;
+            padding: 60px 20px;
+        }
+        
+        .no-results h2 {
+            font-size: 28px;
+            color: var(--metal-dark);
+            margin-bottom: 16px;
+        }
+        
+        .no-results p {
+            font-size: 16px;
+            color: var(--metal-medium);
+            margin-bottom: 30px;
+        }
+        
+        .search-loading-state {
+            text-align: center;
+            padding: 60px 20px;
+        }
+        
+        .search-loading-state::after {
+            content: '...';
+            animation: dots 1.5s steps(4, end) infinite;
+        }
+        
+        @keyframes dots {
+            0%, 20% { content: '.'; }
+            40% { content: '..'; }
+            60%, 100% { content: '...'; }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header -->
+    <header id="header"></header>
+
+    <!-- Main Content -->
+    <main>
+        <section class="search-results-page">
+            <div class="search-results-container">
+                <div class="search-results-header">
+                    <h1>Search Results</h1>
+                    <div class="search-query-display" id="queryDisplay">
+                        Searching<span class="search-loading-state"></span>
+                    </div>
+                </div>
+                
+                <div class="search-results-list" id="resultsList">
+                    <!-- Results will be inserted here -->
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer id="footer"></footer>
+
+    <!-- Scripts -->
+    <script src="script.js"></script>
+    <script>
+        // Load header and footer
+        fetch('../header.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('header').innerHTML = data;
+                // Re-initialize search after header loads
+                if (window.initializeSearch) {
+                    setTimeout(() => initializeSearch(), 100);
+                }
+                // Initialize header search
+                if (window.initializeHeaderSearch) {
+                    setTimeout(() => initializeHeaderSearch(), 100);
+                }
+            });
+
+        fetch('footer.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('footer').innerHTML = data;
+            });
+
+        // Get search query from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const query = urlParams.get('q') || '';
+        
+        const queryDisplay = document.getElementById('queryDisplay');
+        const resultsList = document.getElementById('resultsList');
+        
+        // List of pages to search
+        const searchablePages = [
+            { url: '/', title: 'Home' },
+            { url: 'about', title: 'About' },
+            { url: 'blade', title: 'BLADE' },
+            { url: 'community', title: 'Community' },
+            { url: 'docs', title: 'Documentation' },
+            { url: 'docs/cli', title: 'CLI' },
+            { url: 'docs/development', title: 'Development' },
+            { url: 'docs/faq', title: 'FAQ' },
+            { url: 'docs/get-started', title: 'Getting Started' },
+            { url: 'docs/syntax', title: 'Syntax' },
+            { url: 'download', title: 'Download' },
+            { url: 'menu', title: 'Menu' },
+            { url: 'releases', title: 'Releases' },
+            { url: 'account', title: 'Sign In' },
+        ];
+        
+        // Extract text content from HTML
+        function extractText(html) {
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = html;
+            const scripts = tempDiv.querySelectorAll('script, style, nav, header, footer');
+            scripts.forEach(el => el.remove());
+            return tempDiv.textContent || tempDiv.innerText || '';
+        }
+        
+        // Highlight search terms
+        function highlightText(text, query) {
+            if (!query) return text;
+            const regex = new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+            return text.replace(regex, '<span class="highlight">$1</span>');
+        }
+        
+        // Get snippet around match
+        function getSnippet(text, query, maxLength = 200) {
+            const index = text.toLowerCase().indexOf(query.toLowerCase());
+            if (index === -1) {
+                return text.substring(0, maxLength) + '...';
+            }
+            
+            const start = Math.max(0, index - 80);
+            const end = Math.min(text.length, index + query.length + 120);
+            let snippet = text.substring(start, end);
+            
+            if (start > 0) snippet = '...' + snippet;
+            if (end < text.length) snippet = snippet + '...';
+            
+            return highlightText(snippet, query);
+        }
+        
+        // Search a single page
+        async function searchPage(page, query) {
+            try {
+                const response = await fetch(page.url);
+                if (!response.ok) return null;
+                
+                const html = await response.text();
+                const text = extractText(html);
+                const lowerText = text.toLowerCase();
+                const lowerQuery = query.toLowerCase();
+                
+                if (!lowerText.includes(lowerQuery)) {
+                    return null;
+                }
+                
+                const matches = (lowerText.match(new RegExp(lowerQuery.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi')) || []).length;
+                
+                return {
+                    url: page.url,
+                    title: page.title,
+                    snippet: getSnippet(text, query),
+                    relevance: matches
+                };
+            } catch (error) {
+                console.error(`Error searching ${page.url}:`, error);
+                return null;
+            }
+        }
+        
+        // Perform search and display results
+        async function performSearch(query) {
+            if (!query || query.trim().length < 2) {
+                queryDisplay.innerHTML = 'Please enter a search query';
+                resultsList.innerHTML = '<div class="no-results"><p>Enter at least 2 characters to search.</p></div>';
+                return;
+            }
+            
+            queryDisplay.innerHTML = `Results for <strong>"${query}"</strong>`;
+            resultsList.innerHTML = '<div class="search-loading-state">Searching</div>';
+            
+            try {
+                const results = await Promise.all(
+                    searchablePages.map(page => searchPage(page, query))
+                );
+                
+                const validResults = results
+                    .filter(r => r !== null)
+                    .sort((a, b) => b.relevance - a.relevance);
+                
+                if (validResults.length === 0) {
+                    resultsList.innerHTML = `
+                        <div class="no-results">
+                            <h2>No results found</h2>
+                            <p>We couldn't find any results for "${query}". Try different keywords or check your spelling.</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                const resultsHTML = validResults.map(result => `
+                    <div class="search-result-card" onclick="window.location.href='${result.url}'">
+                        <div class="search-result-card-title">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                            </svg>
+                            ${highlightText(result.title, query)}
+                        </div>
+                        <div class="search-result-card-url">${result.url}</div>
+                        <div class="search-result-card-snippet">${result.snippet}</div>
+                    </div>
+                `).join('');
+                
+                resultsList.innerHTML = resultsHTML;
+            } catch (error) {
+                console.error('Search error:', error);
+                resultsList.innerHTML = '<div class="no-results"><h2>Error</h2><p>An error occurred while searching. Please try again.</p></div>';
+            }
+        }
+        
+        // Perform search on page load
+        if (query) {
+            performSearch(query);
+        } else {
+            queryDisplay.innerHTML = 'No search query provided';
+            resultsList.innerHTML = '<div class="no-results"><p>Please enter a search query in the search bar.</p></div>';
+        }
+    </script>
+</body>
+
+</html>

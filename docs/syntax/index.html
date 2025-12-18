@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="shortcut icon" href="../.images/langx.ico" type="image/x-icon">
+        <title>Synatx - Documentation</title>
+        <link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body>
+    <header id="header"></header>
+
+    <div class="docs">
+        <div class="sidebar">
+            <div id="sidebar"></div>
+        </div>
+        <div id="content" class="content">
+
+            <div class="content-wrapper">
+                <h1>Language Basics</h1>
+            
+                <section id="annotate">
+                    <h2>Annotations</h2>
+                    <p>Annotations or comments made in code should be written with
+                        <code>#</code> on each side of the comment or anotation.
+                    </p>
+                    <p>This works for both single lines and more. All text or characters within the
+                        <code>#...#</code> would be ignored.
+                    </p>
+                    <h3>Examples:</h3>
+                    <pre><code>
+                        # This is a comment #
+                        
+                        # This part of the code calls the function
+                        which is then used to give the result#
+                                </code></pre>
+                </section>
+            
+                <section id="variables">
+                    <h2>Variables</h2>
+                    <p>Variables are used to store data values. They are declared using the umbrella term
+                        <code>VARIABLES:</code> <code>Variables:</code> or
+                        <code>VAR:</code> followed by variable declarations.
+                    </p>
+                    <p>This provides the relief from scanning through out a file for any declared variables,
+                        as all the variables to be used -
+                        regardless whether it is empty or not- are declared at the start of a program.
+                    </p>
+            
+                    <h3>Variable Declaration</h3>
+                    <p>Variables declarations in LangX are slightly different to many other languages as variable names
+                        generally tend to be nouns. For this reason, variable names must always have the KEYWORD: <code>The</code>
+                        or <code>the</code> just before the variable names.
+                    </p>
+                    <pre><code>VAR:
+                        The num is 3
+                        the name is "John"
+                        </code></pre>
+            
+                    <h3>Variable Naming</h3>
+                    <ul>
+                        <li>Variable names can contain letters, numbers, and underscores</li>
+                        <li>Variable names are case-sensitive</li>
+                        <li>Use descriptive names that explain the purpose of the variable</li>
+                        <li>LangX supports natural language-style variable names</li>
+                    </ul>
+            
+                    <h3>Variable Types</h3>
+                    <p>LangX supports several data types:</p>
+                    <ul>
+                        <li><strong>Numbers:</strong> Integers and floating-point numbers</li>
+                        <li><strong>Strings:</strong> Text enclosed in double quotes</li>
+                        <li><strong>Booleans:</strong> true or false values</li>
+                        <li><strong>Collections:</strong> Arrays and objects</li>
+                    </ul>
+                </section>
+            
+                <section id="data-types">
+                    <h2>Data Types</h2>
+                    <p>LangX is a dynamically typed language, meaning variables can hold values of any type.</p>
+            
+                    <h3>Numbers</h3>
+                    <pre><code>VAR:
+                        the age is 25
+                        the price is 99.99
+                        the count is 1000</code></pre>
+            
+                    <h3>Strings</h3>
+                    <pre><code>VAR:
+                        the name is "LangX"
+                        the message is "Hello, World!"
+                        the path is "/usr/local/bin"</code></pre>
+            
+                    <h3>Booleans</h3>
+                    <pre><code>VAR:
+                        the isReady is true
+                        the hasError is false</code></pre>
+            
+                    <h3>Arrays</h3>
+                    <pre><code>VAR:
+                        the numbers is [1, 2, 3, 4, 5]
+                        the names is ["Alice", "Bob", "Charlie"]</code></pre>
+                </section>
+            
+                <section id="i-o">
+                    <h2>Input/Output</h2>
+                    <p>LangX ...............</p>
+                    <code>input the name</code>
+                </section>
+            
+                <section id="operators">
+                    <h2>Operators</h2>
+                    <p>LangX supports various operators for performing operations on values.</p>
+            
+                    <h3>Arithmetic Operators</h3>
+                    <pre><code>VAR:
+                        the sum is 2 + 3          # Addition: 5
+                        the difference is 10 - 4   # Subtraction: 6
+                        the product is 3 * 4       # Multiplication: 12
+                        the quotient is 15 / 3     # Division: 5
+                        the power is 2 ^ 3         # Exponentiation: 8
+                        the remainder is 10 % 3    # Modulo: 1</code></pre>
+            
+                    <h3>Comparison Operators</h3>
+                    <pre><code>VAR:
+                        the isEqual is 5 == 5      # Equal to: true
+                        the isNotEqual is 5 != 3   # Not equal to: true
+                        the isGreater is 10 > 5    # Greater than: true
+                        the isLess is 3 < 5        # Less than: true
+                        the isGreaterEqual is 5 >= 5  # Greater than or equal: true
+                        the isLessEqual is 3 <= 5     # Less than or equal: true</code></pre>
+            
+                    <h3>Logical Operators</h3>
+                    <pre><code>VAR:
+                        the result1 is true and false   # Logical AND: false
+                        the result2 is true or false    # Logical OR: true
+                        the result3 is not true         # Logical NOT: false</code></pre>
+            
+                    <h3>String Operations</h3>
+                    <pre><code>VAR:
+                        the greeting is "Hello" + " " + "World"  # Concatenation: "Hello World"
+                        the name is "john"
+                        the upperName is to adjust the name to CAPS  # Uppercase conversion</code></pre>
+                </section>
+            </div>
+            
+            
+            
+            <div class="content-wrapper">
+                <h1>Control Flow</h1>
+            
+                <section id="conditionals">
+                    <h2>Conditionals</h2>
+                    <p>Conditional statements allow you to execute different code blocks based on conditions.</p>
+            
+                    <h3>If Statements</h3>
+                    <p>Use if statements to execute code when a condition is true:</p>
+                    <pre><code>VAR:
+                            the age is 18
+                            
+                            IF the age is greater than 16:
+                                write "You can drive"
+                            END IF</code></pre>
+            
+                    <h3>If-Else Statements</h3>
+                    <p>Add an else clause to handle the case when the condition is false:</p>
+                    <pre><code>VAR:
+                            the temperature is 25
+                            
+                            IF the temperature is greater than 20:
+                                write "It's warm outside"
+                            ELSE:
+                                write "It's cool outside"
+                            END IF</code></pre>
+            
+                    <h3>Else-If Statements</h3>
+                    <p>Chain multiple conditions using else-if:</p>
+                    <pre><code>VAR:
+                            the score is 85
+                            
+                            IF the score is greater than 90:
+                                write "Grade: A"
+                            ELSE IF the score is greater than 80:
+                                write "Grade: B"
+                            ELSE IF the score is greater than 70:
+                                write "Grade: C"
+                            ELSE:
+                                write "Grade: F"
+                            END IF</code></pre>
+                </section>
+            
+                <section id="loops">
+                    <h2>Loops</h2>
+                    <p>Loops allow you to execute a block of code repeatedly.</p>
+            
+                    <h3>For Loops</h3>
+                    <p>Iterate over a range of values:</p>
+                    <pre><code>FOR the i from 1 to 10:
+                                write the i
+                            END FOR</code></pre>
+            
+                    <h3>For-Each Loops</h3>
+                    <p>Iterate over elements in a collection:</p>
+                    <pre><code>VAR:
+                            the names is ["Alice", "Bob", "Charlie"]
+                            
+                            FOR EACH the name in the names:
+                                write the name
+                            END FOR</code></pre>
+            
+                    <h3>While Loops</h3>
+                    <p>Execute code while a condition is true:</p>
+                    <pre><code>VAR:
+                            the count is 0
+                            
+                            WHILE the count is less than 5:
+                                write the count
+                                the count is the count + 1
+                            END WHILE</code></pre>
+            
+                    <h3>Loop Control</h3>
+                    <p>Use <code>break</code> to exit a loop early, and <code>continue</code> to skip to the next iteration:
+                    </p>
+                    <pre><code>FOR the i from 1 to 10:
+                                IF the i is equal to 5:
+                                    break
+                                END IF
+                                write the i
+                            END FOR</code></pre>
+                </section>
+            
+                <section id="functions">
+                    <h2>Functions</h2>
+                    <p>Functions allow you to organize code into reusable blocks.</p>
+            
+                    <h3>Defining Functions</h3>
+                    <p>Create a function using the <code>func</code> keyword:</p>
+                    <pre><code>FUNC greet(the name):
+                                return "Hello, " + the name
+                            END FUNC</code></pre>
+            
+                    <h3>Calling Functions</h3>
+                    <p>Invoke a function by its name and pass arguments:</p>
+                    <pre><code>VAR:
+                            the message is greet("Alice")
+                            write the message  # Output: "Hello, Alice"</code></pre>
+            
+                    <h3>Function Parameters</h3>
+                    <p>Functions can accept multiple parameters:</p>
+                    <pre><code>FUNC add(the a, the b):
+                                return the a + the b
+                            END FUNC
+                            
+                            VAR:
+                            the result is add(5, 3)  # Returns 8</code></pre>
+            
+                    <h3>Return Values</h3>
+                    <p>Functions can return values using the <code>return</code> keyword:</p>
+                    <pre><code>FUNC multiply(the x, the y):
+                                return the x * the y
+                            END FUNC
+                            
+                            VAR:
+                            the product is multiply(4, 5)  # Returns 20</code></pre>
+            
+                    <h3>Built-in Functions</h3>
+                    <p>LangX provides several built-in functions:</p>
+                    <ul>
+                        <li><code>write</code> - Output text to console</li>
+                        <li><code>input</code> - Read input from user</li>
+                        <li><code>to adjust</code> - String manipulation</li>
+                        <li><code>the original value of</code> - Get original variable value</li>
+                    </ul>
+                </section>
+            </div>
+            
+            
+            
+            <div class="content-wrapper">
+                <h1>Advanced Topics</h1>
+            
+                <section id="modules">
+                    <h2>Modules</h2>
+                    <p>Modules allow you to organize code into separate files and reuse functionality across your program.
+                    </p>
+            
+                    <h3>Creating Modules</h3>
+                    <p>Create a module by defining functions and variables in a separate file:</p>
+                    <pre><code># math_utils.langx
+                            FUNC add(the a, the b):
+                                return the a + the b
+                            END FUNC
+                            
+                            FUNC subtract(the a, the b):
+                                return the a - the b
+                            END FUNC</code></pre>
+            
+                    <h3>Importing Modules</h3>
+                    <p>Use the <code>import</code> keyword to include module functionality:</p>
+                    <pre><code>IMPORT math_utils
+                            
+                            VAR:
+                            the sum is math_utils.add(5, 3)
+                            the diff is math_utils.subtract(10, 4)</code></pre>
+            
+                    <h3>Module Organization</h3>
+                    <p>Organize your modules in a logical structure:</p>
+                    <ul>
+                        <li>Group related functionality together</li>
+                        <li>Use clear, descriptive module names</li>
+                        <li>Document your modules with comments</li>
+                        <li>Export only what's necessary</li>
+                    </ul>
+                </section>
+            
+                <section id="classes">
+                    <h2>Classes</h2>
+                    <p>Classes provide a way to create objects with properties and methods.</p>
+            
+                    <h3>Defining Classes</h3>
+                    <p>Create a class using the <code>class</code> keyword:</p>
+                    <pre><code>CLASS Person:
+                                VAR:
+                                the name is ""
+                                the age is 0
+                                
+                                FUNC init(the name, the age):
+                                    the self.name is the name
+                                    the self.age is the age
+                                END FUNC
+                                
+                                FUNC greet():
+                                    return "Hello, I'm " + the self.name
+                                END FUNC
+                            END CLASS</code></pre>
+            
+                    <h3>Creating Objects</h3>
+                    <p>Instantiate a class to create an object:</p>
+                    <pre><code>VAR:
+                            the person is new Person("Alice", 30)
+                            write the person.greet()  # Output: "Hello, I'm Alice"</code></pre>
+            
+                    <h3>Class Methods</h3>
+                    <p>Classes can have methods that operate on instance data:</p>
+                    <pre><code>CLASS Rectangle:
+                                VAR:
+                                the width is 0
+                                the height is 0
+                                
+                                FUNC area():
+                                    return the self.width * the self.height
+                                END FUNC
+                                
+                                FUNC perimeter():
+                                    return 2 * (the self.width + the self.height)
+                                END FUNC
+                            END CLASS</code></pre>
+            
+                    <h3>Inheritance</h3>
+                    <p>Create derived classes that extend base classes:</p>
+                    <pre><code>CLASS Animal:
+                                VAR:
+                                the name is ""
+                                
+                                FUNC speak():
+                                    return "Some sound"
+                                END FUNC
+                            END CLASS
+                            
+                            CLASS Dog extends Animal:
+                                FUNC speak():
+                                    return "Woof!"
+                                END FUNC
+                            END CLASS</code></pre>
+                </section>
+            
+                <section id="error-handling">
+                    <h2>Error Handling</h2>
+                    <p>Error handling allows you to gracefully handle exceptions and errors in your code.</p>
+            
+                    <h3>Try-Catch Blocks</h3>
+                    <p>Use try-catch blocks to handle potential errors:</p>
+                    <pre><code>TRY:
+                                VAR:
+                                the result is 10 / 0
+                                write the result
+                            CATCH the error:
+                                write "An error occurred: " + the error.message
+                            END TRY</code></pre>
+            
+                    <h3>Throwing Errors</h3>
+                    <p>Throw custom errors using the <code>throw</code> keyword:</p>
+                    <pre><code>FUNC divide(the a, the b):
+                                IF the b is equal to 0:
+                                    throw "Division by zero is not allowed"
+                                END IF
+                                return the a / the b
+                            END FUNC</code></pre>
+            
+                    <h3>Error Types</h3>
+                    <p>LangX supports different error types:</p>
+                    <ul>
+                        <li><strong>Runtime Errors:</strong> Errors that occur during program execution</li>
+                        <li><strong>Syntax Errors:</strong> Errors in code structure</li>
+                        <li><strong>Type Errors:</strong> Errors related to data types</li>
+                        <li><strong>Custom Errors:</strong> User-defined error messages</li>
+                    </ul>
+            
+                    <h3>Best Practices</h3>
+                    <ul>
+                        <li>Always handle potential errors gracefully</li>
+                        <li>Provide meaningful error messages</li>
+                        <li>Log errors for debugging purposes</li>
+                        <li>Validate input before processing</li>
+                        <li>Use specific error handling for different scenarios</li>
+                    </ul>
+                </section>
+            </div>
+
+        </div>
+
+
+
+        <!-- Scripts -->
+        <script src="script.js"></script>
+        <script>
+            
+                document.addEventListener('DOMContentLoaded', () => {
+                    const docsContainer = document.querySelector('.docs');
+                    const contentArea = document.querySelector('.content');
+
+                    if (!docsContainer || !contentArea) return;
+
+                    // Create sidebar if missing
+                    let sidebar = document.querySelector('.sidebar');
+                    if (!sidebar) {
+                        sidebar = document.createElement('div');
+                        sidebar.className = 'sidebar';
+                        docsContainer.insertBefore(sidebar, contentArea);
+                    }
+
+                    fetch('../sidebar.html')
+                        .then(r => { if (!r.ok) throw Error(r.status); return r.text(); })
+                        .then(html => {
+                            sidebar.innerHTML = html;
+
+                            // Only run on mobile/tablet
+                            if (window.innerWidth > 1023) return;
+
+                            // Floating toggle button
+                            const btn = document.createElement('button');
+                            btn.innerHTML = 'Menu';
+                            btn.setAttribute('aria-label', 'Toggle navigation');
+                            Object.assign(btn.style, {
+                                position: 'fixed',
+                                left: '16px',
+                                width: '56px',
+                                height: '56px',
+                                background: 'white',
+                                color: 'var(--metal-dark)',
+                                border: 'none',
+                                borderRadius: '12px',
+                                fontSize: '28px',
+                                fontWeight: 'bold',
+                                cursor: 'pointer',
+                                zIndex: '1001',
+                                boxShadow: '0 4px 20px rgba(0,0,0,0.2)',
+                                transition: 'all 0.3s ease',
+                            });
+                            document.body.appendChild(btn);
+
+                            const MIN_TOP = 160;   // Starting position when page is at top
+                            const STICKY_TOP = 10;   // Final sticky position when scrolled
+                            const OPEN_TOP = 10;   // Force to 10px when sidebar is open
+
+                            let isOpen = false;
+
+                            const updateButton = () => {
+                                isOpen = sidebar.classList.contains('open');
+                                btn.innerHTML = isOpen ? '×' : '☰';
+                                btn.style.background = isOpen ? 'var(--accent-blue)' : 'white';
+                                btn.style.color = isOpen ? 'white' : 'var(--metal-dark)';
+
+                                // When sidebar is open → force button to 10px immediately
+                                if (isOpen) {
+                                    btn.style.top = `${OPEN_TOP}px`;
+                                } else {
+                                    // Normal smart sticky behavior
+                                    const scrolled = window.scrollY;
+                                    let top = MIN_TOP - scrolled;
+                                    top = Math.max(STICKY_TOP, Math.min(MIN_TOP, top));
+                                    btn.style.top = `${top}px`;
+                                }
+                            };
+
+                            // Toggle sidebar
+                            btn.onclick = e => {
+                                e.stopPropagation();
+                                sidebar.classList.toggle('open');
+                                updateButton();
+                            };
+
+                            // Close when clicking outside
+                            document.addEventListener('click', e => {
+                                if (isOpen && !sidebar.contains(e.target) && !btn.contains(e.target)) {
+                                    sidebar.classList.remove('open');
+                                    updateButton();
+                                }
+                            });
+
+                            // Close with Escape
+                            document.addEventListener('keydown', e => {
+                                if (e.key === 'Escape' && isOpen) {
+                                    sidebar.classList.remove('open');
+                                    updateButton();
+                                }
+                            });
+
+                            // Scroll handler — only affects position when sidebar is closed
+                            const handleScroll = () => {
+                                if (!isOpen) updateButton();
+                            };
+
+                            window.addEventListener('scroll', handleScroll);
+
+                            // Initial setup
+                            updateButton();
+                            handleScroll();
+                        })
+                        .catch(err => {
+                            console.error('Sidebar failed:', err);
+                            sidebar.innerHTML = '<p style="color:red;padding:20px;">Sidebar failed to load</p>';
+                        });
+                });
+                // Load footer and sidebar
+            // Load footer and sidebar
+                fetch('../../footer.html')
+                .then(response => response.text())
+                .then(data => {
+                    const f = document.getElementById('footer'); if (f) f.innerHTML = data;
+                })
+                .catch(err => console.error('Error loading footer:', err));
+
+                fetch('../../header.html')
+                .then(response => response.text())
+                .then(data => {
+                    const f = document.getElementById('header'); if (f) f.innerHTML = data;
+                })
+                .catch(err => console.error('Error loading footer:', err));
+
+            fetch('../sidebar.html')
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('sidebar').innerHTML = data;
+                    // Initialize content loader after sidebar is loaded
+                    setTimeout(() => {
+                        initializeContentLoader();
+                    }, 100);
+                })
+                .catch(err => {
+                    console.error('Error loading sidebar:', err);
+                });
+        </script>
+</body>
+
+</html>
