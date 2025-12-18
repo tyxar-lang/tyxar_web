@@ -4,9 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" href=".images/langx.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="/tyxar_web/.images/langx.ico" type="image/x-icon">
     <title>BLADE - Beginner Language Accelerated Development Environment</title>
-    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="/tyxar_web/styles.css">
 </head>
 
 <body>
@@ -130,7 +130,7 @@
     <footer id="footer"></footer>
 
     <!-- Scripts -->
-    <script src="../script.js"></script>
+    <script src="/tyxar_web/script.js"></script>
     <script>
         // Function to load external HTML content
         function loadHTML(url, elementId) {
@@ -150,8 +150,8 @@
         // Call these functions when the main page loads:
         document.addEventListener('DOMContentLoaded', (event) => {
             // Load Header, Footer, and Sidebar
-            loadHTML('../header.html', 'header');
-            loadHTML('../footer.html', 'footer');
+            loadHTML('/tyxar_web/header.html', 'header');
+            loadHTML('/tyxar_web/footer.html', 'footer');
 
             // If sidebar is only used in the 'doc' index.html, call it conditionally:
             if (document.getElementById('sidebar')) {
