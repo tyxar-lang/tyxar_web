@@ -92,7 +92,7 @@ print(greet(name))</code></pre>
 
 
 <!-- Scripts -->
-<script src="script.js"></script>
+<script src="/tyxar_web/script.js"></script>
 <script>
     
         document.addEventListener('DOMContentLoaded', () => {
@@ -109,7 +109,7 @@ print(greet(name))</code></pre>
                 docsContainer.insertBefore(sidebar, contentArea);
             }
 
-            fetch('sidebar.html')
+            fetch('/tyxar_web/docs/sidebar.html')
                 .then(r => { if (!r.ok) throw Error(r.status); return r.text(); })
                 .then(html => {
                     sidebar.innerHTML = html;
@@ -204,21 +204,21 @@ print(greet(name))</code></pre>
         });
         // Load footer and sidebar
     // Load footer and sidebar
-    fetch('footer.html')
+    fetch('/tyxar_web/footer.html')
         .then(response => response.text())
         .then(data => {
             const f = document.getElementById('footer'); if (f) f.innerHTML = data;
         })
         .catch(err => console.error('Error loading footer:', err));
 
-    fetch('../header.html')
+    fetch('/tyxar_web/header.html')
         .then(response => response.text())
         .then(data => {
             const f = document.getElementById('header'); if (f) f.innerHTML = data;
         })
         .catch(err => console.error('Error loading footer:', err));
 
-    fetch('sidebar.html')
+    fetch('/tyxar_web/docs/sidebar.html')
         .then(response => response.text())
         .then(data => {
             document.getElementById('sidebar').innerHTML = data;
