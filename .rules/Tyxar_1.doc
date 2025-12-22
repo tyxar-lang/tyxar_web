@@ -118,10 +118,13 @@ Cases where 'write' could be used, with respective examples:
                         HELLO, THERE!
                         
 ---------------------------------------------------------------------------------------------------------------------------------
+<<<<<<< HEAD:.rules/Helix_1.doc
 
 
 Tyxar_1.0.1
 ---------------------------------------------------------------------------------------------------------------------------------
+=======
+>>>>>>> 156679700b00163ef35efeab22bee3523b0c015f:.rules/Tyxar_1.doc
 3 - VARIABLES
 
 At the start of the code, variables listed out under the umbrella "variables:"
