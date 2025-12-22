@@ -1,4 +1,4 @@
-Tyxer_1
+Tyxar_1
 
 
 Content:
@@ -10,7 +10,7 @@ Content:
     TEXT MANIPULATION
 
 
-Tyxer_1.0.0 (UPDATED)
+Tyxar_1.0.0 (UPDATED)
 ---------------------------------------------------------------------------------------------------------------------------------
 1 - COMMENTS
 
@@ -120,7 +120,7 @@ Cases where 'write' could be used, with respective examples:
 ---------------------------------------------------------------------------------------------------------------------------------
 
 
-Tyxer_1.0.1
+Tyxar_1.0.1
 ---------------------------------------------------------------------------------------------------------------------------------
 3 - VARIABLES
 
@@ -134,7 +134,7 @@ This includes all variables, whether they have assigned data or not
 
 6: Empty variables have empty quotation marks instead of data for vacancy "" or ''
 
-7: Data assigned to variables are written immediately after "is" and in qoutation marks "" or ''. All in the quotation marks are saved as data. TYXER can understand variables that contain sectences especially when its hardcoded
+7: Data assigned to variables are written immediately after "is" and in qoutation marks "" or ''. All in the quotation marks are saved as data. TYXAR can understand variables that contain sectences especially when its hardcoded
 
 
 
@@ -193,7 +193,7 @@ the size is '13' as a number;
  the idea is False as a bool 
 
 
-* If the state of the variable is not declared, TYXER automatically discerns the state.
+* If the state of the variable is not declared, TYXAR automatically discerns the state.
 letters are strings and numbers are integers, but letters and numbers together are strings.
 
 --> booleans do not have qoutation marks around them. if so then they are words not booleans
@@ -226,7 +226,7 @@ write "You have chosen (the colour) and (the size)."
 
 output:  You have chosen green and xxl
 
-Tyxer_1.0.2
+Tyxar_1.0.2
 INPUTS
 13: To input data to a variable, the command "Input" is used. It must always start with a capital "I".
 
@@ -282,7 +282,7 @@ Input the type(Type is: )
 
 output
 
-TYXER ain't happy: Logic error...
+TYXAR ain't happy: Logic error...
 
 * this will not work for constant variables(as a const)
 
@@ -295,7 +295,7 @@ STATE IDENTIFICATION
 18: "state id" or "State id" can be used to find the state of individual characters and words. "typo" is used for individual characters and "term" is used for groups of characters(words).
 To find the state of groups of words (sectences), "tence" is used.
 
-19: If "typo", "term" or "tence" is not identified, TYXER discerns which to use based on the data, whether it is a character, word or sentence
+19: If "typo", "term" or "tence" is not identified, TYXAR discerns which to use based on the data, whether it is a character, word or sentence
 
 20: ":" is always needed before the data that we need to find its state. It indicates that what follows is the data.
 
@@ -412,7 +412,7 @@ Data stored: "i" is a letter
         Example: 
           The colour is state id for : The colour  
 
-          TYXER aint happy: loggic error.... 
+          TYXAR aint happy: loggic error.... 
 
 
           The colour is "red";
@@ -422,7 +422,7 @@ Data stored: "i" is a letter
             the name is state id for: the house_type;
             the house_type is "duplex"
 
-        TYXER aint happy: ...........
+        TYXAR aint happy: ...........
 
         The name is ""
         write state id for : the name

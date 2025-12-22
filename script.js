@@ -308,10 +308,9 @@ function initializeSearch() {
         { url: '/', title: 'Home' },
         { url: 'about', title: 'About' },
         { url: 'blade', title: 'BLADE' },
-        { url: 'community', title: 'Community' },
         { url: 'docs', title: 'Documentation' },
         { url: 'docs/cli', title: 'CLI' },
-        { url: 'docs/development', title: 'Development' },
+        { url: 'docs/blade', title: 'Development' },
         { url: 'docs/faq', title: 'FAQ' },
         { url: 'docs/get-started', title: 'Getting Started' },
         { url: 'docs/syntax', title: 'Syntax' },
@@ -591,5 +590,5 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Initialize other features
-    console.log('LangX website loaded successfully!');
+    console.log('Tyxar website loaded successfully!');
 });

@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="shortcut icon" href="/tyxar_web/.images/langx.ico" type="image/x-icon">
+        <link rel="shortcut icon" href="/tyxar_web/.images/tyxar.ico" type="image/x-icon">
         <title>Synatx - Documentation</title>
         <link rel="stylesheet" href="/tyxar_web/styles.css">
 </head>
@@ -31,10 +31,10 @@
                     </p>
                     <h3>Examples:</h3>
                     <pre><code>
-                        # This is a comment #
-                        
-                        # This part of the code calls the function
-                        which is then used to give the result#
+# This is a comment #
+
+# This part of the code calls the function
+which is then used to give the result#
                                 </code></pre>
                 </section>
             
@@ -50,13 +50,13 @@
                     </p>
             
                     <h3>Variable Declaration</h3>
-                    <p>Variables declarations in LangX are slightly different to many other languages as variable names
+                    <p>Variables declarations in Tyxar are slightly different to many other languages as variable names
                         generally tend to be nouns. For this reason, variable names must always have the KEYWORD: <code>The</code>
                         or <code>the</code> just before the variable names.
                     </p>
                     <pre><code>VAR:
-                        The num is 3
-                        the name is "John"
+The num is 3
+the name is "John"
                         </code></pre>
             
                     <h3>Variable Naming</h3>
@@ -64,11 +64,11 @@
                         <li>Variable names can contain letters, numbers, and underscores</li>
                         <li>Variable names are case-sensitive</li>
                         <li>Use descriptive names that explain the purpose of the variable</li>
-                        <li>LangX supports natural language-style variable names</li>
+                        <li>Tyxar supports natural language-style variable names</li>
                     </ul>
             
                     <h3>Variable Types</h3>
-                    <p>LangX supports several data types:</p>
+                    <p>Tyxar supports several data types:</p>
                     <ul>
                         <li><strong>Numbers:</strong> Integers and floating-point numbers</li>
                         <li><strong>Strings:</strong> Text enclosed in double quotes</li>
@@ -76,43 +76,39 @@
                         <li><strong>Collections:</strong> Arrays and objects</li>
                     </ul>
                 </section>
-            
-                <section id="data-types">
-                    <h2>Data Types</h2>
-                    <p>LangX is a dynamically typed language, meaning variables can hold values of any type.</p>
-            
-                    <h3>Numbers</h3>
-                    <pre><code>VAR:
-                        the age is 25
-                        the price is 99.99
-                        the count is 1000</code></pre>
-            
-                    <h3>Strings</h3>
-                    <pre><code>VAR:
-                        the name is "LangX"
-                        the message is "Hello, World!"
-                        the path is "/usr/local/bin"</code></pre>
-            
-                    <h3>Booleans</h3>
-                    <pre><code>VAR:
-                        the isReady is true
-                        the hasError is false</code></pre>
-            
-                    <h3>Arrays</h3>
-                    <pre><code>VAR:
-                        the numbers is [1, 2, 3, 4, 5]
-                        the names is ["Alice", "Bob", "Charlie"]</code></pre>
-                </section>
-            
-                <section id="i-o">
+
+                <section id="input-output">
                     <h2>Input/Output</h2>
-                    <p>LangX ...............</p>
+                    <h3>Output</h3>
+                    <p>Tyxar uses the keyword <code>write</code> to output data to the screen.
+                    <br></p>
                     <code>input the name</code>
                 </section>
             
+                <section id="data-types">
+                    <h2>Data Types</h2>
+                    <p>Tyxar is a dynamically typed language, meaning variables can hold values of any type.</p>
+            
+                    <h3>Numbers</h3>
+                    <pre><code>
+VAR:
+the age is 25
+the price is 99.99
+the count is 1000
+                    </code></pre>
+            
+                    <h3>Strings</h3>
+                    <pre><code>
+VAR:
+the name is "Tyxar"
+the message is "Hello, World!"
+                    </code></pre>
+                </section>
+            
+            
                 <section id="operators">
                     <h2>Operators</h2>
-                    <p>LangX supports various operators for performing operations on values.</p>
+                    <p>Tyxar supports various operators for performing operations on values.</p>
             
                     <h3>Arithmetic Operators</h3>
                     <pre><code>VAR:
@@ -189,237 +185,10 @@
                             ELSE:
                                 write "Grade: F"
                             END IF</code></pre>
-                </section>
-            
-                <section id="loops">
-                    <h2>Loops</h2>
-                    <p>Loops allow you to execute a block of code repeatedly.</p>
-            
-                    <h3>For Loops</h3>
-                    <p>Iterate over a range of values:</p>
-                    <pre><code>FOR the i from 1 to 10:
-                                write the i
-                            END FOR</code></pre>
-            
-                    <h3>For-Each Loops</h3>
-                    <p>Iterate over elements in a collection:</p>
-                    <pre><code>VAR:
-                            the names is ["Alice", "Bob", "Charlie"]
-                            
-                            FOR EACH the name in the names:
-                                write the name
-                            END FOR</code></pre>
-            
-                    <h3>While Loops</h3>
-                    <p>Execute code while a condition is true:</p>
-                    <pre><code>VAR:
-                            the count is 0
-                            
-                            WHILE the count is less than 5:
-                                write the count
-                                the count is the count + 1
-                            END WHILE</code></pre>
-            
-                    <h3>Loop Control</h3>
-                    <p>Use <code>break</code> to exit a loop early, and <code>continue</code> to skip to the next iteration:
-                    </p>
-                    <pre><code>FOR the i from 1 to 10:
-                                IF the i is equal to 5:
-                                    break
-                                END IF
-                                write the i
-                            END FOR</code></pre>
-                </section>
-            
-                <section id="functions">
-                    <h2>Functions</h2>
-                    <p>Functions allow you to organize code into reusable blocks.</p>
-            
-                    <h3>Defining Functions</h3>
-                    <p>Create a function using the <code>func</code> keyword:</p>
-                    <pre><code>FUNC greet(the name):
-                                return "Hello, " + the name
-                            END FUNC</code></pre>
-            
-                    <h3>Calling Functions</h3>
-                    <p>Invoke a function by its name and pass arguments:</p>
-                    <pre><code>VAR:
-                            the message is greet("Alice")
-                            write the message  # Output: "Hello, Alice"</code></pre>
-            
-                    <h3>Function Parameters</h3>
-                    <p>Functions can accept multiple parameters:</p>
-                    <pre><code>FUNC add(the a, the b):
-                                return the a + the b
-                            END FUNC
-                            
-                            VAR:
-                            the result is add(5, 3)  # Returns 8</code></pre>
-            
-                    <h3>Return Values</h3>
-                    <p>Functions can return values using the <code>return</code> keyword:</p>
-                    <pre><code>FUNC multiply(the x, the y):
-                                return the x * the y
-                            END FUNC
-                            
-                            VAR:
-                            the product is multiply(4, 5)  # Returns 20</code></pre>
-            
-                    <h3>Built-in Functions</h3>
-                    <p>LangX provides several built-in functions:</p>
-                    <ul>
-                        <li><code>write</code> - Output text to console</li>
-                        <li><code>input</code> - Read input from user</li>
-                        <li><code>to adjust</code> - String manipulation</li>
-                        <li><code>the original value of</code> - Get original variable value</li>
-                    </ul>
-                </section>
+                </section>   
             </div>
             
-            
-            
-            <div class="content-wrapper">
-                <h1>Advanced Topics</h1>
-            
-                <section id="modules">
-                    <h2>Modules</h2>
-                    <p>Modules allow you to organize code into separate files and reuse functionality across your program.
-                    </p>
-            
-                    <h3>Creating Modules</h3>
-                    <p>Create a module by defining functions and variables in a separate file:</p>
-                    <pre><code># math_utils.langx
-                            FUNC add(the a, the b):
-                                return the a + the b
-                            END FUNC
-                            
-                            FUNC subtract(the a, the b):
-                                return the a - the b
-                            END FUNC</code></pre>
-            
-                    <h3>Importing Modules</h3>
-                    <p>Use the <code>import</code> keyword to include module functionality:</p>
-                    <pre><code>IMPORT math_utils
-                            
-                            VAR:
-                            the sum is math_utils.add(5, 3)
-                            the diff is math_utils.subtract(10, 4)</code></pre>
-            
-                    <h3>Module Organization</h3>
-                    <p>Organize your modules in a logical structure:</p>
-                    <ul>
-                        <li>Group related functionality together</li>
-                        <li>Use clear, descriptive module names</li>
-                        <li>Document your modules with comments</li>
-                        <li>Export only what's necessary</li>
-                    </ul>
-                </section>
-            
-                <section id="classes">
-                    <h2>Classes</h2>
-                    <p>Classes provide a way to create objects with properties and methods.</p>
-            
-                    <h3>Defining Classes</h3>
-                    <p>Create a class using the <code>class</code> keyword:</p>
-                    <pre><code>CLASS Person:
-                                VAR:
-                                the name is ""
-                                the age is 0
-                                
-                                FUNC init(the name, the age):
-                                    the self.name is the name
-                                    the self.age is the age
-                                END FUNC
-                                
-                                FUNC greet():
-                                    return "Hello, I'm " + the self.name
-                                END FUNC
-                            END CLASS</code></pre>
-            
-                    <h3>Creating Objects</h3>
-                    <p>Instantiate a class to create an object:</p>
-                    <pre><code>VAR:
-                            the person is new Person("Alice", 30)
-                            write the person.greet()  # Output: "Hello, I'm Alice"</code></pre>
-            
-                    <h3>Class Methods</h3>
-                    <p>Classes can have methods that operate on instance data:</p>
-                    <pre><code>CLASS Rectangle:
-                                VAR:
-                                the width is 0
-                                the height is 0
-                                
-                                FUNC area():
-                                    return the self.width * the self.height
-                                END FUNC
-                                
-                                FUNC perimeter():
-                                    return 2 * (the self.width + the self.height)
-                                END FUNC
-                            END CLASS</code></pre>
-            
-                    <h3>Inheritance</h3>
-                    <p>Create derived classes that extend base classes:</p>
-                    <pre><code>CLASS Animal:
-                                VAR:
-                                the name is ""
-                                
-                                FUNC speak():
-                                    return "Some sound"
-                                END FUNC
-                            END CLASS
-                            
-                            CLASS Dog extends Animal:
-                                FUNC speak():
-                                    return "Woof!"
-                                END FUNC
-                            END CLASS</code></pre>
-                </section>
-            
-                <section id="error-handling">
-                    <h2>Error Handling</h2>
-                    <p>Error handling allows you to gracefully handle exceptions and errors in your code.</p>
-            
-                    <h3>Try-Catch Blocks</h3>
-                    <p>Use try-catch blocks to handle potential errors:</p>
-                    <pre><code>TRY:
-                                VAR:
-                                the result is 10 / 0
-                                write the result
-                            CATCH the error:
-                                write "An error occurred: " + the error.message
-                            END TRY</code></pre>
-            
-                    <h3>Throwing Errors</h3>
-                    <p>Throw custom errors using the <code>throw</code> keyword:</p>
-                    <pre><code>FUNC divide(the a, the b):
-                                IF the b is equal to 0:
-                                    throw "Division by zero is not allowed"
-                                END IF
-                                return the a / the b
-                            END FUNC</code></pre>
-            
-                    <h3>Error Types</h3>
-                    <p>LangX supports different error types:</p>
-                    <ul>
-                        <li><strong>Runtime Errors:</strong> Errors that occur during program execution</li>
-                        <li><strong>Syntax Errors:</strong> Errors in code structure</li>
-                        <li><strong>Type Errors:</strong> Errors related to data types</li>
-                        <li><strong>Custom Errors:</strong> User-defined error messages</li>
-                    </ul>
-            
-                    <h3>Best Practices</h3>
-                    <ul>
-                        <li>Always handle potential errors gracefully</li>
-                        <li>Provide meaningful error messages</li>
-                        <li>Log errors for debugging purposes</li>
-                        <li>Validate input before processing</li>
-                        <li>Use specific error handling for different scenarios</li>
-                    </ul>
-                </section>
-            </div>
-
-        </div>
+        
 
 
 
