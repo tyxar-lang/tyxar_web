@@ -105,6 +105,64 @@ document.addEventListener('DOMContentLoaded', () => {
             sidebar.innerHTML = '<p style="color:red;padding:20px;">Sidebar failed to load</p>';
         });
 });
+
+// Function to add copy buttons to code blocks
+function addCopyButtons() {
+    const preElements = document.querySelectorAll('.content-wrapper pre');
+
+    preElements.forEach(pre => {
+        // Skip if already has a copy button
+        if (pre.querySelector('.copy-btn')) return;
+
+        const copyBtn = document.createElement('button');
+        copyBtn.className = 'copy-btn';
+        copyBtn.textContent = 'Copy';
+        copyBtn.setAttribute('aria-label', 'Copy code to clipboard');
+
+        copyBtn.addEventListener('click', async () => {
+            const code = pre.querySelector('code');
+            const textToCopy = code ? code.textContent : pre.textContent;
+
+            try {
+                await navigator.clipboard.writeText(textToCopy.trim());
+                copyBtn.textContent = 'Copied!';
+                copyBtn.style.background = '#28a745';
+
+                setTimeout(() => {
+                    copyBtn.textContent = 'Copy';
+                    copyBtn.style.background = '#398fff';
+                }, 2000);
+            } catch (err) {
+                console.error('Failed to copy text: ', err);
+                copyBtn.textContent = 'Error';
+                copyBtn.style.background = '#dc3545';
+
+                setTimeout(() => {
+                    copyBtn.textContent = 'Copy';
+                    copyBtn.style.background = '#398fff';
+                }, 2000);
+            }
+        });
+
+        pre.appendChild(copyBtn);
+    });
+
+    // Set up mutation observer to watch for new content
+    const contentWrapper = document.querySelector('.content-wrapper');
+    if (contentWrapper && !contentWrapper._copyObserver) {
+        const observer = new MutationObserver(() => {
+            addCopyButtons();
+        });
+        observer.observe(contentWrapper, { childList: true, subtree: true });
+        contentWrapper._copyObserver = observer;
+    }
+}
+
+// Add copy buttons after content is loaded
+document.addEventListener('DOMContentLoaded', () => {
+    // Wait a bit for content to load
+    setTimeout(addCopyButtons, 500);
+});
 // Load footer and sidebar
 // Load footer and sidebar
 fetch('/tyxar_web/footer.html')
@@ -128,6 +186,8 @@ fetch('/tyxar_web/docs/sidebar.html')
         // Initialize content loader after sidebar is loaded
         setTimeout(() => {
             initializeContentLoader();
+            // Add copy buttons after content is loaded
+            setTimeout(addCopyButtons, 200);
         }, 100);
     })
     .catch(err => {
