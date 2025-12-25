@@ -5,7 +5,7 @@
             <a href="/tyxar_web/">
                 
             <img src="/tyxar_web/images/tyxar.png" alt="Tyxar Logo">
-            <h1>Tyxar</h1>
+            <h1>Tyxar(test)</h1>
         </a>
         </div>
         
@@ -211,7 +211,7 @@
         // Function to navigate to search page
         function goToSearch() {
             const query = searchBar.value.trim();
-            const searchUrl = query ? `/search?q=${encodeURIComponent(query)}` : '/tyxar_web/search';
+            const searchUrl = query ? `/tyxar_web/search?q=${encodeURIComponent(query)}` : '/tyxar_web/search';
             window.location.href = searchUrl;
         }
 
