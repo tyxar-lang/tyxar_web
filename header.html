@@ -201,3 +201,43 @@
         }
     }
 </style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const searchBar = document.querySelector('.search-bar');
+        const searchIcon = document.querySelector('.search-icon');
+        const clearIcon = document.querySelector('.clear-icon');
+
+        // Function to navigate to search page
+        function goToSearch() {
+            const query = searchBar.value.trim();
+            const searchUrl = query ? `/tyxar_web/search?q=${encodeURIComponent(query)}` : '/tyxar_web/search';
+            window.location.href = searchUrl;
+        }
+
+        // Handle search icon click
+        searchIcon.addEventListener('click', goToSearch);
+
+        // Handle Enter key press in search bar
+        searchBar.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                goToSearch();
+            }
+        });
+
+        // Handle clear icon functionality
+        clearIcon.addEventListener('click', function() {
+            searchBar.value = '';
+            searchBar.focus();
+            clearIcon.style.display = 'none';
+        });
+
+        // Show/hide clear icon based on input
+        searchBar.addEventListener('input', function() {
+            clearIcon.style.display = this.value ? 'flex' : 'none';
+        });
+
+        // Initial check for clear icon
+        clearIcon.style.display = searchBar.value ? 'flex' : 'none';
+    });
+</script>
