@@ -116,7 +116,7 @@ function addCopyButtons() {
 
         const copyBtn = document.createElement('button');
         copyBtn.className = 'copy-btn';
-        copyBtn.textContent = 'Copy';
+        copyBtn.textContent = '📋';
         copyBtn.setAttribute('aria-label', 'Copy code to clipboard');
 
         copyBtn.addEventListener('click', async () => {
@@ -125,20 +125,20 @@ function addCopyButtons() {
 
             try {
                 await navigator.clipboard.writeText(textToCopy.trim());
-                copyBtn.textContent = 'Copied!';
+                copyBtn.textContent = '✅';
                 copyBtn.style.background = '#28a745';
 
                 setTimeout(() => {
-                    copyBtn.textContent = 'Copy';
+                    copyBtn.textContent = '📋';
                     copyBtn.style.background = '#398fff';
                 }, 2000);
             } catch (err) {
                 console.error('Failed to copy text: ', err);
-                copyBtn.textContent = 'Error';
+                copyBtn.textContent = '❌';
                 copyBtn.style.background = '#dc3545';
 
                 setTimeout(() => {
-                    copyBtn.textContent = 'Copy';
+                    copyBtn.textContent = '📋';
                     copyBtn.style.background = '#398fff';
                 }, 2000);
             }
