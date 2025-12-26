@@ -216,7 +216,7 @@
         function goToSearch() {
             const query = searchBar.value.trim();
             const searchUrl = query
-                ? `/tyxar_web/search?q=${encodeURIComponent(query)}`
+                ? '/tyxar_web/search?q=${encodeURIComponent(query)}'
                 : '/tyxar_web/search';
 
             console.log('Navigating to:', searchUrl);
