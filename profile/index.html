@@ -171,11 +171,17 @@
         }
 
         async function loginWithGitHub() {
-            await supabase.auth.signInWithOAuth({
-                provider: 'github',
-                options: { redirectTo: 'https://tyxar-lang.github.io/tyxar_web/account/' }
-            });
-        }
+                const { error } = await supabaseClient.auth.signInWithOAuth({
+                    provider: 'github',
+                    options: {
+                        redirectTo: window.location.origin + '/profile'
+                    }
+                });
+
+                authStatus.textContent = error
+                    ? error.message
+                    : "Redirecting to GitHub...";
+            }
 
         // Sign Out
         async function signOut() {
