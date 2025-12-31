@@ -26,7 +26,7 @@
                         <h2>Log In</h2>
                         <input type="email" id="loginEmail" placeholder="Email" required>
                         <input type="password" id="loginPassword" placeholder="Password" required>
-                        <button class="login-btn" onclick="signIn()">Log In</button>
+                        <button class="login-btn" onclick="login()">Log In</button>
                         <div class="divider">
                             <hr>or
                             <hr>
@@ -143,6 +143,122 @@
                     loadHTML('doc/ ', 'sidebar');
                 }
             });
+    </script>
+    <script>
+
+        // ===============================
+        // ELEMENTS
+        // ===============================
+        const authBox = document.getElementById("auth");
+        const accountBox = document.getElementById("account");
+        const authStatus = document.getElementById("authStatus");
+
+        const emailInput = document.getElementById("email");
+        const passwordInput = document.getElementById("password");
+
+        const userEmailText = document.getElementById("userEmail");
+        const userRoleText = document.getElementById("userRole");
+        const userNameText = document.getElementById("userName");
+        const userCreatedText = document.getElementById("userCreated");
+
+        // ===============================
+        // AUTH FUNCTIONS
+        // ===============================
+        async function signup() {
+            const email = emailInput.value;
+            const password = passwordInput.value;
+
+            const { error } = await supabaseClient.auth.signUp({
+                email,
+                password
+            });
+
+            authStatus.textContent = error
+                ? error.message
+                : "Check your email to confirm signup.";
+        }
+
+        async function login() {
+            const email = emailInput.value;
+            const password = passwordInput.value;
+
+            const { error } = await supabaseClient.auth.signInWithPassword({
+                email,
+                password
+            });
+
+            authStatus.textContent = error
+                ? error.message
+                : "Logged in.";
+
+            loadUser();
+        }
+
+        async function loginWithGitHub() {
+            const { error } = await supabaseClient.auth.signInWithOAuth({
+                provider: 'github',
+                options: {
+                    redirectTo: window.location.origin + '/profile/b.html'
+                }
+            });
+
+            authStatus.textContent = error
+                ? error.message
+                : "Redirecting to GitHub...";
+        }
+
+        async function loginWithGoogle() {
+            const { error } = await supabaseClient.auth.signInWithOAuth({
+                provider: 'google',
+                options: {
+                    redirectTo: window.location.origin + '/profile/b.html'
+                }
+            });
+
+            authStatus.textContent = error
+                ? error.message
+                : "Redirecting to Google...";
+        }
+
+        async function logout() {
+            await supabaseClient.auth.signOut();
+            showAuth();
+        }
+
+        // ===============================
+        // USER STATE
+        // ===============================
+        async function loadUser() {
+            const { data } = await supabaseClient.auth.getUser();
+            const user = data.user;
+
+            if (!user) {
+                showAuth();
+                return;
+            }
+
+            // Display user details
+            userNameText.textContent = `Username: ${user.user_metadata?.user_name || user.user_metadata?.name || 'N/A'}`;
+            userEmailText.textContent = `Email: ${user.email}`;
+            userCreatedText.textContent = `Created: ${new Date(user.created_at).toLocaleDateString()}`;
+
+            // Fetch is_admin from profiles table
+            const { data: profile } = await supabaseClient
+                .from("profiles")
+                .select("is_admin")
+                .eq("id", user.id)
+                .single();
+
+            userRoleText.textContent =
+                profile?.is_admin
+            authBox.classList.add("hidden");
+            accountBox.classList.remove("hidden");
+        }
+
+        // ===============================
+        // INIT
+        // ===============================
+        loadUser();
     </script>
 </body>
 
