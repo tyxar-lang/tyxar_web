@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu - Tyxar Programming Language</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Times New Roman', Times, serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #2a3439 0%, #4a5568 100%);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header {
+            background: linear-gradient(225deg, #2a3439 0%, #4a5568 100%);
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo img {
+            height: 50px;
+        }
+
+        .back-btn {
+            color: #6dafff;
+            text-decoration: none;
+            font-size: 1.2rem;
+        }
+
+        .back-btn:hover {
+            color: #ffffff;
+        }
+
+        .menu-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+            text-align: center;
+            overflow-y: hidden;
+        }
+
+        .menu-content h1 {
+            font-size: 70px;
+            font-weight: bold;
+            margin-bottom: 2rem;
+            color: #9d9d9d;
+            padding: 0px 40px;
+            border-bottom: 2px solid #ffffff;
+
+        }
+
+        .menu-content ul {
+            list-style: none;
+        }
+
+        .menu-content ul li {
+            margin: 1rem 0;
+            padding: 10px;
+        }
+
+        .menu-content ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 1.5rem;
+            transition: color 0.3s;
+        }
+
+        .menu-content ul li a:hover {
+            color: #6dafff;
+        }
+
+        .menu-content .account-link {
+            padding: 1rem 2rem;
+            border: 2px solid white;
+            transition: box-shadow 0.3s;
+        }
+
+        .menu-content .account-link:hover {
+            color: #6dafff;
+            box-shadow: 0 0 10px white;
+        }
+
+        footer {
+            background: linear-gradient(to right, #2a3d2f, #1a2a1f);
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .footer-logo img {
+            height: 40px;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="logo">
+            <img src="/tyxar_web/images/tyxar.png" alt="Logo">
+        </div>
+        <a href="javascript:history.back()" class="back-btn">✖</a>
+    </header>
+
+    <div class="menu-content">
+        <h1>Menu</h1>
+        <ul>
+            <li><a href="/tyxar_web/">Home</a></li>
+            <li><a href="/tyxar_web/blade">BLADE</a></li>
+            <li><a href="/tyxar_web/docs">Documentation</a></li>
+            <li><a href="/tyxar_web/releases">Releases</a></li>
+            <li><a href="/tyxar_web/download">Download</a></li>
+            <li><a href="/tyxar_web/about">About</a></li>
+            <li><a href="/tyxar_web/profile" class="account-link">Sign In</a></li>
+        </ul>
+    </div>
+
+</body>
+
+</html>

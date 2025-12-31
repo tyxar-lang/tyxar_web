@@ -73,6 +73,8 @@
 
             <button onclick="login()">Log in</button>
             <button class="secondary" onclick="signup()">Sign up</button>
+            <button onclick="loginWithGitHub()" style="background: #24292e; margin-top: 0.5rem;">Login with GitHub</button>
+            <button onclick="loginWithGoogle()" style="background: #4285f4; color: white; margin-top: 0.5rem;">Login with Google</button>
 
             <div class="status" id="authStatus"></div>
         </div>
@@ -81,8 +83,10 @@
         <div id="account" class="hidden">
             <h2>Welcome</h2>
 
+            <p id="userName"></p>
             <p id="userEmail"></p>
             <p id="userRole"></p>
+            <p id="userCreated"></p>
 
             <button onclick="logout()">Log out</button>
         </div>
@@ -116,6 +120,8 @@
 
         const userEmailText = document.getElementById("userEmail");
         const userRoleText = document.getElementById("userRole");
+        const userNameText = document.getElementById("userName");
+        const userCreatedText = document.getElementById("userCreated");
 
         // ===============================
         // AUTH FUNCTIONS
@@ -150,6 +156,32 @@
             loadUser();
         }
 
+        async function loginWithGitHub() {
+            const { error } = await supabaseClient.auth.signInWithOAuth({
+                provider: 'github',
+                options: {
+                    redirectTo: window.location.origin + '/profile/b.html'
+                }
+            });
+
+            authStatus.textContent = error
+                ? error.message
+                : "Redirecting to GitHub...";
+        }
+
+        async function loginWithGoogle() {
+            const { error } = await supabaseClient.auth.signInWithOAuth({
+                provider: 'google',
+                options: {
+                    redirectTo: window.location.origin + '/profile/b.html'
+                }
+            });
+
+            authStatus.textContent = error
+                ? error.message
+                : "Redirecting to Google...";
+        }
+
         async function logout() {
             await supabaseClient.auth.signOut();
             showAuth();
@@ -167,29 +199,20 @@
                 return;
             }
 
+            // Display user details
+            userNameText.textContent = `Username: ${user.user_metadata?.user_name || user.user_metadata?.name || 'N/A'}`;
             userEmailText.textContent = `Email: ${user.email}`;
+            userCreatedText.textContent = `Created: ${new Date(user.created_at).toLocaleDateString()}`;
 
-            // Fetch role from profiles table
+            // Fetch is_admin from profiles table
             const { data: profile } = await supabaseClient
                 .from("profiles")
-                .select("role")
+                .select("is_admin")
                 .eq("id", user.id)
                 .single();
 
             userRoleText.textContent =
-                profile?.role === "admin"
-                    ? "Role: Admin"
-                    : "Role: User";
-
-            showAccount();
-        }
-
-        function showAuth() {
-            authBox.classList.remove("hidden");
-            accountBox.classList.add("hidden");
-        }
-
-        function showAccount() {
+                profile?.is_admin
             authBox.classList.add("hidden");
             accountBox.classList.remove("hidden");
         }
