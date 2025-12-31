@@ -25,8 +25,8 @@
                     </div>
                     <div class="login-right">
                         <h2>Log In</h2>
-                        <input type="email" id="loginEmail" placeholder="Email" required>
-                        <input type="password" id="loginPassword" placeholder="Password" required>
+                        <input type="email" id="email" placeholder="Email" required>
+                        <input type="password" id="password" placeholder="Password" required>
                         <button class="login-btn" onclick="login()">Log In</button>
                         <div class="divider">
                             <hr>or
@@ -40,12 +40,12 @@
                             <img src="/tyxar_web/images/github-icon.png" alt="GitHub Icon">
                             Log in with GitHub
                         </button>
-                        <p>Don't have an account? <a href="#" onclick="showRegister()">Register</a></p>
+                        <!--<p>Don't have an account? <a href="#" onclick="showRegister()">Register</a></p>-->
                     </div>
                 </div>
             </div>
 
-            <!-- Register Overlay -->
+            <!-- Register Overlay 
             <div class="register-overlay" id="registerOverlay" style="display: none;">
                 <div class="register-container">
                     <div class="register-left">
@@ -62,55 +62,43 @@
                         <p>Already have an account? <a href="#" onclick="showLogin()">Log In</a></p>
                     </div>
                 </div>
-            </div>
+            </div> -->
 
-            <!-- Profile Content (hidden until logged in) -->
-            <div class="profile-content" id="profileContent" style="display: none;">
-                <div class="profile-picture-container">
+            <!-- Profile Content -->
+            <div class="hidden" id="account">
+               <!-- <div class="profile-picture-container">
                     <img id="profilePicture" class="profile-picture" src="https://via.placeholder.com/120?text=Profile"
                         alt="Profile Picture">
                     <div>
                         <input type="file" id="profilePictureInput" accept="image/*" style="display: none;"
                             onchange="uploadProfilePicture()">
                         <button class="change-picture-btn"
-                            onclick="document.getElementById('profilePictureInput').click()">
-                            Change
-                        </button>
+                            onclick="document.getElementById('profilePictureInput').click()">Change</button>
                     </div>
-                </div>
-                <div class="user-name" id="userFullName">Welcome</div>
-                <div class="user-email" id="userEmail"></div>
+                </div> -->
+                <h2>Welcome</h2>
+                <p id="userName" ></p>
+                <p id="userEmail"></p>
 
-                <div class="account-section">
+                <!--<div class="account-section">
                     <h2>Account</h2>
-                    <div class="account-field">
-                        <label>Username</label>
-                        <span id="userUsername">Loading...</span>
-                    </div>
-                    <div class="account-field">
-                        <label>Email</label>
-                        <span id="userEmailField"></span>
-                    </div>
-                    <div class="account-field">
-                        <label>Password</label>
-                        <span>••••••••</span>
-                    </div>
-                    <div class="account-field">
-                        <label>Full Name</label>
-                        <span id="userFullNameField"></span>
+                    <div class="account-field"><label>Username</label><span id="userUsername">Loading...</span></div>
+                    <div class="account-field"><label>Email</label><span id="userEmailField"></span></div>
+                    <div class="account-field"><label>Password</label><span>••••••••</span></div>
+                    <div class="account-field"><label>Full Name</label><span id="userFullNameField"></span>
                         <button class="edit-btn" onclick="showEditProfileForm()">Edit</button>
                     </div>
 
                     <div class="edit-profile-form" id="editProfileForm" style="display: none;">
                         <input type="text" id="editFirstName" placeholder="First Name" required>
                         <input type="text" id="editMiddleName" placeholder="Middle Name (Optional)">
-                        <input type="text" id="editLastName" placeholder="Last Name" required>
+                        <input type="text" id="lastName" placeholder="Last Name" required>
                         <button onclick="updateProfile()">Save Changes</button>
                         <button onclick="cancelEditProfile()">Cancel</button>
-                    </div>
+                    </div> -->
                 </div>
 
-                <button class="sign-out-btn" onclick="signOut()">Sign Out</button>
+                <button class="sign-out-btn" onclick="logout()">Log Out</button>
             </div>
         </div>
     </main>
@@ -120,133 +108,127 @@
 
     <!-- Scripts -->
     <script src="/tyxar_web/script.js"></script>
+
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="config.js"></script>
 
-    <!-- Supabase Client Initialization -->
     <script>
-        const supabase = supabase.createClient(
-            'https://ntqoveatlcvzbuipwxfl.supabase.co',
-            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im50cW92ZWF0bGN2emJ1aXB3eGZsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjcxOTYxMDYsImV4cCI6MjA4Mjc3MjEwNn0.dWn4N1tWbUnLNW3dABcVqf3CHiVdjkz9dYeJD0TsaYU'
-        );
+        // ===============================
+        // ELEMENTS
+        // ===============================
+        const authBox = document.getElementById("auth");
+        const accountBox = document.getElementById("account");
+        const authStatus = document.getElementById("authStatus");
 
-        // Clean URL after OAuth redirect (remove #access_token=...)
-        if (window.location.hash.includes('access_token')) {
-            window.history.replaceState({}, document.title, window.location.pathname);
-        }
+        const emailInput = document.getElementById("email");
+        const passwordInput = document.getElementById("password");
 
-        // Show/hide overlays
-        function showRegister() {
-            document.getElementById('loginOverlay').style.display = 'none';
-            document.getElementById('registerOverlay').style.display = 'block';
-        }
+        const userEmailText = document.getElementById("userEmail");
+        const userRoleText = document.getElementById("userRole");
+        const userNameText = document.getElementById("userName");
+        const userCreatedText = document.getElementById("userCreated");
 
-        function showLogin() {
-            document.getElementById('registerOverlay').style.display = 'none';
-            document.getElementById('loginOverlay').style.display = 'block';
-        }
+        // ===============================
+        // AUTH FUNCTIONS
+        // ===============================
+        async function signup() {
+            const email = emailInput.value;
+            const password = passwordInput.value;
 
-        // Email/Password Login
-        async function login() {
-            const email = document.getElementById('loginEmail').value;
-            const password = document.getElementById('loginPassword').value;
-            const { error } = await supabase.auth.signInWithPassword({ email, password });
-            if (error) alert('Login failed: ' + error.message);
-        }
-
-        // Register (basic)
-        async function createAccount() {
-            const email = document.getElementById('registerEmail').value;
-            const password = document.getElementById('registerPassword').value;
-            const { error } = await supabase.auth.signUp({ email, password });
-            if (error) alert('Registration failed: ' + error.message);
-            else alert('Check your email to confirm!');
-        }
-
-        // OAuth Logins
-        async function loginWithGoogle() {
-            await supabase.auth.signInWithOAuth({
-                provider: 'google',
-                options: { redirectTo: 'https://tyxar-lang.github.io/tyxar_web/account/' }
+            const { error } = await supabaseClient.auth.signUp({
+                email,
+                password
             });
+
+            authStatus.textContent = error
+                ? error.message
+                : "Check your email to confirm signup.";
+        }
+
+        async function login() {
+            const email = emailInput.value;
+            const password = passwordInput.value;
+
+            const { error } = await supabaseClient.auth.signInWithPassword({
+                email,
+                password
+            });
+
+            authStatus.textContent = error
+                ? error.message
+                : "Logged in.";
+
+            loadUser();
         }
 
         async function loginWithGitHub() {
-                const { error } = await supabaseClient.auth.signInWithOAuth({
-                    provider: 'github',
-                    options: {
-                        redirectTo: window.location.origin + '/profile'
-                    }
-                });
+            const { error } = await supabaseClient.auth.signInWithOAuth({
+                provider: 'github',
+                options: {
+                    redirectTo: window.location.origin + '/profile/b.html'
+                }
+            });
 
-                authStatus.textContent = error
-                    ? error.message
-                    : "Redirecting to GitHub...";
+            authStatus.textContent = error
+                ? error.message
+                : "Redirecting to GitHub...";
+        }
+
+        async function loginWithGoogle() {
+            const { error } = await supabaseClient.auth.signInWithOAuth({
+                provider: 'google',
+                options: {
+                    redirectTo: window.location.origin + '/profile/b.html'
+                }
+            });
+
+            authStatus.textContent = error
+                ? error.message
+                : "Redirecting to Google...";
+        }
+
+        async function logout() {
+            await supabaseClient.auth.signOut();
+            showAuth();
+        }
+
+        // ===============================
+        // USER STATE
+        // ===============================
+        async function loadUser() {
+            const { data } = await supabaseClient.auth.getUser();
+            const user = data.user;
+
+            if (!user) {
+                showAuth();
+                return;
             }
 
-        // Sign Out
-        async function signOut() {
-            await supabase.auth.signOut();
-            document.getElementById('profileContent').style.display = 'none';
-            document.getElementById('loginOverlay').style.display = 'block';
+            // Display user details
+            userNameText.textContent = `Username: ${user.user_metadata?.user_name || user.user_metadata?.name || 'N/A'}`;
+            userEmailText.textContent = `Email: ${user.email}`;
+            userCreatedText.textContent = `Created: ${new Date(user.created_at).toLocaleDateString()}`;
+
+            // Fetch is_admin from profiles table
+            const { data: profile } = await supabaseClient
+                .from("profiles")
+                .select("is_admin")
+                .eq("id", user.id)
+                .single();
+
+            userRoleText.textContent =
+                profile?.is_admin
+                    ? "Role: Admin"
+                    : "Role: User";
+
+            authBox.classList.add("hidden");
+            accountBox.classList.remove("hidden");
         }
 
-        // Load and display user profile
-        async function loadUserProfile(user) {
-            if (!user) return;
-
-            document.getElementById('userFullName').textContent = user.user_metadata.full_name || user.user_metadata.name || 'User';
-            document.getElementById('userEmail').textContent = user.email;
-            document.getElementById('userEmailField').textContent = user.email;
-            document.getElementById('userUsername').textContent = user.user_metadata.preferred_username || user.user_metadata.user_name || 'N/A';
-            document.getElementById('userFullNameField').textContent = user.user_metadata.full_name || 'Not set';
-
-            // Profile picture
-            if (user.user_metadata.avatar_url) {
-                document.getElementById('profilePicture').src = user.user_metadata.avatar_url;
-            }
-        }
-
-        // Check session on load
-        async function checkSession() {
-            const { data: { session } } = await supabase.auth.getSession();
-            if (session) {
-                document.getElementById('loginOverlay').style.display = 'none';
-                document.getElementById('registerOverlay').style.display = 'none';
-                document.getElementById('profileContent').style.display = 'block';
-                loadUserProfile(session.user);
-            }
-        }
-
-        // Listen for auth changes
-        supabase.auth.onAuthStateChange((event, session) => {
-            if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
-                document.getElementById('loginOverlay').style.display = 'none';
-                document.getElementById('registerOverlay').style.display = 'none';
-                document.getElementById('profileContent').style.display = 'block';
-                loadUserProfile(session?.user);
-            } else if (event === 'SIGNED_OUT') {
-                document.getElementById('profileContent').style.display = 'none';
-                document.getElementById('loginOverlay').style.display = 'block';
-            }
-        });
-
-        // Run on page load
-        checkSession();
-
-        // Placeholder functions (expand later)
-        function showEditProfileForm() {
-            document.getElementById('editProfileForm').style.display = 'block';
-        }
-        function cancelEditProfile() {
-            document.getElementById('editProfileForm').style.display = 'none';
-        }
-        function updateProfile() {
-            alert('Profile update coming soon!');
-            cancelEditProfile();
-        }
-        function uploadProfilePicture() {
-            alert('Profile picture upload coming soon!');
-        }
+        // ===============================
+        // INIT
+        // ===============================
+        loadUser();
     </script>
 
     <!-- Load Header & Footer -->
@@ -257,7 +239,6 @@
                 .then(data => document.getElementById(elementId).innerHTML = data)
                 .catch(err => console.error('Load error:', err));
         }
-
         document.addEventListener('DOMContentLoaded', () => {
             loadHTML('/tyxar_web/header.html', 'header');
             loadHTML('/tyxar_web/footer.html', 'footer');
