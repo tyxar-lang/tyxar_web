@@ -154,8 +154,8 @@
             const { error } = await supabaseClient.auth.signInWithOAuth({
                 provider: 'github',
                 options: {
-                    redirectTo: window.location.origin + '/profile/'
-                }
+                    redirectTo: 'https://tyxar-lang.github.io/tyxar_web/profile/'
+                               }
             });
 
             authStatus.textContent = error
@@ -167,8 +167,8 @@
             const { error } = await supabaseClient.auth.signInWithOAuth({
                 provider: 'google',
                 options: {
-                    redirectTo: window.location.origin + '/profile/'
-                }
+                    redirectTo: 'https://tyxar-lang.github.io/tyxar_web/profile/'
+                               }
             });
 
             authStatus.textContent = error
@@ -218,17 +218,15 @@
         // INIT
         // ===============================
         loadUser();
-    </script>
 
-    <script>
-        // ADD THIS BLOCK ONLY - CLEANUP & AUTO SHOW ACCOUNT
+        // CLEANUP HASH & AUTO SHOW ACCOUNT AFTER OAUTH
 
-            // Remove the #access_token=... from the URL after OAuth redirect
+            // Remove the #access_token=... from URL
             if (window.location.hash && window.location.hash.includes('access_token')) {
                 window.history.replaceState({}, document.title, window.location.pathname);
             }
 
-            // Automatically check if user is logged in (after OAuth or page refresh) and show account
+            // Check session and show account if logged in (runs after OAuth redirect)
             async function checkAndShowAccount() {
                 const { data } = await supabaseClient.auth.getUser();
                 const user = data.user;
@@ -251,10 +249,10 @@
                 }
             }
 
-            // Run once on page load
+            // Run on page load
             checkAndShowAccount();
 
-            // Also run every time auth state changes (important for after OAuth redirect)
+            // Run when auth state changes (critical for after OAuth)
             supabaseClient.auth.onAuthStateChange((event, session) => {
                 if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
                     checkAndShowAccount();
@@ -264,6 +262,8 @@
                 }
          });
     </script>
+
+    
   
 
 </body>
