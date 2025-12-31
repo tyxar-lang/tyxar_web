@@ -7,115 +7,101 @@
     <link rel="shortcut icon" href="/tyxar_web/images/tyxar.ico" type="image/x-icon">
     <title>Account - Tyxar Programming Language</title>
     <link rel="stylesheet" href="/tyxar_web/styles.css">
+    <style>
+    body {
+    font-family: system-ui, sans-serif;
+    background: #0b0b0b;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    }
+    
+    .box {
+    background: #161616;
+    padding: 2rem;
+    width: 320px;
+    border-radius: 10px;
+    }
+    
+    input,
+    button {
+    width: 100%;
+    margin-top: 0.7rem;
+    padding: 0.6rem;
+    border-radius: 6px;
+    border: none;
+    }
+    
+    input {
+    background: #222;
+    color: #fff;
+    }
+    
+    button {
+    background: #4f46e5;
+    color: white;
+    cursor: pointer;
+    }
+    
+    button.secondary {
+    background: #333;
+    }
+    
+    .hidden {
+    display: none;
+    }
+    
+    .status {
+    margin-top: 1rem;
+    font-size: 0.9rem;
+    opacity: 0.85;
+    }
+    </style>
+
 </head>
 
 <body>
-    <!-- Header -->
-    <header id="header"></header>
 
-    <!-- Main Content -->
-    <main>
-        <div class="page-content">
+    <div class="box">
 
-            <!-- Login Overlay -->
-            <div class="login-overlay" id="loginOverlay">
-                <div class="login-container">
-                    <div class="login-left">
-                        <img src="/tyxar_web/images/tyxar.png" alt="Tyxar Logo">
-                    </div>
-                    <div class="login-right">
-                        <h2>Log In</h2>
-                        <input type="email" id="email" placeholder="Email" required>
-                        <input type="password" id="password" placeholder="Password" required>
-                        <button class="login-btn" onclick="login()">Log In</button>
-                        <div class="divider">
-                            <hr>or
-                            <hr>
-                        </div>
-                        <button class="social-login-btn google" onclick="loginWithGoogle()">
-                            <img src="/tyxar_web/images/google-icon.png" alt="Google Icon">
-                            Log in with Google
-                        </button>
-                        <button class="social-login-btn github" onclick="loginWithGitHub()">
-                            <img src="/tyxar_web/images/github-icon.png" alt="GitHub Icon">
-                            Log in with GitHub
-                        </button>
-                        <!--<p>Don't have an account? <a href="#" onclick="showRegister()">Register</a></p>-->
-                    </div>
-                </div>
-            </div>
+        <!-- LOGIN / SIGNUP -->
+        <div id="auth">
+            <h2>Helix Account</h2>
 
-            <!-- Register Overlay 
-            <div class="register-overlay" id="registerOverlay" style="display: none;">
-                <div class="register-container">
-                    <div class="register-left">
-                        <img src="/tyxar_web/images/tyxar.png" alt="Tyxar Logo">
-                    </div>
-                    <div class="register-right">
-                        <h2>Register</h2>
-                        <input type="text" id="firstName" placeholder="First Name" required>
-                        <input type="text" id="middleName" placeholder="Middle Name (Optional)">
-                        <input type="text" id="lastName" placeholder="Last Name" required>
-                        <input type="email" id="registerEmail" placeholder="Email" required>
-                        <input type="password" id="registerPassword" placeholder="Password" required>
-                        <button class="create-account" onclick="createAccount()">Create Account</button>
-                        <p>Already have an account? <a href="#" onclick="showLogin()">Log In</a></p>
-                    </div>
-                </div>
-            </div> -->
+            <input id="email" type="email" placeholder="Email" />
+            <input id="password" type="password" placeholder="Password" />
 
-            <!-- Profile Content -->
-            <div class="hidden" id="account">
-               <!-- <div class="profile-picture-container">
-                    <img id="profilePicture" class="profile-picture" src="https://via.placeholder.com/120?text=Profile"
-                        alt="Profile Picture">
-                    <div>
-                        <input type="file" id="profilePictureInput" accept="image/*" style="display: none;"
-                            onchange="uploadProfilePicture()">
-                        <button class="change-picture-btn"
-                            onclick="document.getElementById('profilePictureInput').click()">Change</button>
-                    </div>
-                </div> -->
-                <h2>Welcome</h2>
-                <p id="userName" ></p>
-                <p id="userEmail"></p>
+            <button onclick="login()">Log in</button>
+            <button class="secondary" onclick="signup()">Sign up</button>
+            <button onclick="loginWithGitHub()" style="background: #24292e; margin-top: 0.5rem;">Login with
+                GitHub</button>
+            <button onclick="loginWithGoogle()" style="background: #4285f4; color: white; margin-top: 0.5rem;">Login
+                with Google</button>
 
-                <!--<div class="account-section">
-                    <h2>Account</h2>
-                    <div class="account-field"><label>Username</label><span id="userUsername">Loading...</span></div>
-                    <div class="account-field"><label>Email</label><span id="userEmailField"></span></div>
-                    <div class="account-field"><label>Password</label><span>••••••••</span></div>
-                    <div class="account-field"><label>Full Name</label><span id="userFullNameField"></span>
-                        <button class="edit-btn" onclick="showEditProfileForm()">Edit</button>
-                    </div>
-
-                    <div class="edit-profile-form" id="editProfileForm" style="display: none;">
-                        <input type="text" id="editFirstName" placeholder="First Name" required>
-                        <input type="text" id="editMiddleName" placeholder="Middle Name (Optional)">
-                        <input type="text" id="lastName" placeholder="Last Name" required>
-                        <button onclick="updateProfile()">Save Changes</button>
-                        <button onclick="cancelEditProfile()">Cancel</button>
-                    </div> -->
-                </div>
-
-                <button class="sign-out-btn" onclick="logout()">Log Out</button>
-            </div>
+            <div class="status" id="authStatus"></div>
         </div>
-    </main>
 
-    <!-- Footer -->
-    <footer id="footer"></footer>
+        <!-- ACCOUNT -->
+        <div id="account" class="hidden">
+            <h2>Welcome</h2>
 
-    <!-- Scripts -->
-    <script src="/tyxar_web/script.js"></script>
+            <p id="userName"></p>
+            <p id="userEmail"></p>
+            <p id="userRole"></p>
+            <p id="userCreated"></p>
 
+            <button onclick="logout()">Log out</button>
+        </div>
+
+    </div>
+
+    <!-- Supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="config.js"></script>
 
     <script>
-
-        const SUPABASE_URL = "https://ntqoveatlcvzbuipwxfl.supabase.co";
-            const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im50cW92ZWF0bGN2emJ1aXB3eGZsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjcxOTYxMDYsImV4cCI6MjA4Mjc3MjEwNn0.dWn4N1tWbUnLNW3dABcVqf3CHiVdjkz9dYeJD0TsaYU";
-            const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
         // ===============================
         // ELEMENTS
         // ===============================
@@ -234,19 +220,6 @@
         loadUser();
     </script>
 
-    <!-- Load Header & Footer -->
-    <script>
-        function loadHTML(url, elementId) {
-            fetch(url)
-                .then(res => res.text())
-                .then(data => document.getElementById(elementId).innerHTML = data)
-                .catch(err => console.error('Load error:', err));
-        }
-        document.addEventListener('DOMContentLoaded', () => {
-            loadHTML('/tyxar_web/header.html', 'header');
-            loadHTML('/tyxar_web/footer.html', 'footer');
-        });
-    </script>
 </body>
 
 </html>
