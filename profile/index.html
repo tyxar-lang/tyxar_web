@@ -219,48 +219,45 @@
         // ===============================
         loadUser();
 
-        // CLEANUP HASH & AUTO SHOW ACCOUNT AFTER OAUTH
+        // ADD THIS - FINAL FIX FOR SHOWING ACCOUNT AFTER OAUTH REDIRECT
 
-            // Remove the #access_token=... from URL
-            if (window.location.hash && window.location.hash.includes('access_token')) {
-                window.history.replaceState({}, document.title, window.location.pathname);
-            }
-
-            // Check session and show account if logged in (runs after OAuth redirect)
-            async function checkAndShowAccount() {
+        // Clean the #access_token=... from the URL
+        if (window.location.hash && window.location.hash.includes('access_token')) {
+            window.history.replaceState({}, document.title, window.location.pathname);
+        }
+    
+        // Force check session and show account after OAuth
+        supabaseClient.auth.onAuthStateChange(async (event, session) => {
+            if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
                 const { data } = await supabaseClient.auth.getUser();
                 const user = data.user;
-
+    
                 if (user) {
                     userNameText.textContent = `Username: ${user.user_metadata?.user_name || user.user_metadata?.name || 'N/A'}`;
                     userEmailText.textContent = `Email: ${user.email}`;
                     userCreatedText.textContent = `Created: ${new Date(user.created_at).toLocaleDateString()}`;
-
+    
                     const { data: profile } = await supabaseClient
                         .from("profiles")
                         .select("is_admin")
                         .eq("id", user.id)
                         .single();
-
+    
                     userRoleText.textContent = profile?.is_admin ? "Role: Admin" : "Role: User";
-
+    
                     authBox.classList.add("hidden");
                     accountBox.classList.remove("hidden");
                 }
             }
-
-            // Run on page load
-            checkAndShowAccount();
-
-            // Run when auth state changes (critical for after OAuth)
-            supabaseClient.auth.onAuthStateChange((event, session) => {
-                if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
-                    checkAndShowAccount();
-                } else if (event === 'SIGNED_OUT') {
-                    authBox.classList.remove("hidden");
-                    accountBox.classList.add("hidden");
-                }
-         });
+        });
+    
+        // Also run once in case the session is already there
+        (async () => {
+            const { data: { session } } = await supabaseClient.auth.getSession();
+            if (session) {
+                loadUser();  // Reuse your existing loadUser function
+            }
+        })();
     </script>
 
     
