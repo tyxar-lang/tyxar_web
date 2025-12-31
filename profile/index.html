@@ -219,6 +219,43 @@
         // ===============================
         loadUser();
     </script>
+    <script>
+        const supabase = supabase.createClient(
+            'https://ntqoveatlcvzbuipwxfl.supabase.co',
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im50cW92ZWF0bGN2emJ1aXB3eGZsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjcxOTYxMDYsImV4cCI6MjA4Mjc3MjEwNn0.dWn4N1tWbUnLNW3dABcVqf3CHiVdjkz9dYeJD0TsaYU'
+        );
+
+        // === CRITICAL: Clean the ugly token hash from URL ===
+        if (window.location.hash && window.location.hash.includes('access_token')) {
+            // Remove the hash but keep the path
+            window.history.replaceState({}, document.title, window.location.pathname);
+        }
+
+        // === Show profile when logged in ===
+        async function checkAuth() {
+            const { data: { session } } = await supabase.auth.getSession();
+
+            if (session) {
+                document.getElementById('loginOverlay').style.display = 'none';
+                document.getElementById('account').classList.remove('hidden');
+
+                // Fill in user data
+                document.getElementById('userName').textContent =
+                    session.user.user_metadata.name || session.user.user_metadata.full_name || session.user.email;
+                document.getElementById('userEmail').textContent = session.user.email;
+            }
+        }
+
+        // Run on load
+        checkAuth();
+
+        // Also run when auth state changes
+        supabase.auth.onAuthStateChange((event, session) => {
+            if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
+                checkAuth();
+            }
+        });
+    </script>
 
 </body>
 
