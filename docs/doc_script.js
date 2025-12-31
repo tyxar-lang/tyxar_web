@@ -111,8 +111,14 @@ function addCopyButtons() {
     const preElements = document.querySelectorAll('.content-wrapper pre');
 
     preElements.forEach(pre => {
-        // Skip if already has a copy button
-        if (pre.querySelector('.copy-btn')) return;
+        // Skip if already wrapped
+        if (pre.parentNode.classList.contains('pre-wrapper')) return;
+
+        const wrapper = document.createElement('div');
+        wrapper.className = 'pre-wrapper';
+
+        pre.parentNode.insertBefore(wrapper, pre);
+        wrapper.appendChild(pre);
 
         const copyBtn = document.createElement('button');
         copyBtn.className = 'copy-btn';
@@ -144,7 +150,7 @@ function addCopyButtons() {
             }
         });
 
-        pre.appendChild(copyBtn);
+        wrapper.appendChild(copyBtn);
     });
 
     // Set up mutation observer to watch for new content

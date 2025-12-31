@@ -516,10 +516,13 @@ main {
     font-family: 'Courier New', monospace;
     font-size: 14px;
     line-height: 1.6;
+}
+
+.content-wrapper .pre-wrapper {
     position: relative;
 }
 
-.content-wrapper pre .copy-btn {
+.pre-wrapper .copy-btn {
     position: absolute;
     top: 10px;
     right: 10px;
@@ -534,11 +537,11 @@ main {
     transition: opacity 0.3s ease;
 }
 
-.content-wrapper pre .copy-btn:hover {
+.pre-wrapper .copy-btn:hover {
     opacity: 1;
 }
 
-.content-wrapper pre:hover .copy-btn {
+.pre-wrapper:hover .copy-btn {
     opacity: 1;
 }
 
