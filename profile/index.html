@@ -219,57 +219,53 @@
         // ===============================
         loadUser();
     </script>
-  
+
     <script>
-        // ... your existing code above ...
+        // ADD THIS BLOCK ONLY - CLEANUP & AUTO SHOW ACCOUNT
 
-        // ADD THIS CLEANUP & AUTO-SHOW PROFILE CODE BELOW
-
-        // Clean the #access_token=... from URL after OAuth login
-        if (window.location.hash && window.location.hash.includes('access_token')) {
-            window.history.replaceState({}, document.title, window.location.pathname);
-        }
-
-        // Automatically show account if user is already logged in (or after OAuth)
-        async function checkAndShowAccount() {
-            const { data: { user } } = await supabaseClient.auth.getUser();
-
-            if (user) {
-                // Fill user info
-                userNameText.textContent = `Username: ${user.user_metadata?.user_name || user.user_metadata?.name || 'N/A'}`;
-                userEmailText.textContent = `Email: ${user.email}`;
-                userCreatedText.textContent = `Created: ${new Date(user.created_at).toLocaleDateString()}`;
-
-                // Optional admin check (keep your existing code)
-                const { data: profile } = await supabaseClient
-                    .from("profiles")
-                    .select("is_admin")
-                    .eq("id", user.id)
-                    .single();
-
-                userRoleText.textContent = profile?.is_admin ? "Role: Admin" : "Role: User";
-
-                // Show account, hide login
-                authBox.classList.add("hidden");
-                accountBox.classList.remove("hidden");
+            // Remove the #access_token=... from the URL after OAuth redirect
+            if (window.location.hash && window.location.hash.includes('access_token')) {
+                window.history.replaceState({}, document.title, window.location.pathname);
             }
-        }
 
-        // Run on page load
-        checkAndShowAccount();
+            // Automatically check if user is logged in (after OAuth or page refresh) and show account
+            async function checkAndShowAccount() {
+                const { data } = await supabaseClient.auth.getUser();
+                const user = data.user;
 
-        // Also run whenever auth state changes (e.g. after OAuth redirect)
-        supabaseClient.auth.onAuthStateChange((event, session) => {
-            if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
-                checkAndShowAccount();
-            } else if (event === 'SIGNED_OUT') {
-                authBox.classList.remove("hidden");
-                accountBox.classList.add("hidden");
+                if (user) {
+                    userNameText.textContent = `Username: ${user.user_metadata?.user_name || user.user_metadata?.name || 'N/A'}`;
+                    userEmailText.textContent = `Email: ${user.email}`;
+                    userCreatedText.textContent = `Created: ${new Date(user.created_at).toLocaleDateString()}`;
+
+                    const { data: profile } = await supabaseClient
+                        .from("profiles")
+                        .select("is_admin")
+                        .eq("id", user.id)
+                        .single();
+
+                    userRoleText.textContent = profile?.is_admin ? "Role: Admin" : "Role: User";
+
+                    authBox.classList.add("hidden");
+                    accountBox.classList.remove("hidden");
+                }
             }
-        });
 
-        // Your existing loadUser() can stay or be removed — this replaces it
+            // Run once on page load
+            checkAndShowAccount();
+
+            // Also run every time auth state changes (important for after OAuth redirect)
+            supabaseClient.auth.onAuthStateChange((event, session) => {
+                if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
+                    checkAndShowAccount();
+                } else if (event === 'SIGNED_OUT') {
+                    authBox.classList.remove("hidden");
+                    accountBox.classList.add("hidden");
+                }
+         });
     </script>
+  
+
 </body>
 
 </html>
