@@ -219,45 +219,26 @@
         // ===============================
         loadUser();
 
-        // ADD THIS - FINAL FIX FOR SHOWING ACCOUNT AFTER OAUTH REDIRECT
+        // CLEANUP & SHOW ACCOUNT AFTER LOGIN
 
-        // Clean the #access_token=... from the URL
-        if (window.location.hash && window.location.hash.includes('access_token')) {
-            window.history.replaceState({}, document.title, window.location.pathname);
-        }
-    
-        // Force check session and show account after OAuth
-        supabaseClient.auth.onAuthStateChange(async (event, session) => {
-            if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
-                const { data } = await supabaseClient.auth.getUser();
-                const user = data.user;
-    
-                if (user) {
-                    userNameText.textContent = `Username: ${user.user_metadata?.user_name || user.user_metadata?.name || 'N/A'}`;
-                    userEmailText.textContent = `Email: ${user.email}`;
-                    userCreatedText.textContent = `Created: ${new Date(user.created_at).toLocaleDateString()}`;
-    
-                    const { data: profile } = await supabaseClient
-                        .from("profiles")
-                        .select("is_admin")
-                        .eq("id", user.id)
-                        .single();
-    
-                    userRoleText.textContent = profile?.is_admin ? "Role: Admin" : "Role: User";
-    
-                    authBox.classList.add("hidden");
-                    accountBox.classList.remove("hidden");
+            if (window.location.hash.includes('access_token')) {
+                window.history.replaceState({}, document.title, window.location.pathname);
+            }
+
+            supabaseClient.auth.onAuthStateChange((event, session) => {
+                if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
+                    loadUser();  // Re-use your existing loadUser() to fill details and show accountBox
+                } else if (event === 'SIGNED_OUT') {
+                    authBox.classList.remove("hidden");
+                    accountBox.classList.add("hidden");
                 }
-            }
-        });
-    
-        // Also run once in case the session is already there
-        (async () => {
-            const { data: { session } } = await supabaseClient.auth.getSession();
-            if (session) {
-                loadUser();  // Reuse your existing loadUser function
-            }
-        })();
+            });
+
+            // Initial check in case page loads with existing session
+            (async () => {
+                const { data: { session } } = await supabaseClient.auth.getSession();
+                if (session) loadUser();
+            })();
     </script>
 
     
