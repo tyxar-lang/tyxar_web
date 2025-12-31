@@ -509,7 +509,8 @@ main {
     color: #e2e8f0;
     padding: 20px;
     border-radius: 8px;
-    overflow-x: auto;
+    overflow: auto;
+    max-height: 400px;
     margin: 20px 0;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     font-family: 'Courier New', monospace;
@@ -1087,7 +1088,7 @@ footer {
 
 .user-email {
     font-size: 1rem;
-    color:var(--accent-blue);
+    color: var(--accent-blue);
     margin-bottom: 1.5rem;
 }
 
