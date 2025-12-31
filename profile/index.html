@@ -7,8 +7,6 @@
     <link rel="shortcut icon" href="/tyxar_web/images/tyxar.ico" type="image/x-icon">
     <title>Account - Tyxar Programming Language</title>
     <link rel="stylesheet" href="/tyxar_web/styles.css">
-    <script src="config.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 
 <body>
@@ -25,8 +23,7 @@
                         <img src="/tyxar_web/images/tyxar.png" alt="Tyxar Logo">
                     </div>
                     <div class="login-right">
-                        <h2>Log In to Tyxar</h2>
-                        <p>Welcome back! Sign in to access your account and explore the Tyxar Programming Language.</p>
+                        <h2>Log In</h2>
                         <input type="email" id="loginEmail" placeholder="Email" required>
                         <input type="password" id="loginPassword" placeholder="Password" required>
                         <button class="login-btn" onclick="signIn()">Log In</button>
@@ -54,8 +51,7 @@
                         <img src="/tyxar_web/images/tyxar.png" alt="Tyxar Logo">
                     </div>
                     <div class="register-right">
-                        <h2>Join Tyxar</h2>
-                        <p>Create your account to start coding with Tyxar Programming Language.</p>
+                        <h2>Register</h2>
                         <input type="text" id="firstName" placeholder="First Name" required>
                         <input type="text" id="middleName" placeholder="Middle Name (Optional)">
                         <input type="text" id="lastName" placeholder="Last Name" required>
@@ -117,6 +113,8 @@
 
     <!-- Scripts -->
     <script src="/tyxar_web/script.js"></script>
+    <script src="config.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
 
         // Function to load external HTML content
@@ -145,154 +143,158 @@
                     loadHTML('doc/ ', 'sidebar');
                 }
 
-                // Initialize Supabase
-                initializeSupabase();
+                // Load user on page load
+                loadUser();
             });
 
-            // Supabase Client
-            let supabaseClient;
+        // ===============================
+        // AUTH FUNCTIONS
+        // ===============================
+        async function signIn() {
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
 
-            function initializeSupabase() {
-                supabaseClient = supabase.createClient(
-                    SUPABASE_CONFIG.URL,
-                    SUPABASE_CONFIG.ANON_KEY
-                );
-                checkAuthState();
+            const { error } = await supabaseClient.auth.signInWithPassword({
+                email,
+                password
+            });
+
+            if (error) {
+                alert(error.message);
+            } else {
+                loadUser();
             }
+        }
 
-            // Auth Functions
-            async function signIn() {
-                const email = document.getElementById('loginEmail').value;
-                const password = document.getElementById('loginPassword').value;
-
-                const { error } = await supabaseClient.auth.signInWithPassword({
-                    email,
-                    password
-                });
-
-                if (error) {
-                    alert(error.message);
-                } else {
-                    showProfile();
+        async function signInWithGoogle() {
+            const { error } = await supabaseClient.auth.signInWithOAuth({
+                provider: 'google',
+                options: {
+                    redirectTo: window.location.origin + '/profile/index.html'
                 }
-            }
+            });
 
-            async function signInWithGoogle() {
-                const { error } = await supabaseClient.auth.signInWithOAuth({
-                    provider: 'google',
-                    options: {
-                        redirectTo: window.location.href
+            if (error) {
+                alert(error.message);
+            }
+        }
+
+        async function signInWithGitHub() {
+            const { error } = await supabaseClient.auth.signInWithOAuth({
+                provider: 'github',
+                options: {
+                    redirectTo: window.location.origin + '/profile/index.html'
+                }
+            });
+
+            if (error) {
+                alert(error.message);
+            }
+        }
+
+        async function createAccount() {
+            const firstName = document.getElementById('firstName').value;
+            const middleName = document.getElementById('middleName').value;
+            const lastName = document.getElementById('lastName').value;
+            const email = document.getElementById('registerEmail').value;
+            const password = document.getElementById('registerPassword').value;
+
+            const { error } = await supabaseClient.auth.signUp({
+                email,
+                password,
+                options: {
+                    data: {
+                        first_name: firstName,
+                        middle_name: middleName,
+                        last_name: lastName
                     }
-                });
-
-                if (error) {
-                    alert(error.message);
                 }
+            });
+
+            if (error) {
+                alert(error.message);
+            } else {
+                alert('Check your email to confirm signup.');
             }
+        }
 
-            async function signInWithGitHub() {
-                const { error } = await supabaseClient.auth.signInWithOAuth({
-                    provider: 'github',
-                    options: {
-                        redirectTo: window.location.href
-                    }
-                });
+        async function signOut() {
+            await supabaseClient.auth.signOut();
+            showLogin();
+        }
 
-                if (error) {
-                    alert(error.message);
-                }
-            }
+        // ===============================
+        // UI FUNCTIONS
+        // ===============================
+        function showLogin() {
+            document.getElementById('loginOverlay').style.display = 'flex';
+            document.getElementById('registerOverlay').style.display = 'none';
+            document.getElementById('profileContent').style.display = 'none';
+        }
 
-            async function createAccount() {
-                const firstName = document.getElementById('firstName').value;
-                const middleName = document.getElementById('middleName').value;
-                const lastName = document.getElementById('lastName').value;
-                const email = document.getElementById('registerEmail').value;
-                const password = document.getElementById('registerPassword').value;
+        function showRegister() {
+            document.getElementById('loginOverlay').style.display = 'none';
+            document.getElementById('registerOverlay').style.display = 'flex';
+            document.getElementById('profileContent').style.display = 'none';
+        }
 
-                const { error } = await supabaseClient.auth.signUp({
-                    email,
-                    password,
-                    options: {
-                        data: {
-                            first_name: firstName,
-                            middle_name: middleName,
-                            last_name: lastName
-                        }
-                    }
-                });
+        function showProfile() {
+            document.getElementById('loginOverlay').style.display = 'none';
+            document.getElementById('registerOverlay').style.display = 'none';
+            document.getElementById('profileContent').style.display = 'block';
+        }
 
-                if (error) {
-                    alert(error.message);
-                } else {
-                    alert('Check your email to confirm signup.');
-                }
-            }
+        // ===============================
+        // USER STATE
+        // ===============================
+        async function loadUser() {
+            const { data } = await supabaseClient.auth.getUser();
+            const user = data.user;
 
-            async function signOut() {
-                await supabaseClient.auth.signOut();
+            if (!user) {
                 showLogin();
+                return;
             }
 
-            function showLogin() {
-                document.getElementById('loginOverlay').style.display = 'flex';
-                document.getElementById('registerOverlay').style.display = 'none';
-                document.getElementById('profileContent').style.display = 'none';
-            }
+            // Populate profile
+            const fullName = `${user.user_metadata?.first_name || ''} ${user.user_metadata?.middle_name || ''} ${user.user_metadata?.last_name || ''}`.trim();
+            document.getElementById('userFullName').textContent = fullName || 'Welcome';
+            document.getElementById('userEmail').textContent = user.email;
+            document.getElementById('userUsername').textContent = user.user_metadata?.user_name || user.user_metadata?.name || 'N/A';
+            document.getElementById('userEmailField').textContent = user.email;
+            document.getElementById('userFullNameField').textContent = fullName || 'N/A';
 
-            function showRegister() {
-                document.getElementById('loginOverlay').style.display = 'none';
-                document.getElementById('registerOverlay').style.display = 'flex';
-                document.getElementById('profileContent').style.display = 'none';
-            }
+            // Fetch is_admin
+            const { data: profile } = await supabaseClient
+                .from("profiles")
+                .select("is_admin")
+                .eq("id", user.id)
+                .single();
 
-            function showProfile() {
-                document.getElementById('loginOverlay').style.display = 'none';
-                document.getElementById('registerOverlay').style.display = 'none';
-                document.getElementById('profileContent').style.display = 'block';
-                loadUserProfile();
-            }
+            // For now, just show profile
+            showProfile();
+        }
 
-            async function loadUserProfile() {
-                const { data } = await supabaseClient.auth.getUser();
-                const user = data.user;
+        // Placeholder functions for edit profile
+        function showEditProfileForm() {
+            document.getElementById('editProfileForm').style.display = 'block';
+        }
 
-                if (user) {
-                    document.getElementById('userFullName').textContent = `${user.user_metadata?.first_name || ''} ${user.user_metadata?.last_name || ''}`.trim() || 'Welcome';
-                    document.getElementById('userEmail').textContent = user.email;
-                    document.getElementById('userUsername').textContent = user.user_metadata?.user_name || user.email.split('@')[0];
-                    document.getElementById('userEmailField').textContent = user.email;
-                    document.getElementById('userFullNameField').textContent = `${user.user_metadata?.first_name || ''} ${user.user_metadata?.middle_name ? user.user_metadata.middle_name + ' ' : ''}${user.user_metadata?.last_name || ''}`.trim();
-                }
-            }
+        function cancelEditProfile() {
+            document.getElementById('editProfileForm').style.display = 'none';
+        }
 
-            async function checkAuthState() {
-                const { data } = await supabaseClient.auth.getUser();
-                if (data.user) {
-                    showProfile();
-                } else {
-                    showLogin();
-                }
-            }
+        async function updateProfile() {
+            // Implement update logic if needed
+            alert('Update not implemented yet.');
+            cancelEditProfile();
+        }
 
-            // Placeholder functions for profile editing (implement as needed)
-            function uploadProfilePicture() {
-                alert('Profile picture upload not implemented yet.');
-            }
+        function uploadProfilePicture() {
+            // Implement upload logic if needed
+            alert('Upload not implemented yet.');
+        }
 
-            function showEditProfileForm() {
-                document.getElementById('editProfileForm').style.display = 'block';
-            }
-
-            function updateProfile() {
-                // Implement profile update logic
-                alert('Profile update not implemented yet.');
-                document.getElementById('editProfileForm').style.display = 'none';
-            }
-
-            function cancelEditProfile() {
-                document.getElementById('editProfileForm').style.display = 'none';
-            }
     </script>
 </body>
 
