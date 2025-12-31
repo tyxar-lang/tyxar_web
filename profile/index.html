@@ -113,8 +113,8 @@
 
     <!-- Scripts -->
     <script src="/tyxar_web/script.js"></script>
-    <script src="config.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="config.js"></script>
     <script>
 
         // Function to load external HTML content
@@ -198,7 +198,7 @@
             const { error } = await supabaseClient.auth.signInWithOAuth({
                 provider: 'github',
                 options: {
-                    redirectTo: window.location.origin + '/profile/b.html'
+                    redirectTo: window.location.origin + '/profile'
                 }
             });
 
@@ -211,7 +211,7 @@
             const { error } = await supabaseClient.auth.signInWithOAuth({
                 provider: 'google',
                 options: {
-                    redirectTo: window.location.origin + '/profile/b.html'
+                    redirectTo: window.location.origin + '/profile'
                 }
             });
 
