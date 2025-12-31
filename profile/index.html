@@ -31,11 +31,11 @@
                             <hr>or
                             <hr>
                         </div>
-                        <button class="social-login-btn google" onclick="signInWithGoogle()">
+                        <button class="social-login-btn google" onclick="loginWithGoogle()">
                             <img src="/tyxar_web/images/google-icon.png" alt="Google Icon">
                             Log in with Google
                         </button>
-                        <button class="social-login-btn github" onclick="signInWithGitHub()">
+                        <button class="social-login-btn github" onclick="loginWithGitHub()">
                             <img src="/tyxar_web/images/github-icon.png" alt="GitHub Icon">
                             Log in with GitHub
                         </button>
@@ -116,132 +116,94 @@
     <script src="config.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
+        // ===============================
+        // CONFIG — CHANGE THESE
+        // ===============================
+        const SUPABASE_URL = "https://ntqoveatlcvzbuipwxfl.supabase.co";
+        const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im50cW92ZWF0bGN2emJ1aXB3eGZsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjcxOTYxMDYsImV4cCI6MjA4Mjc3MjEwNn0.dWn4N1tWbUnLNW3dABcVqf3CHiVdjkz9dYeJD0TsaYU";
 
-        // Function to load external HTML content
-            function loadHTML(url, elementId) {
-                fetch(url)
-                    .then(response => response.text())
-                    .then(data => {
-                        document.getElementById(elementId).innerHTML = data;
+        const supabaseClient = supabase.createClient(
+            SUPABASE_URL,
+            SUPABASE_ANON_KEY
+        );
 
-                        // --- CRITICAL STEP ---
-                        // Re-run initialization to catch the *new* links in the footer 
-                        // AND the sidebar links (since they use the global selector now)
-                        initializeContentLoader();
-                    })
-                    .catch(err => console.error(`Error loading ${url}:`, err));
-            }
+        // ===============================
+        // ELEMENTS
+        // ===============================
+        const authBox = document.getElementById("auth");
+        const accountBox = document.getElementById("account");
+        const authStatus = document.getElementById("authStatus");
 
-            // Call these functions when the main page loads:
-            document.addEventListener('DOMContentLoaded', (event) => {
-                // Load Header, Footer, and Sidebar
-                loadHTML('/tyxar_web/header.html', 'header');
-                loadHTML('/tyxar_web/footer.html', 'footer');
+        const emailInput = document.getElementById("email");
+        const passwordInput = document.getElementById("password");
 
-                // If sidebar is only used in the 'doc' index.html, call it conditionally:
-                if (document.getElementById('sidebar')) {
-                    loadHTML('doc/ ', 'sidebar');
-                }
-
-                // Load user on page load
-                loadUser();
-            });
+        const userEmailText = document.getElementById("userEmail");
+        const userRoleText = document.getElementById("userRole");
+        const userNameText = document.getElementById("userName");
+        const userCreatedText = document.getElementById("userCreated");
 
         // ===============================
         // AUTH FUNCTIONS
         // ===============================
-        async function signIn() {
-            const email = document.getElementById('loginEmail').value;
-            const password = document.getElementById('loginPassword').value;
+        async function signup() {
+            const email = emailInput.value;
+            const password = passwordInput.value;
+
+            const { error } = await supabaseClient.auth.signUp({
+                email,
+                password
+            });
+
+            authStatus.textContent = error
+                ? error.message
+                : "Check your email to confirm signup.";
+        }
+
+        async function login() {
+            const email = emailInput.value;
+            const password = passwordInput.value;
 
             const { error } = await supabaseClient.auth.signInWithPassword({
                 email,
                 password
             });
 
-            if (error) {
-                alert(error.message);
-            } else {
-                loadUser();
-            }
+            authStatus.textContent = error
+                ? error.message
+                : "Logged in.";
+
+            loadUser();
         }
 
-        async function signInWithGoogle() {
-            const { error } = await supabaseClient.auth.signInWithOAuth({
-                provider: 'google',
-                options: {
-                    redirectTo: window.location.origin + '/profile/index.html'
-                }
-            });
-
-            if (error) {
-                alert(error.message);
-            }
-        }
-
-        async function signInWithGitHub() {
+        async function loginWithGitHub() {
             const { error } = await supabaseClient.auth.signInWithOAuth({
                 provider: 'github',
                 options: {
-                    redirectTo: window.location.origin + '/profile/index.html'
+                    redirectTo: window.location.origin + '/profile/b.html'
                 }
             });
 
-            if (error) {
-                alert(error.message);
-            }
+            authStatus.textContent = error
+                ? error.message
+                : "Redirecting to GitHub...";
         }
 
-        async function createAccount() {
-            const firstName = document.getElementById('firstName').value;
-            const middleName = document.getElementById('middleName').value;
-            const lastName = document.getElementById('lastName').value;
-            const email = document.getElementById('registerEmail').value;
-            const password = document.getElementById('registerPassword').value;
-
-            const { error } = await supabaseClient.auth.signUp({
-                email,
-                password,
+        async function loginWithGoogle() {
+            const { error } = await supabaseClient.auth.signInWithOAuth({
+                provider: 'google',
                 options: {
-                    data: {
-                        first_name: firstName,
-                        middle_name: middleName,
-                        last_name: lastName
-                    }
+                    redirectTo: window.location.origin + '/profile/b.html'
                 }
             });
 
-            if (error) {
-                alert(error.message);
-            } else {
-                alert('Check your email to confirm signup.');
-            }
+            authStatus.textContent = error
+                ? error.message
+                : "Redirecting to Google...";
         }
 
-        async function signOut() {
+        async function logout() {
             await supabaseClient.auth.signOut();
-            showLogin();
-        }
-
-        // ===============================
-        // UI FUNCTIONS
-        // ===============================
-        function showLogin() {
-            document.getElementById('loginOverlay').style.display = 'flex';
-            document.getElementById('registerOverlay').style.display = 'none';
-            document.getElementById('profileContent').style.display = 'none';
-        }
-
-        function showRegister() {
-            document.getElementById('loginOverlay').style.display = 'none';
-            document.getElementById('registerOverlay').style.display = 'flex';
-            document.getElementById('profileContent').style.display = 'none';
-        }
-
-        function showProfile() {
-            document.getElementById('loginOverlay').style.display = 'none';
-            document.getElementById('registerOverlay').style.display = 'none';
-            document.getElementById('profileContent').style.display = 'block';
+            showAuth();
         }
 
         // ===============================
@@ -252,49 +214,32 @@
             const user = data.user;
 
             if (!user) {
-                showLogin();
+                showAuth();
                 return;
             }
 
-            // Populate profile
-            const fullName = `${user.user_metadata?.first_name || ''} ${user.user_metadata?.middle_name || ''} ${user.user_metadata?.last_name || ''}`.trim();
-            document.getElementById('userFullName').textContent = fullName || 'Welcome';
-            document.getElementById('userEmail').textContent = user.email;
-            document.getElementById('userUsername').textContent = user.user_metadata?.user_name || user.user_metadata?.name || 'N/A';
-            document.getElementById('userEmailField').textContent = user.email;
-            document.getElementById('userFullNameField').textContent = fullName || 'N/A';
+            // Display user details
+            userNameText.textContent = `Username: ${user.user_metadata?.user_name || user.user_metadata?.name || 'N/A'}`;
+            userEmailText.textContent = `Email: ${user.email}`;
+            userCreatedText.textContent = `Created: ${new Date(user.created_at).toLocaleDateString()}`;
 
-            // Fetch is_admin
+            // Fetch is_admin from profiles table
             const { data: profile } = await supabaseClient
                 .from("profiles")
                 .select("is_admin")
                 .eq("id", user.id)
                 .single();
 
-            // For now, just show profile
-            showProfile();
+            userRoleText.textContent =
+                profile?.is_admin
+            authBox.classList.add("hidden");
+            accountBox.classList.remove("hidden");
         }
 
-        // Placeholder functions for edit profile
-        function showEditProfileForm() {
-            document.getElementById('editProfileForm').style.display = 'block';
-        }
-
-        function cancelEditProfile() {
-            document.getElementById('editProfileForm').style.display = 'none';
-        }
-
-        async function updateProfile() {
-            // Implement update logic if needed
-            alert('Update not implemented yet.');
-            cancelEditProfile();
-        }
-
-        function uploadProfilePicture() {
-            // Implement upload logic if needed
-            alert('Upload not implemented yet.');
-        }
-
+        // ===============================
+        // INIT
+        // ===============================
+        loadUser();
     </script>
 </body>
 
