@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="/tyxar_web/images/tyxar.ico" type="image/x-icon">
     <title>Account - Tyxar Programming Language</title>
-    <link rel="stylesheet" href="/tyxar_web/styles.css">
+    <link rel="stylesheet" href="tyxar_web/styles.css">
 </head>
 
 <body>
@@ -15,6 +15,94 @@
 
     <!-- Main Content -->
     <main>
+        <div class="page-content">
+            <!-- Login Overlay -->
+            <div class="login-overlay" id="loginOverlay">
+                <div class="login-container">
+                    <div class="login-left">
+                        <img src="tyxar_web/images/tyxar.png" alt="Tyxar Logo">
+                    </div>
+                    <div class="login-right">
+                        <h2>Log In</h2>
+                        <input type="email" id="loginEmail" placeholder="Email" required>
+                        <input type="password" id="loginPassword" placeholder="Password" required>
+                        <button class="login-btn" onclick="signIn()">Log In</button>
+                        <div class="divider">
+                            <hr>or
+                            <hr>
+                        </div>
+                        <button class="social-login-btn google" onclick="signInWithGoogle()">
+                            <img src="" alt="Google Icon">
+                            Log in with Google
+                        </button>
+                        <p>Don't have an account? <a href="#" onclick="showRegister()">Register</a></p>
+                    </div>
+                </div>
+            </div>
+        
+            <!-- Register Overlay -->
+            <div class="register-overlay" id="registerOverlay" style="display: none;">
+                <div class="register-container">
+                    <div class="register-left">
+                        <img src="/tyxar_web/images/tyxar.png" alt="Tyxar Logo">
+                    </div>
+                    <div class="register-right">
+                        <h2>Register</h2>
+                        <input type="text" id="firstName" placeholder="First Name" required>
+                        <input type="text" id="middleName" placeholder="Middle Name (Optional)">
+                        <input type="text" id="lastName" placeholder="Last Name" required>
+                        <input type="email" id="registerEmail" placeholder="Email" required>
+                        <input type="password" id="registerPassword" placeholder="Password" required>
+                        <button class="create-account" onclick="createAccount()">Create Account</button>
+                        <p>Already have an account? <a href="#" onclick="showLogin()">Log In</a></p>
+                    </div>
+                </div>
+            </div>
+        
+            <!-- Profile Content -->
+            <div class="profile-content" id="profileContent">
+                <div class="profile-picture-container">
+                    <img id="profilePicture" class="profile-picture" src="https://via.placeholder.com/120?text=Profile"
+                        alt="Profile Picture">
+                    <div>
+                        <input type="file" id="profilePictureInput" accept="image/*" style="display: none;"
+                            onchange="uploadProfilePicture()">
+                        <button class="change-picture-btn"
+                            onclick="document.getElementById('profilePictureInput').click()">Change</button>
+                    </div>
+                </div>
+                <div class="user-name" id="userFullName">Welcome</div>
+                <div class="user-email" id="userEmail"></div>
+                <div class="account-section">
+                    <h2>Account</h2>
+                    <div class="account-field">
+                        <label>Username</label>
+                        <span id="userUsername"></span>
+                    </div>
+                    <div class="account-field">
+                        <label>Email</label>
+                        <span id="userEmailField"></span>
+                    </div>
+                    <div class="account-field">
+                        <label>Password</label>
+                        <span>••••••••</span>
+                    </div>
+                    <div class="account-field">
+                        <label>Full Name</label>
+                        <span id="userFullNameField"></span>
+                        <button class="edit-btn" onclick="showEditProfileForm()">Edit</button>
+                    </div>
+                    <div class="edit-profile-form" id="editProfileForm">
+                        <input type="text" id="editFirstName" placeholder="First Name" required>
+                        <input type="text" id="editMiddleName" placeholder="Middle Name (Optional)">
+                        <input type="text" id="editLastName" placeholder="Last Name" required>
+                        <button onclick="updateProfile()">Save Changes</button>
+                        <button onclick="cancelEditProfile()">Cancel</button>
+                    </div>
+                </div>
+                <button class="sign-out-btn" onclick="signOut()">Sign Out</button>
+            </div>
+            </div>      
     </main>
     <!-- Footer -->
     <footer id="footer"></footer>
@@ -22,6 +110,7 @@
     <!-- Scripts -->
     <script src="/tyxar_web/script.js"></script>
     <script>
+
         // Function to load external HTML content
             function loadHTML(url, elementId) {
                 fetch(url)
