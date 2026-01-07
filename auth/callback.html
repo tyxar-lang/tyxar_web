@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signing in… - Tyxar Programming Language</title>
+</head>
+<body>
+    <p>Signing you in…</p>
+
+    <!-- Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="/tyxar_web/profile/config.js"></script>
+
+    <script>
+        // Handle the OAuth callback
+        supabaseClient.auth.getSession().then(({ data, error }) => {
+            if (error) {
+                console.error('Error getting session:', error);
+                // Redirect to profile with error or something, but for now just redirect
+            }
+            // Redirect to the profile page
+            window.location.href = "/tyxar_web/profile/";
+        });
+    </script>
+</body>
+</html></content>
+<parameter name="filePath">c:\DOATVERSE\DOAT Cs\Projects\TYXAR\tyxar_web\auth\callback.html
