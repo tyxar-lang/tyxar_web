@@ -65,23 +65,11 @@
 
     <!-- DASHBOARD (Full Page) -->
     <div id="dashboard" class="hidden">
-        <header class="dashboard-header">
-            <div class="dashboard-nav">
-                <div class="logo">
-                    <img src="/tyxar_web/images/tyxar.png" alt="Tyxar Logo">
-                    <span>Tyxar Dashboard</span>
-                </div>
-                <nav class="nav-links">
-                    <a href="/tyxar_web/">Home</a>
-                    <a href="/tyxar_web/docs/">Documentation</a>
-                    <a href="/tyxar_web/download/">Download</a>
-                    <button onclick="logout()" class="logout-btn">Log Out</button>
-                </nav>
-            </div>
-        </header>
+        <!-- Actual site header will be injected here on login -->
+        <div id="header"></div>
 
         <main class="dashboard-main">
-            <div class="dashboard-content">
+            <div class="dashboard-content container">
                 <div class="welcome-section">
                     <h1>Welcome back, <span id="dashboardName"></span>!</h1>
                     <p>Manage your Tyxar account and access all features</p>
@@ -139,6 +127,9 @@
                 </div>
             </div>
         </main>
+
+        <!-- Actual site footer will be injected here on login -->
+        <div id="footer"></div>
     </div>
 
     <!-- Supabase -->
@@ -288,6 +279,27 @@
             // Show dashboard, hide auth
             authBox.classList.add("hidden");
             dashboard.classList.remove("hidden");
+
+            // Load actual header and footer into the dashboard (use site's header/footer)
+            try {
+                const headerResp = await fetch('/tyxar_web/header.html');
+                if (headerResp.ok) {
+                    const headerHtml = await headerResp.text();
+                    document.getElementById('siteHeader').innerHTML = headerHtml;
+                }
+            } catch (e) {
+                console.warn('Could not load header:', e);
+            }
+
+            try {
+                const footerResp = await fetch('/tyxar_web/footer.html');
+                if (footerResp.ok) {
+                    const footerHtml = await footerResp.text();
+                    document.getElementById('siteFooter').innerHTML = footerHtml;
+                }
+            } catch (e) {
+                console.warn('Could not load footer:', e);
+            }
         }
 
         // ===============================

@@ -1414,3 +1414,55 @@ button[onclick*="Google"]:hover {
         font-size: 0.9rem;
     }
 }
+
+/* Full-screen dashboard layout */
+#dashboard {
+    display: block;
+    min-height: 100vh;
+    width: 100%;
+    background: var(--gradient-primary);
+    color: white;
+}
+
+#siteHeader, #siteFooter {
+    width: 100%;
+}
+
+.dashboard-main {
+    min-height: calc(100vh - 160px);
+    padding: 40px 20px;
+}
+
+.dashboard-content {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 20px;
+    margin-top: 24px;
+}
+
+.dashboard-card {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.06);
+    padding: 18px;
+    border-radius: 12px;
+}
+
+/* Make dashboard take full page outside the .box card when visible */
+.box.hidden + #dashboard, #dashboard:not(.hidden) {
+    display: block;
+}
+
+/* Hide the small auth card visually when dashboard is active */
+.box.hidden {
+    display: none !important;
+}
+
+/* Ensure injected header/footer content flows correctly */
+#siteHeader > *, #siteFooter > * {
+    width: 100%;
+}
