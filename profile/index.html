@@ -7,198 +7,6 @@
     <link rel="shortcut icon" href="/tyxar_web/images/tyxar.ico" type="image/x-icon">
     <title>Account - Tyxar Programming Language</title>
     <link rel="stylesheet" href="/tyxar_web/styles.css">
-    <style>
-        
-/* ============================================= */
-/* PROFILE PAGE STYLES                          */
-/* ============================================= */
-
-body:has(.box) {
-    font-family: system-ui, sans-serif;
-    background: var(--gradient-primary);
-    color: #fff;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    margin: 0;
-    position: relative;
-    overflow-x: hidden;
-}
-
-body:has(.box)::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: radial-gradient(circle at 30% 50%, rgba(99, 179, 237, 0.1) 0%, transparent 50%);
-    z-index: -1;
-}
-
-.box {
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(20px);
-    padding: 2.5rem;
-    width: 100%;
-    max-width: 400px;
-    border-radius: 16px;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    position: relative;
-    z-index: 1;
-    animation: fadeInUp 0.6s ease-out;
-}
-
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(30px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-
-.box .logo img {
-    height: 60px;
-    padding-left: 40%;
-
-}
-
-.box h2 {
-    text-align: center;
-    margin-bottom: 1.5rem;
-    color: var(--metal-dark);
-    font-size: 1.8rem;
-    font-weight: 700;
-    background: linear-gradient(135deg, var(--accent-blue), var(--accent-blue-dark));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-}
-
-input,
-button {
-    width: 100%;
-    margin-top: 0.7rem;
-    padding: 0.75rem;
-    border-radius: 8px;
-    border: none;
-    font-size: 1rem;
-    transition: all 0.3s ease;
-}
-
-input {
-    background: #f8f9fa;
-    color: var(--metal-dark);
-    border: 2px solid #e2e8f0;
-}
-
-input:focus {
-    outline: none;
-    border-color: var(--accent-blue);
-    box-shadow: 0 0 0 3px rgba(99, 179, 237, 0.1);
-}
-
-button {
-    background: var(--gradient-accent);
-    color: white;
-    cursor: pointer;
-    font-weight: 600;
-    box-shadow: 0 4px 12px rgba(66, 153, 225, 0.3);
-}
-
-button img {
-    width: 45px;
-    height: 25px;
-    padding-right: 20px;
-}
-
-button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(66, 153, 225, 0.4);
-}
-
-button:active {
-    transform: translateY(0);
-}
-
-button.secondary {
-    background: var(--gradient-secondary);
-    box-shadow: 0 4px 12px rgba(74, 85, 104, 0.3);
-}
-
-button.secondary:hover {
-    box-shadow: 0 6px 16px rgba(74, 85, 104, 0.4);
-}
-
-button[onclick*="GitHub"] {
-    background: #24292e;
-    margin-top: 1rem;
-}
-
-button[onclick*="GitHub"]:hover {
-    background: #1a1e22;
-    box-shadow: 0 6px 16px rgba(36, 41, 46, 0.4);
-}
-
-button[onclick*="Google"] {
-    background: #4285f4;
-    margin-top: 0.5rem;
-}
-
-button[onclick*="Google"]:hover {
-    background: #3367d6;
-    box-shadow: 0 6px 16px rgba(66, 133, 244, 0.4);
-}
-
-
-
-.status {
-    margin-top: 1.5rem;
-    font-size: 0.9rem;
-    opacity: 0.85;
-    text-align: center;
-    padding: 0.5rem;
-    border-radius: 6px;
-    background: rgba(255, 255, 255, 0.1);
-    color: var(--metal-dark);
-}
-
-#account p {
-    margin: 0.5rem 0;
-    color: var(--metal-medium);
-    font-size: 0.95rem;
-}
-
-#account h2 {
-    margin-bottom: 1rem;
-}
-
-/* Profile Page Mobile */
-@media (max-width: 480px) {
-    .box {
-        margin: 1rem;
-        padding: 2rem;
-        max-width: none;
-    }
-
-    .box h2 {
-        font-size: 1.5rem;
-    }
-
-    input,
-    button {
-        padding: 0.6rem;
-        font-size: 0.9rem;
-    }
-}
-    </style>
     
 
 </head>
@@ -253,16 +61,105 @@ button[onclick*="Google"]:hover {
             <div class="status" id="authStatus"></div>
         </div>
 
-        <!-- ACCOUNT -->
+        <!-- ACCOUNT DASHBOARD -->
         <div id="account" class="hidden">
-            <h2>Welcome</h2>
+            <!-- Dashboard Header -->
+            <header class="dashboard-header">
+                <div class="dashboard-logo">
+                    <img src="/tyxar_web/images/tyxar.png" alt="Tyxar Logo">
+                    <h1>Tyxar Dashboard</h1>
+                </div>
+                <div class="user-info">
+                    <div class="user-avatar">
+                        <span id="userInitials"></span>
+                    </div>
+                    <div class="user-details">
+                        <span id="userDisplayName"></span>
+                        <small id="userEmailSmall"></small>
+                    </div>
+                    <button onclick="logout()" class="logout-btn">Log out</button>
+                </div>
+            </header>
 
-            <p id="userName"></p>
-            <p id="userEmail"></p>
-            <p id="userRole"></p>
-            <p id="userCreated"></p>
+            <!-- Dashboard Content -->
+            <main class="dashboard-main">
+                <div class="welcome-section">
+                    <h2>Welcome back, <span id="userGreetingName"></span>!</h2>
+                    <p>Manage your Tyxar account and explore the language features.</p>
+                </div>
 
-            <button onclick="logout()">Log out</button>
+                <div class="dashboard-grid">
+                    <!-- Account Info Card -->
+                    <div class="dashboard-card">
+                        <div class="card-icon">👤</div>
+                        <h3>Account Information</h3>
+                        <div class="card-content">
+                            <p><strong>Role:</strong> <span id="userRoleCard"></span></p>
+                            <p><strong>Member since:</strong> <span id="userCreatedCard"></span></p>
+                            <p><strong>Email:</strong> <span id="userEmailCard"></span></p>
+                        </div>
+                    </div>
+
+                    <!-- Quick Actions Card -->
+                    <div class="dashboard-card">
+                        <div class="card-icon">⚡</div>
+                        <h3>Quick Actions</h3>
+                        <div class="card-actions">
+                            <a href="/tyxar_web/docs/" class="action-btn">
+                                <span>📚</span> Documentation
+                            </a>
+                            <a href="/tyxar_web/download/" class="action-btn">
+                                <span>⬇️</span> Download Tyxar
+                            </a>
+                            <a href="/tyxar_web/blade/" class="action-btn">
+                                <span>🛠️</span> Try Online
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Recent Activity Card -->
+                    <div class="dashboard-card">
+                        <div class="card-icon">📈</div>
+                        <h3>Recent Activity</h3>
+                        <div class="activity-list">
+                            <div class="activity-item">
+                                <span class="activity-icon">🔐</span>
+                                <div class="activity-content">
+                                    <p>Account created</p>
+                                    <small id="accountCreatedDate"></small>
+                                </div>
+                            </div>
+                            <div class="activity-item">
+                                <span class="activity-icon">🎯</span>
+                                <div class="activity-content">
+                                    <p>Welcome to Tyxar!</p>
+                                    <small>Just now</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Stats Card -->
+                    <div class="dashboard-card">
+                        <div class="card-icon">📊</div>
+                        <h3>Language Stats</h3>
+                        <div class="stats-grid">
+                            <div class="stat-item">
+                                <span class="stat-number">2026</span>
+                                <span class="stat-label">Current Year</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-number">v1.0</span>
+                                <span class="stat-label">Version</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-number">∞</span>
+                                <span class="stat-label">Possibilities</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
         </div>
 
     </div>
@@ -382,6 +279,7 @@ button[onclick*="Google"]:hover {
             accountBox.classList.add("hidden");
             authBox.classList.remove("hidden");
             showLogin(); // Default to login form
+            document.body.classList.remove("dashboard-view");
         }
 
         // ===============================
@@ -396,10 +294,28 @@ button[onclick*="Google"]:hover {
                 return;
             }
 
-            // Display user details
-            userNameText.textContent = `Username: ${user.user_metadata?.user_name || user.user_metadata?.name || 'N/A'}`;
-            userEmailText.textContent = `Email: ${user.email}`;
-            userCreatedText.textContent = `Created: ${new Date(user.created_at).toLocaleDateString()}`;
+            // Get user display name
+            const displayName = user.user_metadata?.full_name ||
+                              user.user_metadata?.user_name ||
+                              user.user_metadata?.name ||
+                              user.email.split('@')[0] ||
+                              'User';
+
+            // Get user initials for avatar
+            const initials = displayName.split(' ')
+                .map(name => name.charAt(0).toUpperCase())
+                .join('')
+                .substring(0, 2);
+
+            // Populate dashboard elements
+            document.getElementById("userInitials").textContent = initials;
+            document.getElementById("userDisplayName").textContent = displayName;
+            document.getElementById("userEmailSmall").textContent = user.email;
+            document.getElementById("userGreetingName").textContent = displayName.split(' ')[0];
+
+            document.getElementById("userName").textContent = `Username: ${displayName}`;
+            document.getElementById("userEmail").textContent = `Email: ${user.email}`;
+            document.getElementById("userCreated").textContent = `Created: ${new Date(user.created_at).toLocaleDateString()}`;
 
             // Fetch is_admin from profiles table
             const { data: profile } = await supabaseClient
@@ -408,13 +324,17 @@ button[onclick*="Google"]:hover {
                 .eq("id", user.id)
                 .single();
 
-            userRoleText.textContent =
-                profile?.is_admin
-                    ? "Role: Admin"
-                    : "Role: User";
+            const userRole = profile?.is_admin ? "Admin" : "User";
+            document.getElementById("userRole").textContent = `Role: ${userRole}`;
+            document.getElementById("userRoleCard").textContent = userRole;
+            document.getElementById("userCreatedCard").textContent = new Date(user.created_at).toLocaleDateString();
+            document.getElementById("userEmailCard").textContent = user.email;
+            document.getElementById("accountCreatedDate").textContent = new Date(user.created_at).toLocaleDateString();
 
+            // Switch to dashboard view
             authBox.classList.add("hidden");
             accountBox.classList.remove("hidden");
+            document.body.classList.add("dashboard-view");
         }
 
         // ===============================
