@@ -61,104 +61,84 @@
             <div class="status" id="authStatus"></div>
         </div>
 
-        <!-- ACCOUNT DASHBOARD -->
-        <div id="account" class="hidden dashboard">
-            <header class="dashboard-header">
-                <div class="dashboard-nav">
-                    <div class="logo">
-                        <img src="/tyxar_web/images/tyxar.png" alt="Tyxar Logo">
-                    </div>
-                    <nav class="dashboard-menu">
-                        <a href="/tyxar_web/" class="nav-link">Home</a>
-                        <a href="/tyxar_web/docs/" class="nav-link">Documentation</a>
-                        <a href="/tyxar_web/download/" class="nav-link">Download</a>
-                        <button onclick="logout()" class="logout-btn">Log out</button>
-                    </nav>
+    </div>
+
+    <!-- DASHBOARD (Full Page) -->
+    <div id="dashboard" class="hidden">
+        <header class="dashboard-header">
+            <div class="dashboard-nav">
+                <div class="logo">
+                    <img src="/tyxar_web/images/tyxar.png" alt="Tyxar Logo">
+                    <span>Tyxar Dashboard</span>
                 </div>
-            </header>
+                <nav class="nav-links">
+                    <a href="/tyxar_web/">Home</a>
+                    <a href="/tyxar_web/docs/">Documentation</a>
+                    <a href="/tyxar_web/download/">Download</a>
+                    <button onclick="logout()" class="logout-btn">Log Out</button>
+                </nav>
+            </div>
+        </header>
 
-            <main class="dashboard-main">
-                <div class="dashboard-content">
-                    <div class="welcome-section">
-                        <h1>Welcome back!</h1>
-                        <p class="welcome-subtitle">Manage your Tyxar account and explore the language</p>
+        <main class="dashboard-main">
+            <div class="dashboard-content">
+                <div class="welcome-section">
+                    <h1>Welcome back, <span id="dashboardName"></span>!</h1>
+                    <p>Manage your Tyxar account and access all features</p>
+                </div>
+
+                <div class="dashboard-grid">
+                    <div class="dashboard-card">
+                        <h3>Account Information</h3>
+                        <div class="account-info">
+                            <p><strong>Email:</strong> <span id="dashboardEmail"></span></p>
+                            <p><strong>Role:</strong> <span id="dashboardRole"></span></p>
+                            <p><strong>Member since:</strong> <span id="dashboardCreated"></span></p>
+                        </div>
                     </div>
 
-                    <div class="dashboard-grid">
-                        <div class="dashboard-card profile-card">
-                            <div class="card-header">
-                                <h2>Profile Information</h2>
-                            </div>
-                            <div class="card-content">
-                                <div class="profile-info">
-                                    <div class="info-item">
-                                        <label>Name:</label>
-                                        <span id="userName">Loading...</span>
-                                    </div>
-                                    <div class="info-item">
-                                        <label>Email:</label>
-                                        <span id="userEmail">Loading...</span>
-                                    </div>
-                                    <div class="info-item">
-                                        <label>Role:</label>
-                                        <span id="userRole">Loading...</span>
-                                    </div>
-                                    <div class="info-item">
-                                        <label>Member since:</label>
-                                        <span id="userCreated">Loading...</span>
-                                    </div>
-                                </div>
-                            </div>
+                    <div class="dashboard-card">
+                        <h3>Quick Actions</h3>
+                        <div class="quick-actions">
+                            <a href="/tyxar_web/docs/" class="action-btn">
+                                <span>📚</span>
+                                View Documentation
+                            </a>
+                            <a href="/tyxar_web/download/" class="action-btn">
+                                <span>⬇️</span>
+                                Download Tyxar
+                            </a>
+                            <a href="/tyxar_web/menu/" class="action-btn">
+                                <span>⚙️</span>
+                                Settings
+                            </a>
                         </div>
+                    </div>
 
-                        <div class="dashboard-card quick-actions">
-                            <div class="card-header">
-                                <h2>Quick Actions</h2>
-                            </div>
-                            <div class="card-content">
-                                <div class="action-buttons">
-                                    <a href="/tyxar_web/docs/" class="action-btn primary">
-                                        <span class="action-icon">📚</span>
-                                        View Documentation
-                                    </a>
-                                    <a href="/tyxar_web/download/" class="action-btn secondary">
-                                        <span class="action-icon">⬇️</span>
-                                        Download Tyxar
-                                    </a>
-                                    <a href="/tyxar_web/blade/" class="action-btn secondary">
-                                        <span class="action-icon">⚡</span>
-                                        Try Online Editor
-                                    </a>
-                                </div>
-                            </div>
+                    <div class="dashboard-card">
+                        <h3>Recent Activity</h3>
+                        <div class="activity-list">
+                            <p>Welcome to your Tyxar dashboard!</p>
+                            <p>Explore the documentation to learn more about the language.</p>
                         </div>
+                    </div>
 
-                        <div class="dashboard-card stats-card">
-                            <div class="card-header">
-                                <h2>Language Stats</h2>
-                            </div>
-                            <div class="card-content">
-                                <div class="stats-grid">
-                                    <div class="stat-item">
-                                        <span class="stat-number">1.0</span>
-                                        <span class="stat-label">Version</span>
-                                    </div>
-                                    <div class="stat-item">
-                                        <span class="stat-number">2024</span>
-                                        <span class="stat-label">Released</span>
-                                    </div>
-                                    <div class="stat-item">
-                                        <span class="stat-number">MIT</span>
-                                        <span class="stat-label">License</span>
-                                    </div>
-                                </div>
-                            </div>
+                    <div class="dashboard-card">
+                        <h3>Community</h3>
+                        <div class="community-links">
+                            <a href="https://github.com/tyxar-lang" target="_blank" class="social-link">
+                                <span>🐙</span>
+                                GitHub Repository
+                            </a>
+                            <a href="#" class="social-link">
+                                <span>💬</span>
+                                Community Forum
+                            </a>
                         </div>
                     </div>
                 </div>
-            </main>
-        </div>
-
+            </div>
+        </main>
     </div>
 
     <!-- Supabase -->
@@ -169,8 +149,8 @@
         // ===============================
         // ELEMENTS
         // ===============================
-        const authBox = document.getElementById("auth");
-        const accountBox = document.getElementById("account");
+        const authBox = document.querySelector(".box");
+        const dashboard = document.getElementById("dashboard");
         const authStatus = document.getElementById("authStatus");
 
         const loginForm = document.getElementById("loginForm");
@@ -182,10 +162,10 @@
         const signupEmailInput = document.getElementById("signupEmail");
         const signupPasswordInput = document.getElementById("signupPassword");
 
-        const userEmailText = document.getElementById("userEmail");
-        const userRoleText = document.getElementById("userRole");
-        const userNameText = document.getElementById("userName");
-        const userCreatedText = document.getElementById("userCreated");
+        const dashboardName = document.getElementById("dashboardName");
+        const dashboardEmail = document.getElementById("dashboardEmail");
+        const dashboardRole = document.getElementById("dashboardRole");
+        const dashboardCreated = document.getElementById("dashboardCreated");
 
         // ===============================
         // AUTH FUNCTIONS
@@ -273,7 +253,7 @@
         }
 
         function showAuth() {
-            accountBox.classList.add("hidden");
+            dashboard.classList.add("hidden");
             authBox.classList.remove("hidden");
             showLogin(); // Default to login form
         }
@@ -290,10 +270,11 @@
                 return;
             }
 
-            // Display user details
-            userNameText.textContent = user.user_metadata?.full_name || user.user_metadata?.name || user.user_metadata?.user_name || 'N/A';
-            userEmailText.textContent = user.email;
-            userCreatedText.textContent = new Date(user.created_at).toLocaleDateString();
+            // Populate dashboard
+            const displayName = user.user_metadata?.full_name || user.user_metadata?.user_name || user.user_metadata?.name || 'User';
+            dashboardName.textContent = displayName;
+            dashboardEmail.textContent = user.email;
+            dashboardCreated.textContent = new Date(user.created_at).toLocaleDateString();
 
             // Fetch is_admin from profiles table
             const { data: profile } = await supabaseClient
@@ -302,13 +283,11 @@
                 .eq("id", user.id)
                 .single();
 
-            userRoleText.textContent =
-                profile?.is_admin
-                    ? "Role: Admin"
-                    : "Role: User";
+            dashboardRole.textContent = profile?.is_admin ? "Admin" : "User";
 
+            // Show dashboard, hide auth
             authBox.classList.add("hidden");
-            accountBox.classList.remove("hidden");
+            dashboard.classList.remove("hidden");
         }
 
         // ===============================
@@ -324,7 +303,7 @@
 
             supabaseClient.auth.onAuthStateChange((event, session) => {
                 if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
-                    loadUser();  // Re-use your existing loadUser() to fill details and show accountBox
+                    loadUser();
                 } else if (event === 'SIGNED_OUT') {
                     showAuth();
                 }
