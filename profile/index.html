@@ -61,16 +61,102 @@
             <div class="status" id="authStatus"></div>
         </div>
 
-        <!-- ACCOUNT -->
-        <div id="account" class="hidden">
-            <h2>Welcome</h2>
+        <!-- ACCOUNT DASHBOARD -->
+        <div id="account" class="hidden dashboard">
+            <header class="dashboard-header">
+                <div class="dashboard-nav">
+                    <div class="logo">
+                        <img src="/tyxar_web/images/tyxar.png" alt="Tyxar Logo">
+                    </div>
+                    <nav class="dashboard-menu">
+                        <a href="/tyxar_web/" class="nav-link">Home</a>
+                        <a href="/tyxar_web/docs/" class="nav-link">Documentation</a>
+                        <a href="/tyxar_web/download/" class="nav-link">Download</a>
+                        <button onclick="logout()" class="logout-btn">Log out</button>
+                    </nav>
+                </div>
+            </header>
 
-            <p id="userName"></p>
-            <p id="userEmail"></p>
-            <p id="userRole"></p>
-            <p id="userCreated"></p>
+            <main class="dashboard-main">
+                <div class="dashboard-content">
+                    <div class="welcome-section">
+                        <h1>Welcome back!</h1>
+                        <p class="welcome-subtitle">Manage your Tyxar account and explore the language</p>
+                    </div>
 
-            <button onclick="logout()">Log out</button>
+                    <div class="dashboard-grid">
+                        <div class="dashboard-card profile-card">
+                            <div class="card-header">
+                                <h2>Profile Information</h2>
+                            </div>
+                            <div class="card-content">
+                                <div class="profile-info">
+                                    <div class="info-item">
+                                        <label>Name:</label>
+                                        <span id="userName">Loading...</span>
+                                    </div>
+                                    <div class="info-item">
+                                        <label>Email:</label>
+                                        <span id="userEmail">Loading...</span>
+                                    </div>
+                                    <div class="info-item">
+                                        <label>Role:</label>
+                                        <span id="userRole">Loading...</span>
+                                    </div>
+                                    <div class="info-item">
+                                        <label>Member since:</label>
+                                        <span id="userCreated">Loading...</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="dashboard-card quick-actions">
+                            <div class="card-header">
+                                <h2>Quick Actions</h2>
+                            </div>
+                            <div class="card-content">
+                                <div class="action-buttons">
+                                    <a href="/tyxar_web/docs/" class="action-btn primary">
+                                        <span class="action-icon">📚</span>
+                                        View Documentation
+                                    </a>
+                                    <a href="/tyxar_web/download/" class="action-btn secondary">
+                                        <span class="action-icon">⬇️</span>
+                                        Download Tyxar
+                                    </a>
+                                    <a href="/tyxar_web/blade/" class="action-btn secondary">
+                                        <span class="action-icon">⚡</span>
+                                        Try Online Editor
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="dashboard-card stats-card">
+                            <div class="card-header">
+                                <h2>Language Stats</h2>
+                            </div>
+                            <div class="card-content">
+                                <div class="stats-grid">
+                                    <div class="stat-item">
+                                        <span class="stat-number">1.0</span>
+                                        <span class="stat-label">Version</span>
+                                    </div>
+                                    <div class="stat-item">
+                                        <span class="stat-number">2024</span>
+                                        <span class="stat-label">Released</span>
+                                    </div>
+                                    <div class="stat-item">
+                                        <span class="stat-number">MIT</span>
+                                        <span class="stat-label">License</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
         </div>
 
     </div>
@@ -205,9 +291,9 @@
             }
 
             // Display user details
-            userNameText.textContent = `Username: ${user.user_metadata?.user_name || user.user_metadata?.name || 'N/A'}`;
-            userEmailText.textContent = `Email: ${user.email}`;
-            userCreatedText.textContent = `Created: ${new Date(user.created_at).toLocaleDateString()}`;
+            userNameText.textContent = user.user_metadata?.full_name || user.user_metadata?.name || user.user_metadata?.user_name || 'N/A';
+            userEmailText.textContent = user.email;
+            userCreatedText.textContent = new Date(user.created_at).toLocaleDateString();
 
             // Fetch is_admin from profiles table
             const { data: profile } = await supabaseClient
