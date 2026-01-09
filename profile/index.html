@@ -17,6 +17,11 @@
 
         <!-- LOGIN / SIGNUP -->
         <div id="auth">
+
+            <div class="logo">
+            <img src="/tyxar_web/images/tyxar.png" alt="Tyxar Logo">
+            </div>
+
             <h2>Tyxar Account</h2>
 
             <input id="email" type="email" placeholder="Email" />
@@ -24,9 +29,13 @@
 
             <button onclick="login()">Log in</button>
             <button class="secondary" onclick="signup()">Sign up</button>
-            <button onclick="loginWithGitHub()" style="background: #24292e; margin-top: 0.5rem;">Login with
+            <button onclick="loginWithGitHub()" style="background: #5e5f60; margin-top: 0.5rem;">
+                <img src="/tyxar_web/images/github-icon.png" alt="Github Icon">
+                Login with
                 GitHub</button>
-            <button onclick="loginWithGoogle()" style="background: #4285f4; color: white; margin-top: 0.5rem;">Login
+            <button onclick="loginWithGoogle()" style="background: #4f85dd; color: white; margin-top: 0.5rem;">
+                <img src="/tyxar_web/images/google-icon.png" alt="Google Icon">
+                Login
                 with Google</button>
 
             <div class="status" id="authStatus"></div>
