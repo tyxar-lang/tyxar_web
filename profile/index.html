@@ -209,26 +209,46 @@ button[onclick*="Google"]:hover {
 
         <!-- LOGIN / SIGNUP -->
         <div id="auth">
-
             <div class="logo">
             <img src="/tyxar_web/images/tyxar.png" alt="Tyxar Logo">
             </div>
 
-            <h2>Tyxar Account</h2>
+            <!-- LOGIN FORM -->
+            <div id="loginForm">
+                <h2>Tyxar Account</h2>
 
-            <input id="email" type="email" placeholder="Email" />
-            <input id="password" type="password" placeholder="Password" />
+                <input id="email" type="email" placeholder="Email" />
+                <input id="password" type="password" placeholder="Password" />
 
-            <button onclick="login()">Log in</button>
-            <button class="secondary" onclick="signup()">Sign up</button>
-            <button onclick="loginWithGitHub()" style="background: #5e5f60; margin-top: 0.5rem;">
-                <img src="/tyxar_web/images/github-icon.png" alt="Github Icon">
-                Login with
-                GitHub</button>
-            <button onclick="loginWithGoogle()" style="background: #4f85dd; color: white; margin-top: 0.5rem;">
-                <img src="/tyxar_web/images/google-icon.png" alt="Google Icon">
-                Login
-                with Google</button>
+                <button onclick="login()">Log in</button>
+                <button onclick="loginWithGitHub()" style="background: #5e5f60; margin-top: 0.5rem;">
+                    <img src="/tyxar_web/images/github-icon.png" alt="Github Icon">
+                    Login with
+                    GitHub</button>
+                <button onclick="loginWithGoogle()" style="background: #4f85dd; color: white; margin-top: 0.5rem;">
+                    <img src="/tyxar_web/images/google-icon.png" alt="Google Icon">
+                    Login
+                    with Google</button>
+
+                <div class="auth-toggle">
+                    <a href="#" onclick="showSignup()">Don't have an account? Sign up</a>
+                </div>
+            </div>
+
+            <!-- SIGNUP FORM -->
+            <div id="signupForm" class="hidden">
+                <h2>Create Account</h2>
+
+                <input id="signupName" type="text" placeholder="Full Name" />
+                <input id="signupEmail" type="email" placeholder="Email" />
+                <input id="signupPassword" type="password" placeholder="Password" />
+
+                <button onclick="signup()">Sign up</button>
+
+                <div class="auth-toggle">
+                    <a href="#" onclick="showLogin()">Already have an account? Log in</a>
+                </div>
+            </div>
 
             <div class="status" id="authStatus"></div>
         </div>
@@ -259,8 +279,14 @@ button[onclick*="Google"]:hover {
         const accountBox = document.getElementById("account");
         const authStatus = document.getElementById("authStatus");
 
+        const loginForm = document.getElementById("loginForm");
+        const signupForm = document.getElementById("signupForm");
+
         const emailInput = document.getElementById("email");
         const passwordInput = document.getElementById("password");
+        const signupNameInput = document.getElementById("signupName");
+        const signupEmailInput = document.getElementById("signupEmail");
+        const signupPasswordInput = document.getElementById("signupPassword");
 
         const userEmailText = document.getElementById("userEmail");
         const userRoleText = document.getElementById("userRole");
@@ -271,12 +297,18 @@ button[onclick*="Google"]:hover {
         // AUTH FUNCTIONS
         // ===============================
         async function signup() {
-            const email = emailInput.value;
-            const password = passwordInput.value;
+            const name = signupNameInput.value;
+            const email = signupEmailInput.value;
+            const password = signupPasswordInput.value;
 
             const { error } = await supabaseClient.auth.signUp({
                 email,
-                password
+                password,
+                options: {
+                    data: {
+                        full_name: name
+                    }
+                }
             });
 
             authStatus.textContent = error
@@ -332,6 +364,27 @@ button[onclick*="Google"]:hover {
         }
 
         // ===============================
+        // FORM TOGGLE FUNCTIONS
+        // ===============================
+        function showSignup() {
+            loginForm.classList.add("hidden");
+            signupForm.classList.remove("hidden");
+            authStatus.textContent = "";
+        }
+
+        function showLogin() {
+            signupForm.classList.add("hidden");
+            loginForm.classList.remove("hidden");
+            authStatus.textContent = "";
+        }
+
+        function showAuth() {
+            accountBox.classList.add("hidden");
+            authBox.classList.remove("hidden");
+            showLogin(); // Default to login form
+        }
+
+        // ===============================
         // USER STATE
         // ===============================
         async function loadUser() {
@@ -379,8 +432,7 @@ button[onclick*="Google"]:hover {
                 if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
                     loadUser();  // Re-use your existing loadUser() to fill details and show accountBox
                 } else if (event === 'SIGNED_OUT') {
-                    authBox.classList.remove("hidden");
-                    accountBox.classList.add("hidden");
+                    showAuth();
                 }
             });
 
