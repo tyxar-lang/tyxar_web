@@ -3,10 +3,121 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="/tyxar_web/images/tyxar.ico" type="image/x-icon">
     <title>Signing in… - Tyxar Programming Language</title>
+    <link rel="stylesheet" href="/tyxar_web/styles.css">
+    <style>
+    body:has(.callback-box) {
+        font-family: system-ui, sans-serif;
+        background: var(--gradient-primary);
+        color: #fff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        margin: 0;
+        position: relative;
+        overflow-x: hidden;
+    }
+
+    body:has(.callback-box)::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: radial-gradient(circle at 30% 50%, rgba(99, 179, 237, 0.1) 0%, transparent 50%);
+        z-index: -1;
+    }
+
+    .callback-box {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(20px);
+        padding: 3rem;
+        width: 100%;
+        max-width: 400px;
+        border-radius: 16px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        position: relative;
+        z-index: 1;
+        animation: fadeInUp 0.6s ease-out;
+        text-align: center;
+    }
+
+    .callback-logo {
+        margin-bottom: 2rem;
+    }
+
+    .callback-logo img {
+        height: 60px;
+    }
+
+    .callback-box h2 {
+        color: var(--metal-dark);
+        font-size: 1.8rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        background: linear-gradient(135deg, var(--accent-blue), var(--accent-blue-dark));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .callback-box p {
+        color: var(--metal-medium);
+        font-size: 1.1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .loading-spinner {
+        display: inline-block;
+        width: 40px;
+        height: 40px;
+        border: 3px solid rgba(99, 179, 237, 0.3);
+        border-radius: 50%;
+        border-top-color: var(--accent-blue);
+        animation: spin 1s ease-in-out infinite;
+        margin: 1rem auto;
+    }
+
+    @keyframes spin {
+        to { transform: rotate(360deg); }
+    }
+
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @media (max-width: 480px) {
+        .callback-box {
+            margin: 1rem;
+            padding: 2rem;
+        }
+
+        .callback-box h2 {
+            font-size: 1.5rem;
+        }
+    }
+    </style>
 </head>
 <body>
-    <p>Signing you in…</p>
+    <div class="callback-box">
+        <div class="callback-logo">
+            <img src="/tyxar_web/images/tyxar.png" alt="Tyxar Logo">
+        </div>
+        <h2>Signing you in…</h2>
+        <div class="loading-spinner"></div>
+        <p>Please wait while we complete your authentication</p>
+    </div>
 
     <!-- Supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
