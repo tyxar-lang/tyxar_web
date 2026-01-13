@@ -1092,7 +1092,7 @@ button.secondary {
 .welcome-header h1 {
     font-size: 3rem;
     margin: 0;
-    background: linear-gradient(135deg, #63b3ed 0%, #e2e8f0 100%);
+    background: linear-gradient(135deg, #63b3ed 0%, #1279ff 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
