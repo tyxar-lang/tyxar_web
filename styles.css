@@ -535,9 +535,9 @@ main {
     color: white;
     border: none;
     border-radius: 4px;
-    padding: 3px 6px;
+    padding: 5px 10px;
     cursor: pointer;
-    font-size: 11px;
+    font-size: 12px;
     opacity: 0.6;
     transition: opacity 0.3s ease;
     width: auto;
