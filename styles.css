@@ -334,6 +334,16 @@ main {
     padding: 0 20px;
 }
 
+
+.profile-events {
+    display: flex;
+    min-height: calc(100vh - 200px);
+    margin: 20px auto;
+    max-width: 1400px;
+    gap: 20px;
+    background-color: var(--gradient-secondary);
+    padding: 0 20px;
+}
 .sidebar {
     width: 280px;
     min-width: 280px;
