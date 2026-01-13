@@ -1,0 +1,117 @@
+<div class="profile-content-wrapper">
+    <div class="page-header">
+        <h1>Account Settings</h1>
+        <p>Manage your account information and preferences</p>
+    </div>
+
+    <div class="account-settings">
+        <div class="settings-section">
+            <h2>Profile Information</h2>
+            <div class="settings-grid">
+                <div class="setting-item">
+                    <label>Full Name</label>
+                    <div class="setting-value" id="accountName">Loading...</div>
+                </div>
+                <div class="setting-item">
+                    <label>Email Address</label>
+                    <div class="setting-value" id="accountEmail">Loading...</div>
+                </div>
+                <div class="setting-item">
+                    <label>Account Type</label>
+                    <div class="setting-value" id="accountRole">Loading...</div>
+                </div>
+                <div class="setting-item">
+                    <label>Member Since</label>
+                    <div class="setting-value" id="accountCreated">Loading...</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="settings-section">
+            <h2>Account Actions</h2>
+            <div class="action-buttons">
+                <button class="action-btn secondary" onclick="changePassword()">
+                    <span>🔒</span>
+                    Change Password
+                </button>
+                <button class="action-btn secondary" onclick="exportData()">
+                    <span>📤</span>
+                    Export Data
+                </button>
+                <button class="action-btn danger" onclick="deleteAccount()">
+                    <span>🗑️</span>
+                    Delete Account
+                </button>
+            </div>
+        </div>
+
+        <div class="settings-section">
+            <h2>Connected Accounts</h2>
+            <div class="connected-accounts">
+                <div class="account-item">
+                    <div class="account-info">
+                        <span class="account-icon">🐙</span>
+                        <span class="account-name">GitHub</span>
+                    </div>
+                    <button class="disconnect-btn">Disconnect</button>
+                </div>
+                <div class="account-item">
+                    <div class="account-info">
+                        <span class="account-icon">📧</span>
+                        <span class="account-name">Google</span>
+                    </div>
+                    <button class="disconnect-btn">Disconnect</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Load account data when this content is loaded
+document.addEventListener('DOMContentLoaded', function() {
+    loadAccountData();
+});
+
+async function loadAccountData() {
+    try {
+        const { data } = await supabaseClient.auth.getUser();
+        const user = data.user;
+
+        if (user) {
+            document.getElementById('accountName').textContent = user.user_metadata?.full_name || user.user_metadata?.name || 'Not set';
+            document.getElementById('accountEmail').textContent = user.email;
+
+            // Fetch role
+            const { data: profile } = await supabaseClient
+                .from("profiles")
+                .select("is_admin")
+                .eq("id", user.id)
+                .single();
+
+            document.getElementById('accountRole').textContent = profile?.is_admin ? 'Administrator' : 'User';
+            document.getElementById('accountCreated').textContent = new Date(user.created_at).toLocaleDateString();
+        }
+    } catch (error) {
+        console.error('Error loading account data:', error);
+        // Show error state
+        document.querySelectorAll('.setting-value').forEach(el => {
+            el.textContent = 'Error loading data';
+        });
+    }
+}
+
+function changePassword() {
+    alert('Password change functionality would be implemented here');
+}
+
+function exportData() {
+    alert('Data export functionality would be implemented here');
+}
+
+function deleteAccount() {
+    if (confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
+        alert('Account deletion would be implemented here');
+    }
+}
+</script>
