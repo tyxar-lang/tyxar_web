@@ -1521,3 +1521,65 @@ button[onclick*="Google"]:hover {
         padding: 15px;
     }
 }
+
+/* Profile Page Styles */
+.hidden {
+    display: none;
+}
+
+.page-container {
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.sidebar-content {
+    padding: 20px;
+}
+
+.sidebar-content h3 {
+    margin-bottom: 15px;
+    color: var(--text-dark);
+}
+
+.sidebar-content ul {
+    list-style: none;
+}
+
+.sidebar-content li {
+    margin-bottom: 10px;
+}
+
+.sidebar-content a {
+    color: var(--accent-blue);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.sidebar-content a:hover {
+    color: var(--accent-blue-dark);
+}
+
+.page-content h2 {
+    margin-bottom: 20px;
+    color: var(--text-dark);
+}
+
+.page-content .account-details p {
+    margin-bottom: 10px;
+}
+
+.page-content button {
+    background: var(--gradient-primary);
+    color: var(--text-light);
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.page-content button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}

@@ -142,6 +142,9 @@
     authBox.classList.add("hidden");
     dashboard.classList.remove("hidden");
 
+    // Load default page (overview)
+    loadPageContent('overview');
+
     // Load actual header and footer into the dashboard (use site's header/footer)
     try {
         const headerResp = await fetch('/tyxar_web/header.html');
@@ -204,6 +207,59 @@
             })
             .catch(err => console.error(`Error loading ${url}:`, err));
     }
+
+    // Function to load page content
+    function loadPageContent(page) {
+        // Hide all content divs
+        document.querySelectorAll('.page-container').forEach(div => div.classList.add('hidden'));
+        // Hide the default dashboard-main
+        document.querySelector('.dashboard-main').classList.add('hidden');
+
+        // Show the selected content
+        const contentDiv = document.getElementById(page + '-content');
+        if (contentDiv) {
+            fetch(`/tyxar_web/profile/${page}.html`)
+                .then(response => response.text())
+                .then(data => {
+                    contentDiv.innerHTML = data;
+                    contentDiv.classList.remove('hidden');
+                    // Populate dynamic data if needed
+                    if (page === 'account') {
+                        populateAccountData();
+                    }
+                })
+                .catch(err => console.error(`Error loading ${page}.html:`, err));
+        }
+    }
+
+    // Function to populate account data
+    async function populateAccountData() {
+        const {data} = await supabaseClient.auth.getUser();
+        const user = data.user;
+        if (user) {
+            document.getElementById('accountName').textContent = user.user_metadata?.full_name || user.user_metadata?.user_name || user.user_metadata?.name || 'User';
+            document.getElementById('accountEmail').textContent = user.email;
+            document.getElementById('accountCreated').textContent = new Date(user.created_at).toLocaleDateString();
+
+            // Fetch is_admin from profiles table
+            const {data: profile } = await supabaseClient
+                .from("profiles")
+                .select("is_admin")
+                .eq("id", user.id)
+                .single();
+
+            document.getElementById('accountRole').textContent = profile?.is_admin ? "Admin" : "User";
+        }
+    }
+
+    // Event listener for sidebar clicks
+    document.addEventListener('click', function(e) {
+        if (e.target.matches('[data-page]')) {
+            e.preventDefault();
+            const page = e.target.getAttribute('data-page');
+            loadPageContent(page);
+        }
+    });
 
     // Call these functions when the main page loads:
     document.addEventListener('DOMContentLoaded', (event) => {
