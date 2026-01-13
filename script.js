@@ -556,6 +556,32 @@ function initializeSearch() {
 // Make functions available globally
 window.initializeContentLoader = initializeContentLoader;
 window.initializeSearchBar = initializeSearchBar;
+window.initializeSidebar = initializeSidebar;
+
+/**
+ * Initialize sidebar navigation for dashboard pages
+ */
+function initializeSidebar() {
+    const sidebarLinks = document.querySelectorAll('.nav-link[data-page]');
+
+    sidebarLinks.forEach(link => {
+        link.addEventListener('click', function (e) {
+            e.preventDefault();
+
+            const page = this.getAttribute('data-page');
+            if (!page) return;
+
+            // Remove active class from all links
+            sidebarLinks.forEach(l => l.classList.remove('active'));
+            // Add active class to clicked link
+            this.classList.add('active');
+
+            // Navigate to the page
+            const pagePath = `profile/${page}/`;
+            window.location.href = pagePath;
+        });
+    });
+}
 
 document.addEventListener('DOMContentLoaded', () => {
     // Initialize search
