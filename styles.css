@@ -2257,10 +2257,6 @@ input:checked+.toggle-slider:before {
     margin: 0;
 }
 
-/* 2FA Setup Styles */
-.2fa-setup {
-    text-align: center;
-}
 
 .qr-placeholder {
     margin: 20px 0;
