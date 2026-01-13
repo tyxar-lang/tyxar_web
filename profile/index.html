@@ -67,7 +67,7 @@
     <div id="dashboard" class="hidden">
         <!-- Actual site header will be injected here on login -->
         <div id="header"></div>
-
+        <div id="sidebar"></div>
         <main class="dashboard-main">
             <div class="dashboard-content container">
                 <div class="welcome-section">
@@ -355,7 +355,7 @@
 
             // If sidebar is only used in the 'doc' index.html, call it conditionally:
             if (document.getElementById('sidebar')) {
-                loadHTML('docs/sidebar.html ', 'sidebar');
+                loadHTML('/tyxar_web/profile/sidebar.html ', 'sidebar');
             }
         });
     </script>
