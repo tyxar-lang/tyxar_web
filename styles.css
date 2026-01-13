@@ -344,6 +344,7 @@ main {
     background-color: var(--gradient-secondary);
     padding: 0 20px;
 }
+
 .sidebar {
     width: 280px;
     min-width: 280px;
@@ -1766,11 +1767,11 @@ button[onclick*="Google"]:hover {
     transition: 0.3s;
 }
 
-.toggle input:checked + .toggle-slider {
+.toggle input:checked+.toggle-slider {
     background: var(--accent-blue);
 }
 
-.toggle input:checked + .toggle-slider:before {
+.toggle input:checked+.toggle-slider:before {
     transform: translateX(26px);
 }
 
