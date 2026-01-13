@@ -67,13 +67,60 @@ const sampleProjects = [
     }
 ];
 
+// Load functions for header, footer, and sidebar
+async function loadHeader() {
+    try {
+        const response = await fetch('../header.html');
+        if (response.ok) {
+            const html = await response.text();
+            const headerPlaceholder = document.getElementById('header-placeholder');
+            if (headerPlaceholder) {
+                headerPlaceholder.innerHTML = html;
+            }
+        }
+    } catch (error) {
+        console.warn('Could not load header:', error);
+    }
+}
+
+async function loadFooter() {
+    try {
+        const response = await fetch('../footer.html');
+        if (response.ok) {
+            const html = await response.text();
+            const footerPlaceholder = document.getElementById('footer-placeholder');
+            if (footerPlaceholder) {
+                footerPlaceholder.innerHTML = html;
+            }
+        }
+    } catch (error) {
+        console.warn('Could not load footer:', error);
+    }
+}
+
+async function loadSidebar() {
+    try {
+        const response = await fetch('sidebar.html');
+        if (response.ok) {
+            const html = await response.text();
+            const sidebarElement = document.getElementById('sidebar');
+            if (sidebarElement) {
+                sidebarElement.innerHTML = html;
+            }
+        }
+    } catch (error) {
+        console.warn('Could not load sidebar:', error);
+    }
+}
+
 // Initialize profile dashboard based on current page
 function initializeProfileDashboard() {
-    // Load header and footer
+    // Load header, footer, and sidebar
     loadHeader();
     loadFooter();
+    loadSidebar();
 
-    // Initialize sidebar
+    // Initialize sidebar navigation
     initializeSidebar();
 
     // Determine which page we're on and initialize accordingly
@@ -703,6 +750,27 @@ function updateStats() {
         sharedEl.textContent = shared;
         sizeEl.textContent = `${totalSize.toFixed(1)} MB`;
     }
+}
+
+// Load sidebar content
+function loadSidebar() {
+    const sidebarElement = document.getElementById('sidebar');
+    if (!sidebarElement) return;
+
+    fetch('../sidebar.html')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to load sidebar');
+            }
+            return response.text();
+        })
+        .then(html => {
+            sidebarElement.innerHTML = html;
+        })
+        .catch(error => {
+            console.error('Error loading sidebar:', error);
+            sidebarElement.innerHTML = '<div class="sidebar-error">Failed to load sidebar</div>';
+        });
 }
 
 // Initialize profile dashboard when DOM is loaded

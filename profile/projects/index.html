@@ -10,22 +10,23 @@
 <body>
     <div id="header-placeholder"></div>
 
-    <div class="dashboard-container">
-        <div id="sidebar-placeholder"></div>
+    <!-- Sidebar will be loaded here -->
+    <div id="sidebar"></div>
 
-        <main class="dashboard-main">
-            <div class="dashboard-header">
-                <div class="header-actions">
-                    <div>
-                        <h1>My Projects</h1>
-                        <p class="dashboard-subtitle">Manage and track your Tyxar projects</p>
-                    </div>
-                    <button class="btn-primary" id="create-project">
-                        <span class="btn-icon">+</span>
-                        New Project
-                    </button>
+    <!-- Main Content -->
+    <div class="dashboard-content-wrapper">
+        <div class="dashboard-header">
+            <div class="header-actions">
+                <div>
+                    <h1>My Projects</h1>
+                    <p class="dashboard-subtitle">Manage and track your Tyxar projects</p>
                 </div>
+                <button class="btn-primary" id="create-project">
+                    <span class="btn-icon">+</span>
+                    New Project
+                </button>
             </div>
+        </div>
 
             <div class="projects-filters">
                 <div class="filter-tabs">
@@ -139,7 +140,8 @@
         </div>
     </div>
 
-    <script src="../../script.js"></script>
+    <div id="footer-placeholder"></div>
+
     <script src="../../script.js"></script>
     <script src="../profile.js"></script>
 </body>
