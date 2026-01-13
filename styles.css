@@ -352,6 +352,7 @@ main {
     background-color: white;
     border: 1px solid #e2e8f0;
     border-radius: 12px;
+    max-height: calc(100vh - 1rem);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
     font-family: 'Times New Roman', Times, serif;
     overflow-y: auto;
