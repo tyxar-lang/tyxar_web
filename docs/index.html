@@ -74,8 +74,20 @@
        
 
     <!-- Scripts -->
+    <!-- Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="/tyxar_web/script.js"></script>
     <script src="/tyxar_web/docs/doc_script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Load header and sidebar
+            loadHTML('/tyxar_web/header.html', 'header');
+            loadHTML('/tyxar_web/docs/sidebar.html', 'sidebar');
+            
+            // Check authentication state
+            checkAuthState();
+        });
+    </script>
 </body>
 
 </html>

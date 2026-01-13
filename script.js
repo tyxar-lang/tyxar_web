@@ -1,3 +1,90 @@
+// Supabase initialization for global authentication
+const SUPABASE_URL = "https://ntqoveatlcvzbuipwxfl.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im50cW92ZWF0bGN2emJ1aXB3eGZsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjcxOTYxMDYsImV4cCI6MjA4Mjc3MjEwNn0.dWn4N1tWbUnLNW3dABcVqf3CHiVdjkz9dYeJD0TsaYU";
+const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+// Global authentication state
+let currentUser = null;
+
+// Global authentication functions
+async function checkAuthState() {
+    try {
+        const { data: { session } } = await supabaseClient.auth.getSession();
+        if (session?.user) {
+            currentUser = session.user;
+            updateHeaderForAuth();
+        } else {
+            currentUser = null;
+            updateHeaderForAuth();
+        }
+    } catch (error) {
+        console.error('Auth check failed:', error);
+        currentUser = null;
+        updateHeaderForAuth();
+    }
+}
+
+async function globalLogout() {
+    try {
+        await supabaseClient.auth.signOut();
+        currentUser = null;
+        updateHeaderForAuth();
+        // Redirect to home page after logout
+        window.location.href = '/tyxar_web/';
+    } catch (error) {
+        console.error('Logout failed:', error);
+    }
+}
+
+function updateHeaderForAuth() {
+    const accountLink = document.querySelector('.account-link');
+    if (!accountLink) return;
+
+    if (currentUser) {
+        // User is logged in - show user info and logout
+        const displayName = currentUser.user_metadata?.full_name ||
+                           currentUser.user_metadata?.user_name ||
+                           currentUser.user_metadata?.name ||
+                           currentUser.email.split('@')[0] ||
+                           'User';
+
+        accountLink.innerHTML = `
+            <span style="display: flex; align-items: center; gap: 0.5rem;">
+                <span>👤 ${displayName}</span>
+                <button onclick="globalLogout()" style="
+                    background: none;
+                    border: none;
+                    color: #e2e8f0;
+                    cursor: pointer;
+                    font-size: 0.9em;
+                    padding: 0.2rem 0.5rem;
+                    border-radius: 4px;
+                    transition: background-color 0.2s;
+                " onmouseover="this.style.backgroundColor='rgba(255,255,255,0.1)'"
+                   onmouseout="this.style.backgroundColor='transparent'">Logout</button>
+            </span>
+        `;
+        accountLink.href = '/tyxar_web/profile';
+        accountLink.style.textDecoration = 'none';
+    } else {
+        // User is not logged in - show sign in link
+        accountLink.innerHTML = 'Sign In';
+        accountLink.href = '/tyxar_web/profile';
+        accountLink.style.textDecoration = 'none';
+    }
+}
+
+// Listen for auth state changes
+supabaseClient.auth.onAuthStateChange((event, session) => {
+    if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
+        currentUser = session?.user || null;
+        updateHeaderForAuth();
+    } else if (event === 'SIGNED_OUT') {
+        currentUser = null;
+        updateHeaderForAuth();
+    }
+});
+
 function initializeContentLoader() {
     // Remove old listeners to prevent duplicates
     document.removeEventListener('click', contentLoaderHandler);

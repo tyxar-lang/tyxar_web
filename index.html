@@ -141,6 +141,8 @@ write "hI"
 
     <!-- Load your main script file -->
 
+    <!-- Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <!-- Scripts -->
     <script src="/tyxar_web/script.js"></script>
     <script>
@@ -169,6 +171,9 @@ write "hI"
                 if (document.getElementById('sidebar')) {
                     loadHTML('docs/sidebar.html ', 'sidebar');
                 }
+
+                // Check authentication state
+                checkAuthState();
             });
     </script>
 </body>
