@@ -69,13 +69,64 @@
         <div id="header"></div>
 
         <main class="dashboard-main">
-            <div class="dashboard-container">
-                <!-- Sidebar -->
-                <div id="profile-sidebar" class="profile-sidebar"></div>
+            <div class="dashboard-content container">
+                <div class="welcome-section">
+                    <div class="welcome-header">
+                        <h1>Welcome back, <span id="dashboardName"></span>!</h1>
+                        <button onclick="logout()" class="logout-btn">Sign Out</button>
+                    </div>
+                    <p>Manage your Tyxar account and access all features</p>
+                </div>
 
-                <!-- Main Content Area -->
-                <div id="main-content" class="main-content">
-                    <!-- Default content will be loaded here -->
+                <div class="dashboard-grid">
+                    <div class="dashboard-card">
+                        <h3>Account Information</h3>
+                        <div class="account-info">
+                            <p><strong>Email:</strong> <span id="dashboardEmail"></span></p>
+                            <p><strong>Role:</strong> <span id="dashboardRole"></span></p>
+                            <p><strong>Member since:</strong> <span id="dashboardCreated"></span></p>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-card">
+                        <h3>Quick Actions</h3>
+                        <div class="quick-actions">
+                            <a href="/tyxar_web/docs/" class="action-btn">
+                                <span>📚</span>
+                                View Documentation
+                            </a>
+                            <a href="/tyxar_web/download/" class="action-btn">
+                                <span>⬇️</span>
+                                Download Tyxar
+                            </a>
+                            <a href="/tyxar_web/menu/" class="action-btn">
+                                <span>⚙️</span>
+                                Settings
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-card">
+                        <h3>Recent Activity</h3>
+                        <div class="activity-list">
+                            <p>Welcome to your Tyxar dashboard!</p>
+                            <p>Explore the documentation to learn more about the language.</p>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-card">
+                        <h3>Community</h3>
+                        <div class="community-links">
+                            <a href="https://github.com/tyxar-lang" target="_blank" class="social-link">
+                                <span>🐙</span>
+                                GitHub Repository
+                            </a>
+                            <a href="#" class="social-link">
+                                <span>💬</span>
+                                Community Forum
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </main>
@@ -88,7 +139,6 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="config.js"></script>
     <script src="/tyxar_web/script.js"></script>
-    <script src="tyxar_web/profile/profile_script.js"></script>
 
     <script>
         // ===============================
@@ -234,9 +284,6 @@
             authBox.classList.add("hidden");
             dashboard.classList.remove("hidden");
 
-            // Load sidebar and initialize dashboard
-            initializeProfileDashboard(user);
-
             // Load actual header and footer into the dashboard (use site's header/footer)
             try {
                 const headerResp = await fetch('/tyxar_web/header.html');
@@ -284,7 +331,34 @@
                 if (session) loadUser();
             })();
     </script>
+    <script>
+        // Function to load external HTML content
+        function loadHTML(url, elementId) {
+            fetch(url)
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById(elementId).innerHTML = data;
 
+                    // --- CRITICAL STEP ---
+                    // Re-run initialization to catch the *new* links in the footer 
+                    // AND the sidebar links (since they use the global selector now)
+                    initializeContentLoader();
+                })
+                .catch(err => console.error(`Error loading ${url}:`, err));
+        }
+
+        // Call these functions when the main page loads:
+        document.addEventListener('DOMContentLoaded', (event) => {
+            // Load Header, Footer, and Sidebar
+            loadHTML('/tyxar_web/header.html', 'header');
+            loadHTML('/tyxar_web/footer.html', 'footer');
+
+            // If sidebar is only used in the 'doc' index.html, call it conditionally:
+            if (document.getElementById('sidebar')) {
+                loadHTML('docs/sidebar.html ', 'sidebar');
+            }
+        });
+    </script>
 
     
   
