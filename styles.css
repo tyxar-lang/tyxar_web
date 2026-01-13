@@ -1062,21 +1062,8 @@ button.secondary {
     color: var(--accent-blue);
 }
 
-.logout-btn {
-    background: var(--gradient-accent);
-    color: white;
-    border: none;
-    padding: 0.5rem 1rem;
-    border-radius: 6px;
-    cursor: pointer;
-    font-weight: 600;
-    transition: all 0.3s ease;
-}
 
-.logout-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(66, 153, 225, 0.3);
-}
+
 
 .dashboard-main {
     padding: 2rem;
@@ -1114,7 +1101,7 @@ button.secondary {
 .logout-btn {
     background: rgba(255, 255, 255, 0.1);
     border: 1px solid rgba(255, 255, 255, 0.2);
-    color: white;
+    color: var(--metal-dark);
     padding: 8px 16px;
     border-radius: 6px;
     cursor: pointer;
