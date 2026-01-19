@@ -205,54 +205,6 @@
             .catch(err => console.error(`Error loading ${url}:`, err));
     }
 
-    // ===============================
-    // DASHBOARD VIEW SWITCHING
-    // ===============================
-    function showDashboardView(viewId) {
-        // Hide all views
-        document.querySelectorAll('.dashboard-view').forEach(view => {
-            view.classList.add('hidden');
-        });
-        
-        // Show the requested view
-        const targetView = document.getElementById(viewId);
-        if (targetView) {
-            targetView.classList.remove('hidden');
-        }
-    }
-
-    // Load content from external HTML file into a dashboard view
-    function loadDashboardContent(htmlFile, viewId) {
-        fetch(htmlFile)
-            .then(response => response.text())
-            .then(data => {
-                document.getElementById(viewId).innerHTML = data;
-                showDashboardView(viewId);
-            })
-            .catch(err => console.error(`Error loading ${htmlFile}:`, err));
-    }
-
-    // Setup sidebar click handlers
-    function setupSidebarHandlers() {
-        // Example: Link sidebar items to dashboard views
-        // This assumes your sidebar has data-view attributes or specific classes
-        document.addEventListener('click', (e) => {
-            // Check if clicked element is a sidebar link with data-view attribute
-            if (e.target.closest('[data-view]')) {
-                const viewId = e.target.closest('[data-view]').getAttribute('data-view');
-                const htmlFile = e.target.closest('[data-view]').getAttribute('data-file');
-                
-                e.preventDefault();
-                
-                if (htmlFile) {
-                    loadDashboardContent(htmlFile, viewId);
-                } else {
-                    showDashboardView(viewId);
-                }
-            }
-        });
-    }
-
     // Call these functions when the main page loads:
     document.addEventListener('DOMContentLoaded', (event) => {
         // Load Header, Footer, and Sidebar
@@ -262,6 +214,5 @@
     // If sidebar is only used in the 'doc' index.html, call it conditionally:
     if (document.getElementById('sidebar')) {
         loadHTML('/tyxar_web/profile/sidebar.html ', 'sidebar');
-        setupSidebarHandlers();
         }
     });
