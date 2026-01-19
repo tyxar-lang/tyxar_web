@@ -215,4 +215,105 @@
     if (document.getElementById('sidebar')) {
         loadHTML('/tyxar_web/profile/sidebar.html ', 'sidebar');
         }
+    
+    // Initialize profile sidebar
+    initializeProfileSidebar();
     });
+
+    // ===============================
+    // PROFILE SIDEBAR
+    // ===============================
+    function initializeProfileSidebar() {
+        const profileEvents = document.querySelector('.profile-events');
+        const profileSidebar = document.getElementById('profileSidebar');
+        const contentArea = document.querySelector('.profile-events .content');
+
+        if (!profileEvents || !profileSidebar || !contentArea) return;
+
+        fetch('/tyxar_web/profile/sidebar.html')
+            .then(r => { if (!r.ok) throw Error(r.status); return r.text(); })
+            .then(html => {
+                profileSidebar.innerHTML = html;
+
+                // Only run on mobile/tablet
+                if (window.innerWidth > 1023) return;
+
+                // Floating toggle button
+                const btn = document.createElement('button');
+                btn.innerHTML = 'Menu';
+                btn.setAttribute('aria-label', 'Toggle navigation');
+                Object.assign(btn.style, {
+                    position: 'fixed',
+                    left: '16px',
+                    width: '56px',
+                    height: '56px',
+                    background: 'white',
+                    color: 'var(--metal-dark)',
+                    border: 'none',
+                    borderRadius: '12px',
+                    fontSize: '28px',
+                    fontWeight: 'bold',
+                    cursor: 'pointer',
+                    zIndex: '1001',
+                    boxShadow: '0 4px 20px rgba(0,0,0,0.2)',
+                    transition: 'all 0.3s ease',
+                });
+                document.body.appendChild(btn);
+
+                const MIN_TOP = 160;
+                const STICKY_TOP = 10;
+                const OPEN_TOP = 10;
+
+                let isOpen = false;
+
+                const updateButton = () => {
+                    isOpen = profileSidebar.classList.contains('open');
+                    btn.innerHTML = isOpen ? '×' : '☰';
+                    btn.style.background = isOpen ? 'var(--accent-blue)' : 'white';
+                    btn.style.color = isOpen ? 'white' : 'var(--metal-dark)';
+
+                    if (isOpen) {
+                        btn.style.top = `${OPEN_TOP}px`;
+                    } else {
+                        const scrolled = window.scrollY;
+                        let top = MIN_TOP - scrolled;
+                        top = Math.max(STICKY_TOP, Math.min(MIN_TOP, top));
+                        btn.style.top = `${top}px`;
+                    }
+                };
+
+                btn.onclick = e => {
+                    e.stopPropagation();
+                    profileSidebar.classList.toggle('open');
+                    updateButton();
+                };
+
+                document.addEventListener('click', e => {
+                    if (isOpen && !profileSidebar.contains(e.target) && !btn.contains(e.target)) {
+                        profileSidebar.classList.remove('open');
+                        updateButton();
+                    }
+                });
+
+                document.addEventListener('keydown', e => {
+                    if (e.key === 'Escape' && isOpen) {
+                        profileSidebar.classList.remove('open');
+                        updateButton();
+                    }
+                });
+
+                const handleScroll = () => {
+                    if (!isOpen) updateButton();
+                };
+
+                window.addEventListener('scroll', handleScroll);
+
+                updateButton();
+                handleScroll();
+            })
+            .catch(err => {
+                console.error('Profile sidebar failed:', err);
+                profileSidebar.innerHTML = '<p style="color:red;padding:20px;">Sidebar failed to load</p>';
+            });
+    }
+

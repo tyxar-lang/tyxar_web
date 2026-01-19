@@ -812,6 +812,47 @@ footer {
     }
 }
 
+/* profile: MOBILE SIDEBAR (Slide-in + ☰ → X) */
+/* =========================================== */
+@media (max-width: 1023px) {
+    .profile-events {
+        flex-direction: column;
+        position: relative;
+    }
+
+    /* Hide sidebar by default on mobile */
+    .profile-events .sidebar {
+        position: fixed;
+        top: 0;
+        left: -100%;
+        width: 280px;
+        height: 100vh;
+        background: white;
+        z-index: 999;
+        box-shadow: 4px 0 20px rgba(0, 0, 0, 0.15);
+        transition: left 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        padding: 80px 20px 20px;
+        overflow-y: auto;
+        border: none;
+        border-radius: 0;
+    }
+
+    /* When open */
+    .profile-events .sidebar.open {
+        left: 0;
+    }
+}
+
+/* profile: Desktop sidebar */
+@media (min-width: 1024px) {
+    .profile-events .sidebar {
+        position: sticky;
+        top: 10px;
+        left: auto;
+        width: 280px;
+    }
+}
+
 /* Quotes Section */
 #quotes {
     padding: 50px 0;
