@@ -76,8 +76,91 @@
         <div class="profile-events">
             <div id="content" class="content">
                 <div class="content-wrapper">
-                    <div>
-                        <p>jsjsjs</p>
+                    <div style="
+                      position: relative;
+                      height: 320px;
+                      background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+                      border-radius: 0 0 16px 16px;
+                      overflow: hidden;
+                      margin: -16px -16px 0 -16px;
+                      box-shadow: 0 10px 30px -10px rgba(0,0,0,0.4);
+                    ">
+                    
+                        <!-- Optional subtle overlay pattern / texture -->
+                        <div style="
+                        position: absolute;
+                        inset: 0;
+                        background: radial-gradient(circle at 30% 70%, rgba(255,255,255,0.08) 0%, transparent 40%);
+                        pointer-events: none;
+                      "></div>
+                    
+                        <!-- Main content container -->
+                        <div style="
+                        position: absolute;
+                        bottom: 0;
+                        left: 0;
+                        right: 0;
+                        padding: 0 32px 24px;
+                        display: flex;
+                        align-items: flex-end;
+                        gap: 24px;
+                        z-index: 2;
+                      ">
+                    
+                            <!-- Avatar / profile picture -->
+                            <div style="
+                          width: 168px;
+                          height: 168px;
+                          border-radius: 20px;
+                          border: 6px solid white;
+                          background: #334155;
+                          overflow: hidden;
+                          box-shadow: 0 8px 32px rgba(0,0,0,0.35);
+                          flex-shrink: 0;
+                          background-size: cover;
+                          background-position: center;
+                          /* Replace with your image: */
+                          background-image: url('https://images.unsplash.com/photo-1568602471122-7832951cc4c5?w=800');
+                        "></div>
+                    
+                            <!-- Name & meta -->
+                            <div style="color: white; flex: 1; padding-bottom: 8px;">
+                    
+                                <h1 style="
+                            margin: 0;
+                            font-size: 2.8rem;
+                            font-weight: 800;
+                            letter-spacing: -0.5px;
+                            text-shadow: 0 3px 12px rgba(0,0,0,0.5);
+                          ">
+                                    Tyxar
+                                </h1>
+                    
+                                <div style="
+                            margin-top: 6px;
+                            font-size: 1.18rem;
+                            opacity: 0.92;
+                            font-weight: 500;
+                          ">
+                                    London • Developer / Designer / Chaos Coordinator
+                                </div>
+                    
+                                <div style="
+                            margin-top: 10px;
+                            display: flex;
+                            gap: 20px;
+                            font-size: 0.98rem;
+                            opacity: 0.9;
+                          ">
+                                    <span>👾 12k followers</span>
+                                    <span>•</span>
+                                    <span>Joined Jan 2020</span>
+                                </div>
+                    
+                            </div>
+                    
+                        </div>
+                    
                     </div>
                     <main class="dashboard-main">
                         <div class="dashboard-content container">
