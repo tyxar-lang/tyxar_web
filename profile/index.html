@@ -76,7 +76,7 @@
         <div class="profile-events">
             <div id="content" class="content">
                 <div class="content-wrapper">
-                    <div style="
+                    <div id="topBanner" style="
                       position: relative;
                       height: 220px;
                       background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
@@ -93,6 +93,28 @@
                         background: radial-gradient(circle at 30% 70%, rgba(255,255,255,0.08) 0%, transparent 40%);
                         pointer-events: none;
                       "></div>
+                    
+                        <!-- Sign Out Button -->
+                        <button onclick="logout()" style="
+                        position: absolute;
+                        top: 20px;
+                        right: 32px;
+                        z-index: 10;
+                        padding: 10px 20px;
+                        background: rgba(255,255,255,0.2);
+                        border: 1px solid rgba(255,255,255,0.4);
+                        color: white;
+                        border-radius: 8px;
+                        font-weight: 600;
+                        cursor: pointer;
+                        transition: all 0.3s ease;
+                        font-size: 0.95rem;
+                      "
+                        onmouseover="this.style.background='rgba(255,255,255,0.3)'; this.style.borderColor='rgba(255,255,255,0.6)'"
+                        onmouseout="this.style.background='rgba(255,255,255,0.2)'; this.style.borderColor='rgba(255,255,255,0.4)'"
+                        >
+                          Sign Out
+                        </button>
                     
                         <!-- Main content container -->
                         <div style="
@@ -197,8 +219,7 @@
                                 </div>
     
     
-                                <button style="width: 100px; height: 100px; color:rgb(223, 26, 26);" onclick="logout()" class="logout-btn">Sign Out</button>
-                            </div>
+                                  </div>
                         </div>
                     </main>
                 </div>
