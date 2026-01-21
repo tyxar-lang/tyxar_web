@@ -434,10 +434,6 @@ main {
     transition: opacity 0.3s ease;
 }
 
-.content-wrapper {
-    margin: 0 auto;
-}
-
 .content-wrapper h1 {
     font-size: 42px;
     font-weight: 700;
