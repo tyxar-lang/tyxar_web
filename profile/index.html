@@ -107,6 +107,147 @@
                 line-height: 1.3 !important;
             }
         }
+
+        /* Dashboard Layout Styles */
+        .dashboard-wrapper {
+            display: flex;
+            gap: 24px;
+            margin-top: 32px;
+        }
+
+        .dashboard-sidebar {
+            width: 280px;
+            flex-shrink: 0;
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            height: fit-content;
+            position: sticky;
+            top: 100px;
+        }
+
+        .dashboard-sidebar h3 {
+            font-size: 1.1rem;
+            margin-bottom: 16px;
+            color: #2d3748;
+        }
+
+        .sidebar-section {
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .sidebar-section:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .sidebar-item {
+            display: block;
+            padding: 10px 12px;
+            margin: 6px 0;
+            background: #f7fafc;
+            border-radius: 6px;
+            color: #2d3748;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .sidebar-item:hover {
+            background: #e2e8f0;
+            transform: translateX(4px);
+        }
+
+        .dashboard-main-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .content-card {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .content-card h2 {
+            font-size: 1.5rem;
+            margin-bottom: 16px;
+            color: #2d3748;
+        }
+
+        .placeholder-content {
+            background: linear-gradient(135deg, #f7fafc 0%, #e2e8f0 100%);
+            border: 2px dashed #cbd5e0;
+            border-radius: 8px;
+            padding: 32px;
+            text-align: center;
+            color: #718096;
+            min-height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .toggle-sidebar-btn {
+            display: none;
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: #3b82f6;
+            color: white;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            z-index: 999;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+        }
+
+        @media (max-width: 1024px) {
+            .dashboard-wrapper {
+                gap: 16px;
+            }
+
+            .dashboard-sidebar {
+                width: 240px;
+                padding: 16px;
+            }
+
+            .content-card {
+                padding: 16px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-wrapper {
+                flex-direction: column;
+                gap: 16px;
+                margin-top: 24px;
+            }
+
+            .dashboard-sidebar {
+                width: 100%;
+                position: static;
+                top: auto;
+                height: auto;
+            }
+
+            .toggle-sidebar-btn {
+                display: block;
+            }
+
+            .dashboard-sidebar.hidden {
+                display: none;
+            }
+        }
     </style>
     
 
@@ -278,11 +419,66 @@
                     </div>
                     <main class="dashboard-main">
                         <div class="dashboard-content container">
-                            <div class="welcome-section">
-                                
-                                <p>Manage your Tyxar account and access all features</p>
+                            <div class="dashboard-wrapper">
+                                <!-- SIDEBAR -->
+                                <aside class="dashboard-sidebar">
+                                    <h3>Menu</h3>
+                                    
+                                    <div class="sidebar-section">
+                                        <div class="sidebar-item" onclick="showDashboardSection('overview')">📊 Overview</div>
+                                        <div class="sidebar-item" onclick="showDashboardSection('projects')">📁 Projects</div>
+                                        <div class="sidebar-item" onclick="showDashboardSection('settings')">⚙️ Settings</div>
+                                    </div>
+
+                                    <div class="sidebar-section">
+                                        <div class="sidebar-item" onclick="showDashboardSection('docs')">📚 Documentation</div>
+                                        <div class="sidebar-item" onclick="showDashboardSection('community')">👥 Community</div>
+                                    </div>
+                                </aside>
+
+                                <!-- MAIN CONTENT -->
+                                <div class="dashboard-main-content">
+                                    <!-- Overview Section -->
+                                    <div id="section-overview" class="content-card">
+                                        <h2>Welcome Back!</h2>
+                                        <div class="placeholder-content">
+                                            📈 Overview Dashboard Placeholder
+                                        </div>
+                                    </div>
+
+                                    <!-- Projects Section -->
+                                    <div id="section-projects" class="content-card hidden">
+                                        <h2>Your Projects</h2>
+                                        <div class="placeholder-content">
+                                            📁 Projects List Placeholder
+                                        </div>
+                                    </div>
+
+                                    <!-- Settings Section -->
+                                    <div id="section-settings" class="content-card hidden">
+                                        <h2>Account Settings</h2>
+                                        <div class="placeholder-content">
+                                            ⚙️ Settings Panel Placeholder
+                                        </div>
+                                    </div>
+
+                                    <!-- Docs Section -->
+                                    <div id="section-docs" class="content-card hidden">
+                                        <h2>Documentation</h2>
+                                        <div class="placeholder-content">
+                                            📚 Documentation Content Placeholder
+                                        </div>
+                                    </div>
+
+                                    <!-- Community Section -->
+                                    <div id="section-community" class="content-card hidden">
+                                        <h2>Community</h2>
+                                        <div class="placeholder-content">
+                                            👥 Community Content Placeholder
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                                  </div>
                         </div>
                     </main>
                 </div>
@@ -303,8 +499,27 @@
   
  <script src="/tyxar_web/profile/js.js"></script>
 
-    
-  
+    <script>
+        function showDashboardSection(sectionId) {
+            // Hide all sections
+            const allSections = document.querySelectorAll('.content-card');
+            allSections.forEach(section => {
+                section.classList.add('hidden');
+            });
+
+            // Show selected section
+            const selectedSection = document.getElementById(`section-${sectionId}`);
+            if (selectedSection) {
+                selectedSection.classList.remove('hidden');
+            }
+        }
+
+        // Toggle sidebar on mobile
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.dashboard-sidebar');
+            sidebar.classList.toggle('hidden');
+        }
+    </script>
 
 </body>
 
