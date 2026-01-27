@@ -211,23 +211,21 @@ document.addEventListener('DOMContentLoaded', (event) => {
     loadHTML('/tyxar_web/header.html', 'header');
     loadHTML('/tyxar_web/footer.html', 'footer');
 
-    // If sidebar is only used in the 'doc' index.html, call it conditionally:
-    if (document.getElementById('sidebar')) {
-        loadHTML('/tyxar_web/profile/sidebar.html ', 'sidebar');
-    }
+ 
 
-    // Initialize profile sidebar
-    initializeProfileSidebar();
+    // Initialize profile sidebar - add small delay to ensure DOM is ready
+    setTimeout(() => {
+        initializeProfileSidebar();
+    }, 100);
 });
 
 // ===============================
 // PROFILE SIDEBAR WITH SMART BUTTON
 // ===============================
-document.addEventListener('DOMContentLoaded', () => {
-    const dashboardWrapper = document.querySelector('.dashboard-wrapper');
+function initializeProfileSidebar() {
     const sidebar = document.querySelector('.dashboard-sidebar');
 
-    if (!dashboardWrapper || !sidebar) return;
+    if (!sidebar) return;
 
     // Only run on mobile/tablet
     if (window.innerWidth > 768) return;
@@ -316,4 +314,4 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initial setup
     updateButton();
     handleScroll();
-});
+}
