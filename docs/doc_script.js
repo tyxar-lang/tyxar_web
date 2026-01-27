@@ -17,8 +17,8 @@ document.addEventListener('DOMContentLoaded', () => {
         .then(html => {
             sidebar.innerHTML = html;
 
-            // Only run on mobile/tablet
-            if (window.innerWidth > 1023) return;
+            // Only run on mobile/tablet 1023px and below
+            if (window.innerWidth > 768) return;
 
             // Floating toggle button
             const btn = document.createElement('button');
