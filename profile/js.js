@@ -115,7 +115,7 @@ function showAuth() {
     if (btn) {
         btn.remove();
     }
-    
+
     // Also close sidebar if it was open
     const sidebar = document.querySelector('.dashboard-sidebar');
     if (sidebar) {
@@ -228,7 +228,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
     loadHTML('/tyxar_web/header.html', 'header');
     loadHTML('/tyxar_web/footer.html', 'footer');
 
- 
+
 
     // Initialize profile sidebar
     initializeProfileSidebar();

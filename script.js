@@ -255,7 +255,8 @@ function initializeSearchBar() {
     function performSearch() {
         const query = searchBar.value.trim();
         if (query) {
-            window.location.href = `search?q=${encodeURIComponent(query)}`;
+            // Use same path as header for consistency on GitHub Pages
+            window.location.href = `/tyxar_web/search?q=${encodeURIComponent(query)}`;
         }
     }
 
