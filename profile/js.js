@@ -109,6 +109,12 @@ function showAuth() {
     dashboard.classList.add("hidden");
     authBox.classList.remove("hidden");
     showLogin(); // Default to login form
+
+    // Remove hamburger button on sign out
+    const btn = document.querySelector('.floating-menu-btn');
+    if (btn) {
+        btn.remove();
+    }
 }
 
 // ===============================
