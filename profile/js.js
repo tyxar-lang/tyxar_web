@@ -162,6 +162,11 @@ async function loadUser() {
     } catch (e) {
         console.warn('Could not load footer:', e);
     }
+
+    // Initialize floating sidebar button (only when logged in)
+    setTimeout(() => {
+        initializeProfileSidebar();
+    }, 100);
 }
 
 // ===============================
@@ -211,12 +216,10 @@ document.addEventListener('DOMContentLoaded', (event) => {
     loadHTML('/tyxar_web/header.html', 'header');
     loadHTML('/tyxar_web/footer.html', 'footer');
 
- 
-
-    // Initialize profile sidebar - add small delay to ensure DOM is ready
-    setTimeout(() => {
-        initializeProfileSidebar();
-    }, 100);
+    // If sidebar is only used in the 'doc' index.html, call it conditionally:
+    if (document.getElementById('sidebar')) {
+        loadHTML('/tyxar_web/profile/sidebar.html ', 'sidebar');
+    }
 });
 
 // ===============================
