@@ -106,15 +106,20 @@ function showLogin() {
 }
 
 function showAuth() {
-    dashboard.classList.add("hidden");
-    authBox.classList.remove("hidden");
-    showLogin(); // Default to login form
-
-    // Remove hamburger button on sign out
+    // Remove hamburger button and close sidebar immediately on sign out
     const btn = document.querySelector('.floating-menu-btn');
     if (btn) {
         btn.remove();
     }
+
+    const sidebar = document.querySelector('.dashboard-sidebar');
+    if (sidebar) {
+        sidebar.classList.remove('open');
+    }
+
+    dashboard.classList.add("hidden");
+    authBox.classList.remove("hidden");
+    showLogin(); // Default to login form
 }
 
 // ===============================
