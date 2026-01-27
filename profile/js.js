@@ -110,10 +110,16 @@ function showAuth() {
     authBox.classList.remove("hidden");
     showLogin(); // Default to login form
 
-    // Remove hamburger button on sign out
+    // Remove hamburger button on sign out - be thorough
     const btn = document.querySelector('.floating-menu-btn');
     if (btn) {
         btn.remove();
+    }
+    
+    // Also close sidebar if it was open
+    const sidebar = document.querySelector('.dashboard-sidebar');
+    if (sidebar) {
+        sidebar.classList.remove('open');
     }
 }
 
@@ -222,10 +228,10 @@ document.addEventListener('DOMContentLoaded', (event) => {
     loadHTML('/tyxar_web/header.html', 'header');
     loadHTML('/tyxar_web/footer.html', 'footer');
 
-    // If sidebar is only used in the 'doc' index.html, call it conditionally:
-    if (document.getElementById('sidebar')) {
-        loadHTML('/tyxar_web/profile/sidebar.html ', 'sidebar');
-    }
+ 
+
+    // Initialize profile sidebar
+    initializeProfileSidebar();
 });
 
 // ===============================
@@ -238,6 +244,12 @@ function initializeProfileSidebar() {
 
     // Only run on mobile/tablet
     if (window.innerWidth > 768) return;
+
+    // Remove any existing button first (to avoid duplicates)
+    const existingBtn = document.querySelector('.floating-menu-btn');
+    if (existingBtn) {
+        existingBtn.remove();
+    }
 
     // Create floating toggle button
     const btn = document.createElement('button');
