@@ -224,109 +224,31 @@ document.addEventListener('DOMContentLoaded', (event) => {
 // PROFILE SIDEBAR
 // ===============================
 document.addEventListener('DOMContentLoaded', () => {
-    const docsContainer = document.querySelector('.docs');
-    const contentArea = document.querySelector('.content');
+    const hamburgerBtn = document.querySelector('.hamburger-btn');
+    const sidebar = document.querySelector('.dashboard-sidebar');
 
-    if (!docsContainer || !contentArea) return;
+    if (!hamburgerBtn || !sidebar) return;
 
-    // Create sidebar if missing
-    let sidebar = document.querySelector('.profilesidebar');
-    if (!sidebar) {
-        sidebar = document.createElement('div');
-        sidebar.className = 'sidebar';
-        docsContainer.insertBefore(sidebar, contentArea);
-    }
+    // Toggle sidebar on button click
+    hamburgerBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        sidebar.classList.toggle('open');
+        hamburgerBtn.textContent = sidebar.classList.contains('open') ? '×' : '☰';
+    });
 
-    fetch('/tyxar_web/profile/sidebar.html')
-        .then(r => { if (!r.ok) throw Error(r.status); return r.text(); })
-        .then(html => {
-            sidebar.innerHTML = html;
+    // Close when clicking outside
+    document.addEventListener('click', (e) => {
+        if (sidebar.classList.contains('open') && !sidebar.contains(e.target) && !hamburgerBtn.contains(e.target)) {
+            sidebar.classList.remove('open');
+            hamburgerBtn.textContent = '☰';
+        }
+    });
 
-            // Only run on mobile/tablet
-            if (window.innerWidth > 1023) return;
-
-            // Floating toggle button
-            const btn = document.createElement('button');
-            btn.innerHTML = 'Menu';
-            btn.setAttribute('aria-label', 'Toggle navigation');
-            Object.assign(btn.style, {
-                position: 'fixed',
-                left: '16px',
-                width: '56px',
-                height: '56px',
-                background: 'white',
-                color: 'var(--metal-dark)',
-                border: 'none',
-                borderRadius: '12px',
-                fontSize: '28px',
-                fontWeight: 'bold',
-                cursor: 'pointer',
-                zIndex: '1001',
-                boxShadow: '0 4px 20px rgba(0,0,0,0.2)',
-                transition: 'all 0.3s ease',
-            });
-            document.body.appendChild(btn);
-
-            const MIN_TOP = 160;   // Starting position when page is at top
-            const STICKY_TOP = 10;   // Final sticky position when scrolled
-            const OPEN_TOP = 10;   // Force to 10px when sidebar is open
-
-            let isOpen = false;
-
-            const updateButton = () => {
-                isOpen = sidebar.classList.contains('open');
-                btn.innerHTML = isOpen ? '×' : '☰';
-                btn.style.background = isOpen ? 'var(--accent-blue)' : 'white';
-                btn.style.color = isOpen ? 'white' : 'var(--metal-dark)';
-
-                // When sidebar is open → force button to 10px immediately
-                if (isOpen) {
-                    btn.style.top = `${OPEN_TOP}px`;
-                } else {
-                    // Normal smart sticky behavior
-                    const scrolled = window.scrollY;
-                    let top = MIN_TOP - scrolled;
-                    top = Math.max(STICKY_TOP, Math.min(MIN_TOP, top));
-                    btn.style.top = `${top}px`;
-                }
-            };
-
-            // Toggle sidebar
-            btn.onclick = e => {
-                e.stopPropagation();
-                sidebar.classList.toggle('open');
-                updateButton();
-            };
-
-            // Close when clicking outside
-            document.addEventListener('click', e => {
-                if (isOpen && !sidebar.contains(e.target) && !btn.contains(e.target)) {
-                    sidebar.classList.remove('open');
-                    updateButton();
-                }
-            });
-
-            // Close with Escape
-            document.addEventListener('keydown', e => {
-                if (e.key === 'Escape' && isOpen) {
-                    sidebar.classList.remove('open');
-                    updateButton();
-                }
-            });
-
-            // Scroll handler — only affects position when sidebar is closed
-            const handleScroll = () => {
-                if (!isOpen) updateButton();
-            };
-
-            window.addEventListener('scroll', handleScroll);
-
-            // Initial setup
-            updateButton();
-            handleScroll();
-        })
-        .catch(err => {
-            console.error('Sidebar failed:', err);
-            sidebar.innerHTML = '<p style="color:red;padding:20px;">Sidebar failed to load</p>';
-        });
+    // Close with Escape
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && sidebar.classList.contains('open')) {
+            sidebar.classList.remove('open');
+            hamburgerBtn.textContent = '☰';
+        }
+    });
 });
