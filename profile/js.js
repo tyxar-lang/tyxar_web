@@ -221,34 +221,99 @@ document.addEventListener('DOMContentLoaded', (event) => {
 });
 
 // ===============================
-// PROFILE SIDEBAR
+// PROFILE SIDEBAR WITH SMART BUTTON
 // ===============================
 document.addEventListener('DOMContentLoaded', () => {
-    const hamburgerBtn = document.querySelector('.hamburger-btn');
+    const dashboardWrapper = document.querySelector('.dashboard-wrapper');
     const sidebar = document.querySelector('.dashboard-sidebar');
 
-    if (!hamburgerBtn || !sidebar) return;
+    if (!dashboardWrapper || !sidebar) return;
 
-    // Toggle sidebar on button click
-    hamburgerBtn.addEventListener('click', (e) => {
+    // Only run on mobile/tablet
+    if (window.innerWidth > 768) return;
+
+    // Create floating toggle button
+    const btn = document.createElement('button');
+    btn.className = 'floating-menu-btn';
+    btn.innerHTML = '☰';
+    btn.setAttribute('aria-label', 'Toggle navigation');
+    Object.assign(btn.style, {
+        position: 'fixed',
+        left: '16px',
+        bottom: 'auto',
+        width: '50px',
+        height: '50px',
+        background: 'white',
+        color: '#2d3748',
+        border: 'none',
+        borderRadius: '12px',
+        fontSize: '24px',
+        fontWeight: 'bold',
+        cursor: 'pointer',
+        zIndex: '1001',
+        boxShadow: '0 4px 20px rgba(0,0,0,0.2)',
+        transition: 'all 0.3s ease',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center'
+    });
+    document.body.appendChild(btn);
+
+    const MIN_TOP = 280;   // Starting position (under header)
+    const STICKY_TOP = 20; // Final sticky position when scrolled
+    const OPEN_TOP = 20;   // Force to 20px when sidebar is open
+
+    let isOpen = false;
+
+    const updateButton = () => {
+        isOpen = sidebar.classList.contains('open');
+        btn.innerHTML = isOpen ? '×' : '☰';
+        btn.style.background = isOpen ? '#3b82f6' : 'white';
+        btn.style.color = isOpen ? 'white' : '#2d3748';
+
+        // When sidebar is open → force button to 20px immediately
+        if (isOpen) {
+            btn.style.top = `${OPEN_TOP}px`;
+        } else {
+            // Normal smart sticky behavior
+            const scrolled = window.scrollY;
+            let top = MIN_TOP - scrolled;
+            top = Math.max(STICKY_TOP, Math.min(MIN_TOP, top));
+            btn.style.top = `${top}px`;
+        }
+    };
+
+    // Toggle sidebar
+    btn.onclick = e => {
         e.stopPropagation();
         sidebar.classList.toggle('open');
-        hamburgerBtn.textContent = sidebar.classList.contains('open') ? '×' : '☰';
-    });
+        updateButton();
+    };
 
     // Close when clicking outside
-    document.addEventListener('click', (e) => {
-        if (sidebar.classList.contains('open') && !sidebar.contains(e.target) && !hamburgerBtn.contains(e.target)) {
+    document.addEventListener('click', e => {
+        if (isOpen && !sidebar.contains(e.target) && !btn.contains(e.target)) {
             sidebar.classList.remove('open');
-            hamburgerBtn.textContent = '☰';
+            updateButton();
         }
     });
 
     // Close with Escape
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && sidebar.classList.contains('open')) {
+    document.addEventListener('keydown', e => {
+        if (e.key === 'Escape' && isOpen) {
             sidebar.classList.remove('open');
-            hamburgerBtn.textContent = '☰';
+            updateButton();
         }
     });
+
+    // Scroll handler — only affects position when sidebar is closed
+    const handleScroll = () => {
+        if (!isOpen) updateButton();
+    };
+
+    window.addEventListener('scroll', handleScroll);
+
+    // Initial setup
+    updateButton();
+    handleScroll();
 });
