@@ -236,7 +236,7 @@ function initializeProfileSidebar() {
     btn.innerHTML = '☰';
     btn.setAttribute('aria-label', 'Toggle navigation');
     Object.assign(btn.style, {
-        position: 'fixed',
+        position: 'absolute',
         left: '16px',
         bottom: 'auto',
         width: '50px',
