@@ -241,31 +241,36 @@
             .hamburger-btn {
                 display: flex;
                 position: fixed;
-                top: 20px;
+                top: 240px;
                 left: 20px;
                 width: 44px;
                 height: 44px;
-                background: white;
-                border: 1px solid #e2e8f0;
+                background: #3b82f6;
+                color: white;
+                border: none;
                 border-radius: 8px;
-                font-size: 20px;
+                font-size: 24px;
                 z-index: 1000;
+                cursor: pointer;
+            }
+
+            .hamburger-btn:hover {
+                background: #2563eb;
             }
 
             .dashboard-sidebar {
                 position: fixed;
                 left: 0;
-                top: 0;
+                top: 240px;
                 width: 280px;
-                height: 100vh;
+                height: calc(100vh - 240px);
                 border-radius: 0;
-                padding: 80px 16px 16px;
+                padding: 16px;
                 z-index: 999;
-                top: auto;
-                sticky: none;
-                transform: translateX(-100%);
                 overflow-y: auto;
+                transform: translateX(-100%);
                 box-shadow: 2px 0 12px rgba(0,0,0,0.15);
+                transition: transform 0.3s ease;
             }
 
             .dashboard-sidebar.open {
