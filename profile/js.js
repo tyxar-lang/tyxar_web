@@ -236,7 +236,7 @@ function initializeProfileSidebar() {
     btn.innerHTML = '☰';
     btn.setAttribute('aria-label', 'Toggle navigation');
     Object.assign(btn.style, {
-        position: 'absolute',
+        position: 'fixed',
         left: '16px',
         bottom: 'auto',
         width: '50px',
@@ -257,9 +257,9 @@ function initializeProfileSidebar() {
     });
     document.body.appendChild(btn);
 
-    const MIN_TOP = 280;   // Starting position (under header)
-    const STICKY_TOP = 20; // Final sticky position when scrolled
-    const OPEN_TOP = 20;   // Force to 20px when sidebar is open
+    const MIN_TOP = 160;   // Starting position (under header)
+    const STICKY_TOP = 10; // Final sticky position when scrolled
+    const OPEN_TOP = 10;   // Force to 20px when sidebar is open
 
     let isOpen = false;
 
