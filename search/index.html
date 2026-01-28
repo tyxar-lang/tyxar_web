@@ -206,13 +206,80 @@
             { url: '/tyxar_web/profile', title: 'Sign In' },
         ];
         
-        // Extract text content from HTML
+        // Extract text content from HTML - only main content
         function extractText(html) {
             const tempDiv = document.createElement('div');
             tempDiv.innerHTML = html;
+            
+            // Remove script, style, nav, header, footer
             const scripts = tempDiv.querySelectorAll('script, style, nav, header, footer');
             scripts.forEach(el => el.remove());
-            return tempDiv.textContent || tempDiv.innerText || '';
+            
+            // Try to get only the main content
+            let mainContent = tempDiv.querySelector('main');
+            if (!mainContent) {
+                mainContent = tempDiv.querySelector('section:not(.header):not(.footer)');
+            }
+            if (!mainContent) {
+                mainContent = tempDiv.querySelector('article');
+            }
+            if (!mainContent) {
+                mainContent = tempDiv; // fallback to all content
+            }
+            
+            return mainContent.textContent || mainContent.innerText || '';
+        }
+        
+        // Find the nearest heading before a position in text
+        function findNearestHeading(html, textPosition) {
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = html;
+            
+            // Remove non-content elements
+            const scripts = tempDiv.querySelectorAll('script, style, nav, header, footer');
+            scripts.forEach(el => el.remove());
+            
+            // Get main content
+            let mainContent = tempDiv.querySelector('main');
+            if (!mainContent) {
+                mainContent = tempDiv.querySelector('section:not(.header):not(.footer)');
+            }
+            if (!mainContent) {
+                mainContent = tempDiv.querySelector('article');
+            }
+            if (!mainContent) {
+                mainContent = tempDiv;
+            }
+            
+            // Find all headings and their positions
+            const headings = mainContent.querySelectorAll('h1, h2, h3, h4, h5, h6');
+            let nearestHeading = null;
+            let nearestDistance = Infinity;
+            
+            let currentPosition = 0;
+            const walker = document.createTreeWalker(
+                mainContent,
+                NodeFilter.SHOW_TEXT,
+                null,
+                false
+            );
+            
+            let node;
+            while (node = walker.nextNode()) {
+                if (currentPosition >= textPosition) break;
+                currentPosition += node.textContent.length;
+            }
+            
+            // Find nearest heading by DOM position
+            for (let heading of headings) {
+                const headingText = heading.textContent.toLowerCase();
+                if (headingText.length > 0) {
+                    nearestHeading = heading;
+                    break;
+                }
+            }
+            
+            return nearestHeading;
         }
         
         // Highlight search terms
@@ -254,10 +321,32 @@
                     return null;
                 }
                 
+                // Find first occurrence position
+                const matchIndex = lowerText.indexOf(lowerQuery);
+                
+                // Find nearest heading
+                const nearestHeading = findNearestHeading(html, matchIndex);
+                let anchor = '';
+                
+                if (nearestHeading) {
+                    // Use existing ID or create one from heading text
+                    if (nearestHeading.id) {
+                        anchor = `#${nearestHeading.id}`;
+                    } else {
+                        const headingText = nearestHeading.textContent
+                            .toLowerCase()
+                            .trim()
+                            .replace(/[^\w\s-]/g, '')
+                            .replace(/\s+/g, '-')
+                            .substring(0, 50);
+                        anchor = `#${headingText}`;
+                    }
+                }
+                
                 const matches = (lowerText.match(new RegExp(lowerQuery.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi')) || []).length;
                 
                 return {
-                    url: page.url,
+                    url: page.url + anchor,
                     title: page.title,
                     snippet: getSnippet(text, query),
                     relevance: matches
@@ -299,14 +388,13 @@
                 }
                 
                 const resultsHTML = validResults.map(result => `
-                    <div class="search-result-card" onclick="window.location.href='/tyxar_web/${result.url.replace(/^\\/, '')}'">
+                    <div class="search-result-card" onclick="window.location.href='${result.url}'">
                         <div class="search-result-card-title">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                             </svg>
                             ${highlightText(result.title, query)}
                         </div>
-                        <div class="search-result-card-url">/${result.url.replace(/^\/+/, '').replace(/\/$/, '') || 'Home'}</div>
                         <div class="search-result-card-snippet">${result.snippet}</div>
                     </div>
                 `).join('');
