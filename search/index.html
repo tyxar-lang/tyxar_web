@@ -205,32 +205,47 @@
         .search-category-item {
             padding: 16px 24px;
             border-top: 1px solid #e2e8f0;
-            cursor: pointer;
             transition: background 0.2s ease;
-        }
-
-        .search-category-item:hover {
-            background: #f8f9fa;
         }
 
         .search-category-item-title {
             font-size: 15px;
             font-weight: 500;
             color: var(--accent-blue);
-            margin-bottom: 8px;
+            margin-bottom: 12px;
             display: flex;
             align-items: center;
             gap: 8px;
             justify-content: space-between;
         }
 
-        .search-category-item-snippet {
-            font-size: 14px;
+        .search-occurrences-container {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .search-occurrence-card {
+            padding: 12px 16px;
+            background: #f8f9fa;
+            border-left: 3px solid var(--accent-blue);
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .search-occurrence-card:hover {
+            background: #ecf0f9;
+            transform: translateX(2px);
+        }
+
+        .search-occurrence-snippet {
+            font-size: 13px;
             color: var(--metal-medium);
             line-height: 1.5;
         }
 
-        .search-category-item-snippet .highlight {
+        .search-occurrence-snippet .highlight {
             background: rgba(99, 179, 237, 0.2);
             color: var(--accent-blue-dark);
             font-weight: 600;
@@ -411,8 +426,8 @@
         }
         
         // Get snippet around match
-        function getSnippet(text, query, maxLength = 200) {
-            const index = text.toLowerCase().indexOf(query.toLowerCase());
+        function getSnippet(text, query, maxLength = 200, position = null) {
+            const index = position !== null ? position : text.toLowerCase().indexOf(query.toLowerCase());
             if (index === -1) {
                 return text.substring(0, maxLength) + '...';
             }
@@ -459,7 +474,7 @@
             return grouped;
         }
         
-        // Search a single page
+        // Search a single page and return all occurrences
         async function searchPage(page, query) {
             try {
                 const response = await fetch(page.url);
@@ -474,36 +489,40 @@
                     return null;
                 }
                 
-                // Find first occurrence position
-                const matchIndex = lowerText.indexOf(lowerQuery);
+                // Find all occurrences
+                const regex = new RegExp(lowerQuery.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi');
+                const occurrences = [];
+                let match;
                 
-                // Find nearest heading
-                const nearestHeading = findNearestHeading(html, matchIndex);
-                let anchor = '';
-                
-                if (nearestHeading) {
-                    // Use existing ID or create one from heading text
-                    if (nearestHeading.id) {
-                        anchor = `#${nearestHeading.id}`;
-                    } else {
-                        const headingText = nearestHeading.textContent
-                            .toLowerCase()
-                            .trim()
-                            .replace(/[^\w\s-]/g, '')
-                            .replace(/\s+/g, '-')
-                            .substring(0, 50);
-                        anchor = `#${headingText}`;
+                while ((match = regex.exec(lowerText)) !== null) {
+                    const matchIndex = match.index;
+                    
+                    // Find nearest heading for this occurrence
+                    const nearestHeading = findNearestHeading(html, matchIndex);
+                    let anchor = '';
+                    
+                    if (nearestHeading) {
+                        if (nearestHeading.id) {
+                            anchor = `#${nearestHeading.id}`;
+                        } else {
+                            const headingText = nearestHeading.textContent
+                                .toLowerCase()
+                                .trim()
+                                .replace(/[^\w\s-]/g, '')
+                                .replace(/\s+/g, '-')
+                                .substring(0, 50);
+                            anchor = `#${headingText}`;
+                        }
                     }
+                    
+                    occurrences.push({
+                        url: page.url + anchor,
+                        title: page.title,
+                        snippet: getSnippet(text, query, 200, matchIndex)
+                    });
                 }
                 
-                const matches = (lowerText.match(new RegExp(lowerQuery.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi')) || []).length;
-                
-                return {
-                    url: page.url + anchor,
-                    title: page.title,
-                    snippet: getSnippet(text, query),
-                    relevance: matches
-                };
+                return occurrences.length > 0 ? occurrences : null;
             } catch (error) {
                 console.error(`Error searching ${page.url}:`, error);
                 return null;
@@ -538,8 +557,49 @@
                     return;
                 }
                 
-                // Group results by category
-                const grouped = groupResultsByCategory(validResults, searchablePages);
+                // Group results by category, with pages as containers and occurrences as sub-items
+                const grouped = {};
+                
+                validResults.forEach(pageOccurrences => {
+                    // pageOccurrences is now an array of occurrences for one page
+                    if (!pageOccurrences || pageOccurrences.length === 0) return;
+                    
+                    // Get the page title from the first occurrence
+                    const pageTitle = pageOccurrences[0].title;
+                    const pageUrl = pageOccurrences[0].url.split('#')[0]; // Remove anchor for page grouping
+                    
+                    // Parse URL to get category
+                    const urlParts = pageUrl.split('/').filter(p => p && p !== 'tyxar_web');
+                    let category = '';
+                    let categoryTitle = 'Home';
+                    
+                    if (urlParts.length > 0) {
+                        category = urlParts[0];
+                        categoryTitle = categoryTitles[category] || category.charAt(0).toUpperCase() + category.slice(1);
+                    }
+                    
+                    if (!grouped[category]) {
+                        grouped[category] = {
+                            categoryTitle,
+                            pages: {}
+                        };
+                    }
+                    
+                    // Group occurrences by page
+                    if (!grouped[category].pages[pageUrl]) {
+                        grouped[category].pages[pageUrl] = {
+                            title: pageTitle,
+                            occurrences: []
+                        };
+                    }
+                    
+                    grouped[category].pages[pageUrl].occurrences.push(...pageOccurrences);
+                });
+                
+                // Convert pages object to array for rendering
+                Object.keys(grouped).forEach(category => {
+                    grouped[category].pages = Object.values(grouped[category].pages);
+                });
             
                 // Sort categories by predefined order
                 const sortedCategories = Object.entries(grouped)
@@ -547,21 +607,36 @@
             
                 // Generate HTML for grouped results
                 const resultsHTML = sortedCategories.map(([category, data]) => {
-                    // Calculate total occurrences in category
-                    const totalOccurrences = data.pages.reduce((sum, page) => sum + page.relevance, 0);
-                    const pageCount = data.pages.length;
+                    // Sort pages alphabetically
+                    const sortedPages = data.pages.sort((a, b) => a.title.localeCompare(b.title));
                     
-                    const itemsHTML = data.pages
-                        .sort((a, b) => a.title.localeCompare(b.title))
-                        .map(page => `
-                            <div class="search-category-item" onclick="window.location.href='${page.url}'">
-                                <div class="search-category-item-title">
-                                    <span>${highlightText(page.title, query)}</span>
-                                    <span style="color: var(--metal-medium); font-size: 12px; font-weight: normal; white-space: nowrap; margin-left: 8px;">${page.relevance}</span>
-                                </div>
-                                <div class="search-category-item-snippet">${page.snippet}</div>
+                    // Calculate total occurrences in category
+                    const totalOccurrences = sortedPages.reduce((sum, page) => sum + page.occurrences.length, 0);
+                    const pageCount = sortedPages.length;
+                    
+                    // Generate items (pages with their occurrences)
+                    const itemsHTML = sortedPages.map(page => {
+                        const occurrenceCount = page.occurrences.length;
+                        
+                        // Generate sub-cards for each occurrence
+                        const occurrenceCardsHTML = page.occurrences.map(occurrence => `
+                            <div class="search-occurrence-card" onclick="window.location.href='${occurrence.url}'">
+                                <div class="search-occurrence-snippet">${occurrence.snippet}</div>
                             </div>
                         `).join('');
+                        
+                        return `
+                            <div class="search-category-item">
+                                <div class="search-category-item-title">
+                                    <span>${highlightText(page.title, query)}</span>
+                                    <span style="color: var(--metal-medium); font-size: 12px; font-weight: normal; white-space: nowrap; margin-left: 8px;">${occurrenceCount}</span>
+                                </div>
+                                <div class="search-occurrences-container">
+                                    ${occurrenceCardsHTML}
+                                </div>
+                            </div>
+                        `;
+                    }).join('');
                 
                     return `
                         <div class="search-category-card">
