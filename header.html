@@ -79,12 +79,18 @@
     }
 
     .search-bar {
-        padding: 0.5rem 3rem 0.5rem 1rem;
+        padding: 0.5rem 2.5rem 0.5rem 0.75rem;
         border: none;
         border-radius: 20px;
         background: rgba(0, 0, 0, 0.812);
         color: white;
         width: 200px;
+        font-size: 1rem;
+        line-height: 1.5;
+    }
+
+    .search-bar::placeholder {
+        color: rgba(255, 255, 255, 0.6);
     }
 
     .search-icon {
@@ -148,6 +154,8 @@
         padding: 1rem 2rem;
         border: 2px solid white;
         transition: box-shadow 0.3s;
+        display: inline-block;
+        height: fit-content;
     }
 
     .account-link:hover {
