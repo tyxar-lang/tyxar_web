@@ -558,6 +558,63 @@ function initializeSearch() {
 window.initializeContentLoader = initializeContentLoader;
 window.initializeSearchBar = initializeSearchBar;
 
+// Initialize header search functionality with GitHub Pages support
+function initializeHeaderSearch() {
+    const searchBar = document.querySelector('.search-bar');
+    const searchIcon = document.querySelector('.search-icon');
+    const clearIcon = document.querySelector('.clear-icon');
+
+    console.log('Initializing header search...', { searchBar, searchIcon, clearIcon });
+
+    if (!searchBar || !searchIcon || !clearIcon) {
+        console.error('Search elements not found!', { searchBar, searchIcon, clearIcon });
+        return;
+    }
+
+    function goToSearch() {
+        const query = searchBar.value.trim();
+        // Always use absolute path from repo root for GitHub Pages compatibility
+        const searchUrl = query
+            ? `/tyxar_web/search?q=${encodeURIComponent(query)}`
+            : `/tyxar_web/search`;
+
+        console.log('Navigating to:', searchUrl);
+        window.location.href = searchUrl;
+    }
+
+    searchIcon.addEventListener('click', function (e) {
+        e.preventDefault();
+        console.log('Search icon clicked');
+        goToSearch();
+    });
+
+    searchBar.addEventListener('keypress', function (e) {
+        if (e.key === 'Enter' || e.keyCode === 13) {
+            e.preventDefault();
+            console.log('Enter pressed in search bar');
+            goToSearch();
+        }
+    });
+
+    // Clear icon functionality
+    clearIcon.addEventListener('click', function (e) {
+        e.stopPropagation();
+        searchBar.value = '';
+        searchBar.focus();
+        clearIcon.style.display = 'none';
+    });
+
+    searchBar.addEventListener('input', function () {
+        clearIcon.style.display = this.value ? 'flex' : 'none';
+    });
+
+    // Initial state
+    clearIcon.style.display = searchBar.value ? 'flex' : 'none';
+}
+
+// Make header search globally available
+window.initializeHeaderSearch = initializeHeaderSearch;
+
 document.addEventListener('DOMContentLoaded', () => {
     // Initialize search
     initializeSearch();
