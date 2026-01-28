@@ -571,6 +571,13 @@ function initializeHeaderSearch() {
         return;
     }
 
+    // Function to update icon visibility
+    function updateIconDisplay() {
+        const hasText = searchBar.value.trim().length > 0;
+        clearIcon.style.display = hasText ? 'flex' : 'none';
+        searchIcon.style.display = hasText ? 'none' : 'flex';
+    }
+
     function goToSearch() {
         const query = searchBar.value.trim();
         // Always use absolute path from repo root for GitHub Pages compatibility
@@ -601,15 +608,16 @@ function initializeHeaderSearch() {
         e.stopPropagation();
         searchBar.value = '';
         searchBar.focus();
-        clearIcon.style.display = 'none';
+        updateIconDisplay();
     });
 
+    // Update icon display on input
     searchBar.addEventListener('input', function () {
-        clearIcon.style.display = this.value ? 'flex' : 'none';
+        updateIconDisplay();
     });
 
     // Initial state
-    clearIcon.style.display = searchBar.value ? 'flex' : 'none';
+    updateIconDisplay();
 }
 
 // Make header search globally available
