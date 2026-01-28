@@ -132,6 +132,110 @@
             40% { content: '..'; }
             60%, 100% { content: '...'; }
         }
+
+        .search-category-card {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .search-category-header {
+            padding: 20px 24px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: white;
+            border-bottom: 1px solid #e2e8f0;
+            transition: background 0.2s ease;
+        }
+
+        .search-category-header:hover {
+            background: #f8f9fa;
+        }
+
+        .search-category-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            color: var(--accent-blue);
+            font-weight: bold;
+            transition: transform 0.3s ease;
+        }
+
+        .search-category-card.collapsed .search-category-toggle {
+            transform: rotate(-90deg);
+        }
+
+        .search-category-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--metal-dark);
+            flex: 1;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .search-category-count {
+            font-size: 14px;
+            color: var(--metal-medium);
+            background: #f0f0f0;
+            padding: 4px 12px;
+            border-radius: 20px;
+        }
+
+        .search-category-items {
+            display: flex;
+            flex-direction: column;
+            max-height: 1000px;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .search-category-card.collapsed .search-category-items {
+            max-height: 0;
+        }
+
+        .search-category-item {
+            padding: 16px 24px;
+            border-top: 1px solid #e2e8f0;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        .search-category-item:hover {
+            background: #f8f9fa;
+        }
+
+        .search-category-item-title {
+            font-size: 15px;
+            font-weight: 500;
+            color: var(--accent-blue);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .search-category-item-snippet {
+            font-size: 14px;
+            color: var(--metal-medium);
+            line-height: 1.5;
+        }
+
+        .search-category-item-snippet .highlight {
+            background: rgba(99, 179, 237, 0.2);
+            color: var(--accent-blue-dark);
+            font-weight: 600;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
     </style>
 </head>
 
@@ -306,6 +410,45 @@
             return highlightText(snippet, query);
         }
         
+        // Group results by URL category (2nd segment)
+        function groupResultsByCategory(results, searchablePages) {
+            const grouped = {};
+            
+            results.forEach(result => {
+                if (!result) return;
+                
+                // Parse URL to get category
+                const urlWithoutAnchor = result.url.split('#')[0];
+                const urlParts = urlWithoutAnchor.split('/').filter(p => p && p !== 'tyxar_web');
+                
+                let category = 'Home';
+                let categoryTitle = 'Home';
+                
+                if (urlParts.length > 0) {
+                    category = urlParts[0];
+                    
+                    // Find category title from searchablePages
+                    const categoryPage = searchablePages.find(p => {
+                        const parts = p.url.split('/').filter(x => x && x !== 'tyxar_web');
+                        return parts[0] === category && parts.length === 1;
+                    });
+                    
+                    categoryTitle = categoryPage ? categoryPage.title : category.charAt(0).toUpperCase() + category.slice(1);
+                }
+                
+                if (!grouped[category]) {
+                    grouped[category] = {
+                        categoryTitle,
+                        pages: []
+                    };
+                }
+                
+                grouped[category].pages.push(result);
+            });
+            
+            return grouped;
+        }
+        
         // Search a single page
         async function searchPage(page, query) {
             try {
@@ -373,9 +516,7 @@
                     searchablePages.map(page => searchPage(page, query))
                 );
                 
-                const validResults = results
-                    .filter(r => r !== null)
-                    .sort((a, b) => b.relevance - a.relevance);
+                const validResults = results.filter(r => r !== null);
                 
                 if (validResults.length === 0) {
                     resultsList.innerHTML = `
@@ -387,17 +528,41 @@
                     return;
                 }
                 
-                const resultsHTML = validResults.map(result => `
-                    <div class="search-result-card" onclick="window.location.href='${result.url}'">
-                        <div class="search-result-card-title">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                            </svg>
-                            ${highlightText(result.title, query)}
+                // Group results by category
+                const grouped = groupResultsByCategory(validResults, searchablePages);
+            
+                // Sort categories by result count (descending)
+                const sortedCategories = Object.entries(grouped)
+                    .sort((a, b) => b[1].pages.length - a[1].pages.length);
+            
+                // Generate HTML for grouped results
+                const resultsHTML = sortedCategories.map(([category, data]) => {
+                    const itemsHTML = data.pages
+                        .sort((a, b) => b.relevance - a.relevance)
+                        .map(page => `
+                            <div class="search-category-item" onclick="window.location.href='${page.url}'">
+                                <div class="search-category-item-title">
+                                    ${highlightText(page.title, query)}
+                                </div>
+                                <div class="search-category-item-snippet">${page.snippet}</div>
+                            </div>
+                        `).join('');
+                
+                    return `
+                        <div class="search-category-card">
+                            <div class="search-category-header" onclick="this.parentElement.classList.toggle('collapsed')">
+                                <span class="search-category-toggle">▼</span>
+                                <span class="search-category-title">
+                                    ${highlightText(data.categoryTitle, query)}
+                                </span>
+                                <span class="search-category-count">${data.pages.length} ${data.pages.length === 1 ? 'match' : 'matches'}</span>
+                            </div>
+                            <div class="search-category-items">
+                                ${itemsHTML}
+                            </div>
                         </div>
-                        <div class="search-result-card-snippet">${result.snippet}</div>
-                    </div>
-                `).join('');
+                    `;
+                }).join('');
                 
                 resultsList.innerHTML = resultsHTML;
             } catch (error) {
