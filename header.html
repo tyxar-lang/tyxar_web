@@ -17,8 +17,6 @@
                 </svg>
             </span>
         </div>
-    </div>
-</div>
         <nav>
             <ul>
                 <li><a href="/tyxar_web/">Home</a></li>
@@ -77,6 +75,7 @@
         position: relative;
         display: flex;
         align-items: center;
+        flex-shrink: 0;
     }
 
     .search-bar {
@@ -124,16 +123,19 @@
         list-style: none;
         padding: 0;
         margin: 0;
+        gap: 0.5rem;
     }
 
     nav ul li {
-        margin: 0 1rem;
+        margin: 0;
+        white-space: nowrap;
     }
 
     nav ul li a {
         color: white;
         text-decoration: none;
         transition: color 0.3s;
+        padding: 0.5rem 0.75rem;
     }
 
     nav ul li a:hover {
@@ -141,7 +143,7 @@
     }
 
     .account-link {
-        padding: 1rem 2rem;
+        padding: 0.5rem 1rem;
         border: 2px solid white;
         transition: box-shadow 0.3s;
     }
