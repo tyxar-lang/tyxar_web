@@ -155,6 +155,11 @@ write "hI"
                         // Re-run initialization to catch the *new* links in the footer 
                         // AND the sidebar links (since they use the global selector now)
                         initializeContentLoader();
+                        
+                        // Initialize header search if header was loaded
+                        if (elementId === 'header' && window.initializeHeaderSearch) {
+                            setTimeout(() => window.initializeHeaderSearch(), 100);
+                        }
                     })
                     .catch(err => console.error(`Error loading ${url}:`, err));
             }

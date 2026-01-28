@@ -168,14 +168,12 @@
             .then(response => response.text())
             .then(data => {
                 document.getElementById('header').innerHTML = data;
-                // Re-initialize search after header loads
-                if (window.initializeSearch) {
-                    setTimeout(() => initializeSearch(), 100);
-                }
-                // Initialize header search
-                if (window.initializeHeaderSearch) {
-                    setTimeout(() => initializeHeaderSearch(), 100);
-                }
+                // Initialize header search after header loads
+                setTimeout(() => {
+                    if (window.initializeHeaderSearch) {
+                        window.initializeHeaderSearch();
+                    }
+                }, 100);
             });
 
         fetch('/tyxar_web/footer.html')
@@ -301,14 +299,14 @@
                 }
                 
                 const resultsHTML = validResults.map(result => `
-                    <div class="search-result-card" onclick="window.location.href='/tyxar_web/${result.url.replace(/^\\//, '')}'">
+                    <div class="search-result-card" onclick="window.location.href='/tyxar_web/${result.url.replace(/^\\/, '')}'">
                         <div class="search-result-card-title">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                             </svg>
                             ${highlightText(result.title, query)}
                         </div>
-                        <div class="search-result-card-url">/${result.url.replace(/^\\/+/, '').replace(/\\/$/, '') || 'Home'}</div>
+                        <div class="search-result-card-url">/${result.url.replace(/^\/+/, '').replace(/\/$/, '') || 'Home'}</div>
                         <div class="search-result-card-snippet">${result.snippet}</div>
                     </div>
                 `).join('');

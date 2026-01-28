@@ -33,7 +33,7 @@
         function goToSearch() {
             const query = searchBar.value.trim();
             // Always use absolute path from repo root for GitHub Pages compatibility
-            const searchUrl = query 
+            const searchUrl = query
                 ? `/tyxar_web/search?q=${encodeURIComponent(query)}`
                 : `/tyxar_web/search`;
 
@@ -68,6 +68,9 @@
         // Initial state
         clearIcon.style.display = searchBar.value ? 'flex' : 'none';
     }
+
+    // Make function globally available
+    window.initializeHeaderSearch = initializeHeaderSearch;
 
     // Initialize when header is loaded
     if (document.readyState === 'loading') {

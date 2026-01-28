@@ -130,7 +130,15 @@
     <script src="/tyxar_web/script.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            fetch('/tyxar_web/header.html').then(r => r.text()).then(h => document.getElementById('header').innerHTML = h);
+            fetch('/tyxar_web/header.html').then(r => r.text()).then(h => {
+                document.getElementById('header').innerHTML = h;
+                // Initialize header search after loading
+                setTimeout(() => {
+                    if (window.initializeHeaderSearch) {
+                        window.initializeHeaderSearch();
+                    }
+                }, 100);
+            });
             fetch('/tyxar_web/footer.html').then(r => r.text()).then(f => document.getElementById('footer').innerHTML = f);
         });
     </script>
