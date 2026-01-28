@@ -305,10 +305,19 @@
             { url: '/tyxar_web/docs/get-started', title: 'Getting Started' },
             { url: '/tyxar_web/docs/syntax', title: 'Syntax' },
             { url: '/tyxar_web/download', title: 'Download' },
-            { url: '/tyxar_web/menu', title: 'Menu' },
             { url: '/tyxar_web/releases', title: 'Releases' },
-            { url: '/tyxar_web/profile', title: 'Sign In' },
         ];
+        
+        // Define category order
+        const categoryOrder = ['', 'blade', 'docs', 'releases', 'download', 'about'];
+        const categoryTitles = {
+            '': 'Home',
+            'blade': 'BLADE',
+            'docs': 'Documentation',
+            'releases': 'Releases',
+            'download': 'Download',
+            'about': 'About'
+        };
         
         // Extract text content from HTML - only main content
         function extractText(html) {
@@ -421,19 +430,12 @@
                 const urlWithoutAnchor = result.url.split('#')[0];
                 const urlParts = urlWithoutAnchor.split('/').filter(p => p && p !== 'tyxar_web');
                 
-                let category = 'Home';
+                let category = '';
                 let categoryTitle = 'Home';
                 
                 if (urlParts.length > 0) {
                     category = urlParts[0];
-                    
-                    // Find category title from searchablePages
-                    const categoryPage = searchablePages.find(p => {
-                        const parts = p.url.split('/').filter(x => x && x !== 'tyxar_web');
-                        return parts[0] === category && parts.length === 1;
-                    });
-                    
-                    categoryTitle = categoryPage ? categoryPage.title : category.charAt(0).toUpperCase() + category.slice(1);
+                    categoryTitle = categoryTitles[category] || category.charAt(0).toUpperCase() + category.slice(1);
                 }
                 
                 if (!grouped[category]) {
@@ -531,14 +533,14 @@
                 // Group results by category
                 const grouped = groupResultsByCategory(validResults, searchablePages);
             
-                // Sort categories by result count (descending)
+                // Sort categories by predefined order
                 const sortedCategories = Object.entries(grouped)
-                    .sort((a, b) => b[1].pages.length - a[1].pages.length);
+                    .sort((a, b) => categoryOrder.indexOf(a[0]) - categoryOrder.indexOf(b[0]));
             
                 // Generate HTML for grouped results
                 const resultsHTML = sortedCategories.map(([category, data]) => {
                     const itemsHTML = data.pages
-                        .sort((a, b) => b.relevance - a.relevance)
+                        .sort((a, b) => a.title.localeCompare(b.title))
                         .map(page => `
                             <div class="search-category-item" onclick="window.location.href='${page.url}'">
                                 <div class="search-category-item-title">
