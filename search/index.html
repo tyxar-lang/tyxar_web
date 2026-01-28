@@ -221,6 +221,7 @@
             display: flex;
             align-items: center;
             gap: 8px;
+            justify-content: space-between;
         }
 
         .search-category-item-snippet {
@@ -546,12 +547,17 @@
             
                 // Generate HTML for grouped results
                 const resultsHTML = sortedCategories.map(([category, data]) => {
+                    // Calculate total occurrences in category
+                    const totalOccurrences = data.pages.reduce((sum, page) => sum + page.relevance, 0);
+                    const pageCount = data.pages.length;
+                    
                     const itemsHTML = data.pages
                         .sort((a, b) => a.title.localeCompare(b.title))
                         .map(page => `
                             <div class="search-category-item" onclick="window.location.href='${page.url}'">
                                 <div class="search-category-item-title">
-                                    ${highlightText(page.title, query)}
+                                    <span>${highlightText(page.title, query)}</span>
+                                    <span style="color: var(--metal-medium); font-size: 12px; font-weight: normal; white-space: nowrap; margin-left: 8px;">${page.relevance}</span>
                                 </div>
                                 <div class="search-category-item-snippet">${page.snippet}</div>
                             </div>
@@ -564,7 +570,7 @@
                                 <span class="search-category-title">
                                     ${highlightText(data.categoryTitle, query)}
                                 </span>
-                                <span class="search-category-count">${data.pages.length} ${data.pages.length === 1 ? 'match' : 'matches'}</span>
+                                <span class="search-category-count">${totalOccurrences} ${totalOccurrences === 1 ? 'occurrence' : 'occurrences'}, ${pageCount} ${pageCount === 1 ? 'page' : 'pages'}</span>
                             </div>
                             <div class="search-category-items">
                                 ${itemsHTML}
