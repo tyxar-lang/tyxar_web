@@ -565,6 +565,14 @@
             hamburger.classList.toggle('open');
         }
     </script>
+    <script>// Initialize header search after it loads
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+                if (window.initializeHeaderSearch) {
+                    window.initializeHeaderSearch();
+                }
+            }, 100);
+        });</script>
 
 </body>
 
