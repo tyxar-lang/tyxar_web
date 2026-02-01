@@ -198,17 +198,3 @@
         }
     }
 </style>
-
-<script>
-    // Initialize header search when it becomes available
-    var headerSearchAttempts = 0;
-    function initHeaderSearchWhenReady() {
-        if (window.initializeHeaderSearch) {
-            window.initializeHeaderSearch();
-        } else if (headerSearchAttempts < 50) {
-            headerSearchAttempts++;
-            setTimeout(initHeaderSearchWhenReady, 50);
-        }
-    }
-    initHeaderSearchWhenReady();
-</script>
