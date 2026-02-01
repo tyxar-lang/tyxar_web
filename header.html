@@ -198,3 +198,17 @@
         }
     }
 </style>
+
+<script>
+    // Initialize header search when header is loaded
+    if (window.initializeHeaderSearch) {
+        window.initializeHeaderSearch();
+    } else {
+        // If script.js hasn't loaded yet, wait for it
+        document.addEventListener('DOMContentLoaded', () => {
+            if (window.initializeHeaderSearch) {
+                window.initializeHeaderSearch();
+            }
+        });
+    }
+</script>
