@@ -200,19 +200,15 @@
 </style>
 
 <script>
-    // Initialize header search with robust retry logic
-    function tryInitializeHeaderSearch() {
+    // Initialize header search when it becomes available
+    var headerSearchAttempts = 0;
+    function initHeaderSearchWhenReady() {
         if (window.initializeHeaderSearch) {
-            console.log('✓ Initializing header search');
             window.initializeHeaderSearch();
-        } else {
-            console.log('⏳ Waiting for initializeHeaderSearch to be available...');
-            // Retry after a short delay if function not yet available
-            setTimeout(tryInitializeHeaderSearch, 100);
+        } else if (headerSearchAttempts < 50) {
+            headerSearchAttempts++;
+            setTimeout(initHeaderSearchWhenReady, 50);
         }
     }
-    
-    // Start trying to initialize
-    console.log('Header loaded - attempting to initialize search');
-    tryInitializeHeaderSearch();
+    initHeaderSearchWhenReady();
 </script>
