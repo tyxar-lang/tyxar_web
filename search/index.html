@@ -669,6 +669,16 @@
             resultsList.innerHTML = '<div class="no-results"><p>Please enter a search query in the search bar.</p></div>';
         }
     </script>
+    <script>
+        // Initialize header search after it loads
+            document.addEventListener('DOMContentLoaded', () => {
+                setTimeout(() => {
+                    if (window.initializeHeaderSearch) {
+                        window.initializeHeaderSearch();
+                    }
+                }, 100);
+            });
+    </script>
 </body>
 
 </html>
