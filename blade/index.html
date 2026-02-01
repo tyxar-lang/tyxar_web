@@ -188,6 +188,13 @@
             // Load Header, Footer, and Sidebar
             loadHTML('/tyxar_web/header.html', 'header');
             loadHTML('/tyxar_web/footer.html', 'footer');
+            
+            // Initialize header search after it loads
+            setTimeout(() => {
+                if (window.initializeHeaderSearch) {
+                    window.initializeHeaderSearch();
+                }
+            }, 100);
         });
     </script>
     <script>
