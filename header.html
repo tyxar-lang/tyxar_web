@@ -200,15 +200,19 @@
 </style>
 
 <script>
-    // Initialize header search when header is loaded
-    if (window.initializeHeaderSearch) {
-        window.initializeHeaderSearch();
-    } else {
-        // If script.js hasn't loaded yet, wait for it
-        document.addEventListener('DOMContentLoaded', () => {
-            if (window.initializeHeaderSearch) {
-                window.initializeHeaderSearch();
-            }
-        });
+    // Initialize header search with robust retry logic
+    function tryInitializeHeaderSearch() {
+        if (window.initializeHeaderSearch) {
+            console.log('✓ Initializing header search');
+            window.initializeHeaderSearch();
+        } else {
+            console.log('⏳ Waiting for initializeHeaderSearch to be available...');
+            // Retry after a short delay if function not yet available
+            setTimeout(tryInitializeHeaderSearch, 100);
+        }
     }
+    
+    // Start trying to initialize
+    console.log('Header loaded - attempting to initialize search');
+    tryInitializeHeaderSearch();
 </script>
