@@ -149,6 +149,7 @@ async function loadUser() {
         .single();
 
     dashboardRole.textContent = profile?.is_admin ? "Admin" : "User";
+    dashboardCreated.textContent = new Date(user.created_at).toLocaleDateString('en-GB', { year: 'numeric', month: 'long', day: 'numeric' });
 
     // Show dashboard, hide auth
     authBox.classList.add("hidden");
