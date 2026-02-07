@@ -148,13 +148,16 @@ async function loadUser() {
         .eq("id", user.id)
         .single();
 
-    // Build a set of roles from common schema variants so this works regardless
-    // of whether your project stores a single `role`, an array `roles`, or
-    // uses boolean flags like `is_admin`, `is_tester`, `is_developer`.
+    // Build a set of roles from boolean flags and any role fields present.
+    // We will NOT fall back to a hardcoded 'User' label; the UI reflects exactly
+    // what the `profiles` row contains (e.g. is_user true).
     const rolesSet = new Set();
     if (profile?.is_admin) rolesSet.add('admin');
     if (profile?.is_tester) rolesSet.add('tester');
     if (profile?.is_developer) rolesSet.add('developer');
+    if (profile?.is_user) rolesSet.add('user');
+
+    // Also support legacy role/roles fields if present
     if (profile?.role) {
         if (Array.isArray(profile.role)) profile.role.forEach(r => rolesSet.add(String(r).toLowerCase()));
         else rolesSet.add(String(profile.role).toLowerCase());
@@ -165,11 +168,17 @@ async function loadUser() {
     }
 
     const rolesArray = Array.from(rolesSet);
-    dashboardRole.textContent = rolesArray.length ? rolesArray.join(', ') : 'User';
+
+    // Create a human-friendly display string (Title Case) while keeping the
+    // canonical lowercase array available for logic/UI toggles.
+    const displayRoles = rolesArray.map(r => String(r).charAt(0).toUpperCase() + String(r).slice(1));
+
+    // Only display roles returned from Supabase. If none, show empty.
+    dashboardRole.textContent = displayRoles.length ? displayRoles.join(', ') : '';
 
     // Also update the currentRole element (if the role UI exists on the page)
     const currentRoleEl = document.getElementById('currentRole');
-    if (currentRoleEl) currentRoleEl.textContent = rolesArray.length ? rolesArray.join(', ') : 'User';
+    if (currentRoleEl) currentRoleEl.textContent = displayRoles.length ? displayRoles.join(', ') : '';
 
     // Expose roles to other scripts and allow the UI to react
     window.currentUserRoles = rolesArray;
