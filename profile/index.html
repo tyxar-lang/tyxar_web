@@ -464,12 +464,8 @@
                                     <div class="sidebar-section">
                                         <div class="sidebar-item" onclick="showDashboardSection('overview')">📊 Overview</div>
                                         <div class="sidebar-item" onclick="showDashboardSection('projects')">📁 Projects</div>
+                                        <div class="sidebar-item" onclick="showDashboardSection('roles')">👤 Role Requests</div>
                                         <div class="sidebar-item" onclick="showDashboardSection('settings')">⚙️ Settings</div>
-                                    </div>
-
-                                    <div class="sidebar-section">
-                                        <div class="sidebar-item" onclick="showDashboardSection('docs')">📚 Documentation</div>
-                                        <div class="sidebar-item" onclick="showDashboardSection('community')">👥 Community</div>
                                     </div>
                                 </aside>
 
@@ -491,27 +487,62 @@
                                         </div>
                                     </div>
 
+                                    <!-- Role Requests Section -->
+                                    <div id="section-roles" class="content-card hidden">
+                                        <h2>Role Requests</h2>
+                                        <p style="color: #4a5568; margin-bottom: 20px; font-size: 0.95rem;">
+                                            Request additional roles to enhance your capabilities on Tyxar. Your request will be reviewed by administrators.
+                                        </p>
+                                        
+                                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px;">
+                                            <!-- Current Role -->
+                                            <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 12px; padding: 20px; color: white; box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);">
+                                                <div style="font-size: 0.85rem; opacity: 0.9; margin-bottom: 8px;">Current Role</div>
+                                                <div style="font-size: 1.8rem; font-weight: 800;" id="currentRole">User</div>
+                                            </div>
+
+                                            <!-- Request Tester -->
+                                            <div style="background: white; border: 2px solid #cbd5e0; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; justify-content: space-between;">
+                                                <div>
+                                                    <div style="font-size: 1.1rem; font-weight: 700; color: #2d3748; margin-bottom: 8px;">🧪 Tester</div>
+                                                    <p style="font-size: 0.85rem; color: #718096; margin: 0;">Test new features and provide feedback</p>
+                                                </div>
+                                                <button onclick="requestRole('tester')" style="margin-top: 16px; padding: 10px 16px; background: #4299e1; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; transition: all 0.2s ease;" onmouseover="this.style.background='#3182ce'" onmouseout="this.style.background='#4299e1'">Request</button>
+                                            </div>
+
+                                            <!-- Request Developer -->
+                                            <div style="background: white; border: 2px solid #cbd5e0; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; justify-content: space-between;">
+                                                <div>
+                                                    <div style="font-size: 1.1rem; font-weight: 700; color: #2d3748; margin-bottom: 8px;">💻 Developer</div>
+                                                    <p style="font-size: 0.85rem; color: #718096; margin: 0;">Contribute code and create libraries</p>
+                                                </div>
+                                                <button onclick="requestRole('developer')" style="margin-top: 16px; padding: 10px 16px; background: #38a169; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; transition: all 0.2s ease;" onmouseover="this.style.background='#2f855a'" onmouseout="this.style.background='#38a169'">Request</button>
+                                            </div>
+
+                                            <!-- Request Admin -->
+                                            <div style="background: white; border: 2px solid #cbd5e0; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; justify-content: space-between;">
+                                                <div>
+                                                    <div style="font-size: 1.1rem; font-weight: 700; color: #2d3748; margin-bottom: 8px;">👑 Admin</div>
+                                                    <p style="font-size: 0.85rem; color: #718096; margin: 0;">Manage users and moderate community</p>
+                                                </div>
+                                                <button onclick="requestRole('admin')" style="margin-top: 16px; padding: 10px 16px; background: #ed8936; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; transition: all 0.2s ease;" onmouseover="this.style.background='#dd6b20'" onmouseout="this.style.background='#ed8936'">Request</button>
+                                            </div>
+                                        </div>
+
+                                        <!-- Pending Requests -->
+                                        <div style="background: #edf2f7; border-left: 4px solid #4299e1; border-radius: 8px; padding: 16px; margin-top: 24px;">
+                                            <div style="font-weight: 700; color: #2d3748; margin-bottom: 8px;">📋 Pending Requests</div>
+                                            <div id="pendingRequests" style="color: #718096; font-size: 0.9rem;">
+                                                No pending role requests at this time.
+                                            </div>
+                                        </div>
+                                    </div>
+
                                     <!-- Settings Section -->
                                     <div id="section-settings" class="content-card hidden">
                                         <h2>Account Settings</h2>
                                         <div class="placeholder-content">
                                             ⚙️ Settings Panel Placeholder
-                                        </div>
-                                    </div>
-
-                                    <!-- Docs Section -->
-                                    <div id="section-docs" class="content-card hidden">
-                                        <h2>Documentation</h2>
-                                        <div class="placeholder-content">
-                                            📚 Documentation Content Placeholder
-                                        </div>
-                                    </div>
-
-                                    <!-- Community Section -->
-                                    <div id="section-community" class="content-card hidden">
-                                        <h2>Community</h2>
-                                        <div class="placeholder-content">
-                                            👥 Community Content Placeholder
                                         </div>
                                     </div>
                                 </div>
@@ -568,6 +599,71 @@
             sidebar.classList.toggle('open');
             hamburger.classList.toggle('open');
         }
+
+        // Role Request Functions
+        async function requestRole(role) {
+            const user = (await supabaseClient.auth.getUser()).data.user;
+            if (!user) {
+                alert('You must be logged in to request a role.');
+                return;
+            }
+
+            // Insert role request into database
+            const { error } = await supabaseClient
+                .from('role_requests')
+                .insert({
+                    user_id: user.id,
+                    requested_role: role,
+                    status: 'pending',
+                    created_at: new Date().toISOString()
+                });
+
+            if (error) {
+                alert(`Error submitting request: ${error.message}`);
+                console.error(error);
+            } else {
+                alert(`✅ Your request to become a ${role} has been submitted! An admin will review it shortly.`);
+                loadPendingRequests();
+            }
+        }
+
+        async function loadPendingRequests() {
+            const user = (await supabaseClient.auth.getUser()).data.user;
+            if (!user) return;
+
+            const { data: requests, error } = await supabaseClient
+                .from('role_requests')
+                .select('*')
+                .eq('user_id', user.id)
+                .eq('status', 'pending')
+                .order('created_at', { ascending: false });
+
+            if (error) {
+                console.error('Error loading requests:', error);
+                return;
+            }
+
+            const pendingDiv = document.getElementById('pendingRequests');
+            if (!requests || requests.length === 0) {
+                pendingDiv.innerHTML = 'No pending role requests at this time.';
+            } else {
+                pendingDiv.innerHTML = requests.map(req => 
+                    `<div style="padding: 8px 0; border-bottom: 1px solid #cbd5e0; display: flex; justify-content: space-between; align-items: center;">
+                        <span><strong>${req.requested_role.charAt(0).toUpperCase() + req.requested_role.slice(1)}</strong> - Requested ${new Date(req.created_at).toLocaleDateString('en-GB')}</span>
+                        <span style="background: #f6ad55; color: white; padding: 4px 12px; border-radius: 4px; font-size: 0.75rem; font-weight: 700;">PENDING</span>
+                    </div>`
+                ).join('');
+            }
+        }
+
+        // Load pending requests when role section is viewed
+        const originalShowDashboardSection = showDashboardSection;
+        window.showDashboardSection = function(sectionId) {
+            originalShowDashboardSection(sectionId);
+            if (sectionId === 'roles') {
+                loadPendingRequests();
+            }
+        };
     </script>
     <script>// Initialize header search after it loads
         document.addEventListener('DOMContentLoaded', () => {
