@@ -141,14 +141,39 @@ async function loadUser() {
     dashboardEmail.textContent = user.email;
     dashboardCreated.textContent = new Date(user.created_at).toLocaleDateString();
 
-    // Fetch is_admin from profiles table
+    // Fetch profile fields to determine roles dynamically
     const { data: profile } = await supabaseClient
         .from("profiles")
-        .select("is_admin")
+        .select("is_admin, role, roles, is_tester, is_developer")
         .eq("id", user.id)
         .single();
 
-    dashboardRole.textContent = profile?.is_admin ? "Admin" : "User";
+    // Build a set of roles from common schema variants so this works regardless
+    // of whether your project stores a single `role`, an array `roles`, or
+    // uses boolean flags like `is_admin`, `is_tester`, `is_developer`.
+    const rolesSet = new Set();
+    if (profile?.is_admin) rolesSet.add('admin');
+    if (profile?.is_tester) rolesSet.add('tester');
+    if (profile?.is_developer) rolesSet.add('developer');
+    if (profile?.role) {
+        if (Array.isArray(profile.role)) profile.role.forEach(r => rolesSet.add(String(r).toLowerCase()));
+        else rolesSet.add(String(profile.role).toLowerCase());
+    }
+    if (profile?.roles) {
+        if (Array.isArray(profile.roles)) profile.roles.forEach(r => rolesSet.add(String(r).toLowerCase()));
+        else rolesSet.add(String(profile.roles).toLowerCase());
+    }
+
+    const rolesArray = Array.from(rolesSet);
+    dashboardRole.textContent = rolesArray.length ? rolesArray.join(', ') : 'User';
+
+    // Also update the currentRole element (if the role UI exists on the page)
+    const currentRoleEl = document.getElementById('currentRole');
+    if (currentRoleEl) currentRoleEl.textContent = rolesArray.length ? rolesArray.join(', ') : 'User';
+
+    // Expose roles to other scripts and allow the UI to react
+    window.currentUserRoles = rolesArray;
+    if (window.updateRoleUI) window.updateRoleUI(rolesArray);
     dashboardCreated.textContent = new Date(user.created_at).toLocaleDateString('en-GB', { year: 'numeric', month: 'long', day: 'numeric' });
 
     // Show dashboard, hide auth

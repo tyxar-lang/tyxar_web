@@ -507,7 +507,10 @@
                                                     <div style="font-size: 1.1rem; font-weight: 700; color: #2d3748; margin-bottom: 8px;">🧪 Tester</div>
                                                     <p style="font-size: 0.85rem; color: #718096; margin: 0;">Test new features and provide feedback</p>
                                                 </div>
-                                                <button onclick="requestRole('tester')" style="margin-top: 16px; padding: 10px 16px; background: #4299e1; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; transition: all 0.2s ease;" onmouseover="this.style.background='#3182ce'" onmouseout="this.style.background='#4299e1'">Request</button>
+                                                <div style="display:flex; gap:8px; margin-top:16px;">
+                                                    <button class="request-btn" data-role="tester" onclick="requestRole('tester')" style="flex:1; padding: 10px 16px; background: #4299e1; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; transition: all 0.2s ease;" onmouseover="this.style.background='#3182ce'" onmouseout="this.style.background='#4299e1'">Request</button>
+                                                    <button class="quit-btn hidden" data-role="tester" onclick="quitRole('tester')" style="flex:1; padding: 10px 16px; background: #e53e3e; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600;">Quit</button>
+                                                </div>
                                             </div>
 
                                             <!-- Request Developer -->
@@ -516,7 +519,10 @@
                                                     <div style="font-size: 1.1rem; font-weight: 700; color: #2d3748; margin-bottom: 8px;">💻 Developer</div>
                                                     <p style="font-size: 0.85rem; color: #718096; margin: 0;">Contribute code and create libraries</p>
                                                 </div>
-                                                <button onclick="requestRole('developer')" style="margin-top: 16px; padding: 10px 16px; background: #38a169; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; transition: all 0.2s ease;" onmouseover="this.style.background='#2f855a'" onmouseout="this.style.background='#38a169'">Request</button>
+                                                <div style="display:flex; gap:8px; margin-top:16px;">
+                                                    <button class="request-btn" data-role="developer" onclick="requestRole('developer')" style="flex:1; padding: 10px 16px; background: #38a169; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; transition: all 0.2s ease;" onmouseover="this.style.background='#2f855a'" onmouseout="this.style.background='#38a169'">Request</button>
+                                                    <button class="quit-btn hidden" data-role="developer" onclick="quitRole('developer')" style="flex:1; padding: 10px 16px; background: #e53e3e; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600;">Quit</button>
+                                                </div>
                                             </div>
 
                                             <!-- Request Admin -->
@@ -525,7 +531,10 @@
                                                     <div style="font-size: 1.1rem; font-weight: 700; color: #2d3748; margin-bottom: 8px;">👑 Admin</div>
                                                     <p style="font-size: 0.85rem; color: #718096; margin: 0;">Manage users and moderate community</p>
                                                 </div>
-                                                <button onclick="requestRole('admin')" style="margin-top: 16px; padding: 10px 16px; background: #ed8936; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; transition: all 0.2s ease;" onmouseover="this.style.background='#dd6b20'" onmouseout="this.style.background='#ed8936'">Request</button>
+                                                <div style="display:flex; gap:8px; margin-top:16px;">
+                                                    <button class="request-btn" data-role="admin" onclick="requestRole('admin')" style="flex:1; padding: 10px 16px; background: #ed8936; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; transition: all 0.2s ease;" onmouseover="this.style.background='#dd6b20'" onmouseout="this.style.background='#ed8936'">Request</button>
+                                                    <button class="quit-btn hidden" data-role="admin" onclick="quitRole('admin')" style="flex:1; padding: 10px 16px; background: #e53e3e; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600;">Quit</button>
+                                                </div>
                                             </div>
                                         </div>
 
@@ -608,13 +617,14 @@
                 return;
             }
 
-            // Insert role request into database
+            // Insert role request into database (admin will approve)
             const { error } = await supabaseClient
                 .from('role_requests')
                 .insert({
                     user_id: user.id,
                     requested_role: role,
                     status: 'pending',
+                    admin_notes: 'request',
                     created_at: new Date().toISOString()
                 });
 
@@ -624,6 +634,36 @@
             } else {
                 alert(`✅ Your request to become a ${role} has been submitted! An admin will review it shortly.`);
                 loadPendingRequests();
+                // Refresh roles UI in case admin-side changed quickly
+                if (window.loadUser) await loadUser();
+            }
+        }
+
+        async function quitRole(role) {
+            const user = (await supabaseClient.auth.getUser()).data.user;
+            if (!user) {
+                alert('You must be logged in to quit a role.');
+                return;
+            }
+
+            // Submit a role removal request — admins will process this
+            const { error } = await supabaseClient
+                .from('role_requests')
+                .insert({
+                    user_id: user.id,
+                    requested_role: role,
+                    status: 'pending',
+                    admin_notes: 'quit_request',
+                    created_at: new Date().toISOString()
+                });
+
+            if (error) {
+                alert(`Error submitting quit request: ${error.message}`);
+                console.error(error);
+            } else {
+                alert(`✅ Your request to quit the ${role} role has been submitted.`);
+                loadPendingRequests();
+                if (window.loadUser) await loadUser();
             }
         }
 
@@ -654,6 +694,26 @@
                     </div>`
                 ).join('');
             }
+        }
+
+        // Update UI buttons depending on roles
+        function updateRoleUI(rolesArray) {
+            const roles = new Set((rolesArray || []).map(r => String(r).toLowerCase()));
+            ['tester','developer','admin'].forEach(role => {
+                const requestBtn = document.querySelector(`.request-btn[data-role="${role}"]`);
+                const quitBtn = document.querySelector(`.quit-btn[data-role="${role}"]`);
+
+                if (roles.has(role)) {
+                    if (requestBtn) requestBtn.classList.add('hidden');
+                    if (quitBtn) quitBtn.classList.remove('hidden');
+                } else {
+                    if (requestBtn) requestBtn.classList.remove('hidden');
+                    if (quitBtn) quitBtn.classList.add('hidden');
+                }
+            });
+
+            const currentRoleEl = document.getElementById('currentRole');
+            if (currentRoleEl) currentRoleEl.textContent = (rolesArray && rolesArray.length) ? rolesArray.join(', ') : 'User';
         }
 
         // Load pending requests when role section is viewed
