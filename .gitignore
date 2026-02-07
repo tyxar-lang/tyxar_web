@@ -3,6 +3,7 @@
 .env.local
 config.js
 .env.production
+j.md
 
 # Node modules (if any)
 node_modules/
