@@ -141,33 +141,19 @@ async function loadUser() {
     dashboardEmail.textContent = user.email;
     dashboardCreated.textContent = new Date(user.created_at).toLocaleDateString();
 
-    // Fetch profile fields to determine roles dynamically
+    // Fetch boolean role flags from profiles table
     const { data: profile } = await supabaseClient
         .from("profiles")
-        .select("is_admin, role, roles, is_tester, is_developer")
+        .select("is_user, is_admin, is_developer, is_tester")
         .eq("id", user.id)
         .single();
 
-    // Build a set of roles from boolean flags and any role fields present.
-    // We will NOT fall back to a hardcoded 'User' label; the UI reflects exactly
-    // what the `profiles` row contains (e.g. is_user true).
-    const rolesSet = new Set();
-    if (profile?.is_admin) rolesSet.add('admin');
-    if (profile?.is_tester) rolesSet.add('tester');
-    if (profile?.is_developer) rolesSet.add('developer');
-    if (profile?.is_user) rolesSet.add('user');
-
-    // Also support legacy role/roles fields if present
-    if (profile?.role) {
-        if (Array.isArray(profile.role)) profile.role.forEach(r => rolesSet.add(String(r).toLowerCase()));
-        else rolesSet.add(String(profile.role).toLowerCase());
-    }
-    if (profile?.roles) {
-        if (Array.isArray(profile.roles)) profile.roles.forEach(r => rolesSet.add(String(r).toLowerCase()));
-        else rolesSet.add(String(profile.roles).toLowerCase());
-    }
-
-    const rolesArray = Array.from(rolesSet);
+    // Build roles array by checking each boolean flag in the profiles row
+    const rolesArray = [];
+    if (profile?.is_user) rolesArray.push('user');
+    if (profile?.is_admin) rolesArray.push('admin');
+    if (profile?.is_developer) rolesArray.push('developer');
+    if (profile?.is_tester) rolesArray.push('tester');
 
     // Create a human-friendly display string (Title Case) while keeping the
     // canonical lowercase array available for logic/UI toggles.
