@@ -367,28 +367,6 @@
                         pointer-events: none;
                       "></div>
                     
-                        <!-- Sign Out Button -->
-                        <button onclick="logout()" style="
-                        position: absolute;
-                        top: 16px;
-                        right: 24px;
-                        width: 120px;
-                        z-index: 10;
-                        padding: 6px 12px;
-                        background: rgb(197, 4, 4);
-                        border: 1px solid rgba(255,255,255,0.4);
-                        border-radius: 6px;
-                        color: white;
-                        border-radius: 6px;
-                        font-weight: 600;
-                        cursor: pointer;
-                        transition: all 0.3s ease;
-                        font-size: 0.85rem;
-                      "
-                         >
-                          Sign Out
-                        </button>
-                    
                         <!-- Main content container -->
                         <div style="
                         position: absolute;
@@ -591,8 +569,29 @@
                                     <!-- Settings Section -->
                                     <div id="section-settings" class="content-card hidden">
                                         <h2>Account Settings</h2>
-                                        <div class="placeholder-content">
-                                            ⚙️ Settings Panel Placeholder
+
+                                        <!-- Profile Edit Section -->
+                                        <div style="background: white; border-radius: 12px; padding: 24px; margin-bottom: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                                            <h3 style="margin-top: 0; color: #2d3748;">Edit Profile</h3>
+                                            <form id="profileForm" style="display: flex; flex-direction: column; gap: 16px;">
+                                                <div>
+                                                    <label style="display: block; font-weight: 600; color: #2d3748; margin-bottom: 8px;">Full Name</label>
+                                                    <input id="settingName" type="text" placeholder="Your full name" style="width: 100%; padding: 10px; border: 1px solid #cbd5e0; border-radius: 6px; font-size: 1rem; box-sizing: border-box;" />
+                                                </div>
+                                                <div>
+                                                    <label style="display: block; font-weight: 600; color: #2d3748; margin-bottom: 8px;">Email</label>
+                                                    <input id="settingEmail" type="email" placeholder="Your email" disabled style="width: 100%; padding: 10px; border: 1px solid #cbd5e0; border-radius: 6px; font-size: 1rem; box-sizing: border-box; background: #f7fafc; cursor: not-allowed;" />
+                                                    <p style="font-size: 0.85rem; color: #718096; margin-top: 4px;">Email cannot be changed here. Contact support to update.</p>
+                                                </div>
+                                                <button type="button" onclick="saveProfileChanges()" style="padding: 12px 24px; background: #4299e1; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 1rem; transition: all 0.2s ease;" onmouseover="this.style.background='#3182ce'" onmouseout="this.style.background='#4299e1'">Save Changes</button>
+                                            </form>
+                                        </div>
+
+                                        <!-- Sign Out Section -->
+                                        <div style="background: linear-gradient(135deg, #fc8181 0%, #f56565 100%); border-radius: 12px; padding: 24px; color: white;">
+                                            <h3 style="margin-top: 0; margin-bottom: 12px;">Sign Out</h3>
+                                            <p style="margin: 0 0 16px 0; opacity: 0.9;">Click below to sign out of your account.</p>
+                                            <button onclick="logout()" style="padding: 12px 24px; background: rgba(255,255,255,0.2); color: white; border: 2px solid white; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 1rem; transition: all 0.2s ease;" onmouseover="this.style.background='rgba(255,255,255,0.3)'" onmouseout="this.style.background='rgba(255,255,255,0.2)'">Sign Out</button>
                                         </div>
                                     </div>
                                 </div>

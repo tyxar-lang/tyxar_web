@@ -91,6 +91,40 @@ async function logout() {
 }
 
 // ===============================
+// PROFILE UPDATE FUNCTION
+// ===============================
+async function saveProfileChanges() {
+    const user = (await supabaseClient.auth.getUser()).data.user;
+    if (!user) {
+        alert('You must be logged in to save changes.');
+        return;
+    }
+
+    const newName = document.getElementById('settingName').value.trim();
+
+    if (!newName) {
+        alert('Please enter a name.');
+        return;
+    }
+
+    // Update user metadata in auth.users
+    const { error: updateError } = await supabaseClient.auth.updateUser({
+        data: { full_name: newName }
+    });
+
+    if (updateError) {
+        alert(`Error saving changes: ${updateError.message}`);
+        console.error(updateError);
+        return;
+    }
+
+    alert('✅ Profile updated successfully!');
+    
+    // Reload user data to reflect changes
+    loadUser();
+}
+
+// ===============================
 // FORM TOGGLE FUNCTIONS
 // ===============================
 function showSignup() {
@@ -140,6 +174,12 @@ async function loadUser() {
     dashboardName.textContent = displayName;
     dashboardEmail.textContent = user.email;
     dashboardCreated.textContent = new Date(user.created_at).toLocaleDateString();
+
+    // Also populate settings form fields
+    const settingNameInput = document.getElementById('settingName');
+    const settingEmailInput = document.getElementById('settingEmail');
+    if (settingNameInput) settingNameInput.value = displayName;
+    if (settingEmailInput) settingEmailInput.value = user.email;
 
     // Fetch boolean role flags from profiles table
     const { data: profile } = await supabaseClient
