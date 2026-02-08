@@ -143,18 +143,6 @@ function showAuth() {
     dashboard.classList.add("hidden");
     authBox.classList.remove("hidden");
     showLogin(); // Default to login form
-
-    // Remove hamburger button on sign out - be thorough
-    const btn = document.querySelector('.floating-menu-btn');
-    if (btn) {
-        btn.remove();
-    }
-
-    // Also close sidebar if it was open
-    const sidebar = document.querySelector('.dashboard-sidebar');
-    if (sidebar) {
-        sidebar.classList.remove('open');
-    }
 }
 
 // ===============================
@@ -235,11 +223,6 @@ async function loadUser() {
     } catch (e) {
         console.warn('Could not load footer:', e);
     }
-
-    // Initialize floating sidebar button (only when logged in)
-    setTimeout(() => {
-        initializeProfileSidebar();
-    }, 100);
 }
 
 // ===============================
@@ -285,115 +268,7 @@ function loadHTML(url, elementId) {
 
 // Call these functions when the main page loads:
 document.addEventListener('DOMContentLoaded', (event) => {
-    // Load Header, Footer, and Sidebar
+    // Load Header, Footer
     loadHTML('/tyxar_web/header.html', 'header');
     loadHTML('/tyxar_web/footer.html', 'footer');
-
-
-
-    // Initialize profile sidebar
-    initializeProfileSidebar();
 });
-
-// ===============================
-// PROFILE SIDEBAR WITH SMART BUTTON
-// ===============================
-function initializeProfileSidebar() {
-    const sidebar = document.querySelector('.dashboard-sidebar');
-
-    if (!sidebar) return;
-
-    // Only run on mobile/tablet
-    if (window.innerWidth > 768) return;
-
-    // Remove any existing button first (to avoid duplicates)
-    const existingBtn = document.querySelector('.floating-menu-btn');
-    if (existingBtn) {
-        existingBtn.remove();
-    }
-
-    // Create floating toggle button
-    const btn = document.createElement('button');
-    btn.className = 'floating-menu-btn';
-    btn.innerHTML = '☰';
-    btn.setAttribute('aria-label', 'Toggle navigation');
-    Object.assign(btn.style, {
-        position: 'fixed',
-        left: '16px',
-        bottom: 'auto',
-        width: '50px',
-        height: '50px',
-        background: 'white',
-        color: '#2d3748',
-        border: 'none',
-        borderRadius: '12px',
-        fontSize: '24px',
-        fontWeight: 'bold',
-        cursor: 'pointer',
-        zIndex: '1001',
-        boxShadow: '0 4px 20px rgba(0,0,0,0.2)',
-        transition: 'all 0.3s ease',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center'
-    });
-    document.body.appendChild(btn);
-
-    const MIN_TOP = 160;   // Starting position (under header)
-    const STICKY_TOP = 10; // Final sticky position when scrolled
-    const OPEN_TOP = 10;   // Force to 20px when sidebar is open
-
-    let isOpen = false;
-
-    const updateButton = () => {
-        isOpen = sidebar.classList.contains('open');
-        btn.innerHTML = isOpen ? '×' : '☰';
-        btn.style.background = isOpen ? '#3b82f6' : 'white';
-        btn.style.color = isOpen ? 'white' : '#2d3748';
-
-        // When sidebar is open → force button to 20px immediately
-        if (isOpen) {
-            btn.style.top = `${OPEN_TOP}px`;
-        } else {
-            // Normal smart sticky behavior
-            const scrolled = window.scrollY;
-            let top = MIN_TOP - scrolled;
-            top = Math.max(STICKY_TOP, Math.min(MIN_TOP, top));
-            btn.style.top = `${top}px`;
-        }
-    };
-
-    // Toggle sidebar
-    btn.onclick = e => {
-        e.stopPropagation();
-        sidebar.classList.toggle('open');
-        updateButton();
-    };
-
-    // Close when clicking outside
-    document.addEventListener('click', e => {
-        if (isOpen && !sidebar.contains(e.target) && !btn.contains(e.target)) {
-            sidebar.classList.remove('open');
-            updateButton();
-        }
-    });
-
-    // Close with Escape
-    document.addEventListener('keydown', e => {
-        if (e.key === 'Escape' && isOpen) {
-            sidebar.classList.remove('open');
-            updateButton();
-        }
-    });
-
-    // Scroll handler — only affects position when sidebar is closed
-    const handleScroll = () => {
-        if (!isOpen) updateButton();
-    };
-
-    window.addEventListener('scroll', handleScroll);
-
-    // Initial setup
-    updateButton();
-    handleScroll();
-}
