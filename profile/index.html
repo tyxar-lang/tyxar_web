@@ -82,11 +82,40 @@
             font-weight: 500;
         }
 
+        #topBanner .banner-nav {
+            display: flex;
+            gap: 12px;
+            margin-top: 12px;
+        }
+
+        .banner-nav-btn {
+            padding: 8px 16px;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+
+        .banner-nav-btn:hover {
+            background: rgba(255,255,255,0.3);
+            border-color: rgba(255,255,255,0.5);
+        }
+
+        .banner-nav-btn.active {
+            background: rgba(255,255,255,0.4);
+            border-color: white;
+        }
+
         /* Tablet/Mobile (max-width: 768px) */
         @media (max-width: 768px) {
             #topBanner {
                 height: auto;
-                min-height: 120px;
+                min-height: auto;
                 padding: 14px;
                 margin: -16px -16px 0 -16px;
             }
@@ -95,9 +124,9 @@
                 position: static;
                 padding: 0;
                 display: flex;
-                flex-direction: row;
+                flex-direction: column;
                 align-items: flex-start;
-                gap: 14px;
+                gap: 0;
             }
 
             #topBanner .banner-avatar {
@@ -111,6 +140,7 @@
 
             #topBanner .banner-text {
                 padding: 0;
+                margin-bottom: 12px;
             }
 
             #topBanner .banner-text h1 {
@@ -123,24 +153,37 @@
                 font-size: 0.8rem;
                 line-height: 1.3;
             }
+
+            #topBanner .banner-nav {
+                width: 100%;
+                flex-direction: row;
+                gap: 8px;
+                margin-top: 0;
+            }
+
+            .banner-nav-btn {
+                padding: 6px 12px;
+                font-size: 0.8rem;
+                flex: 1;
+            }
         }
 
         /* Small phone (max-width: 480px) */
         @media (max-width: 480px) {
             #topBanner {
                 height: auto;
-                min-height: 100px;
+                min-height: auto;
                 padding: 12px;
                 margin: -16px -16px 0 -16px;
             }
 
             #topBanner > div:nth-child(2) {
-                gap: 15px;
+                gap: 0;
             }
 
             #topBanner .banner-avatar {
-                width: 55px;
-                height: 55px;
+                width: 48px;
+                height: 48px;
                 border-radius: 10px;
                 border: 2px solid white;
             }
@@ -155,14 +198,20 @@
                 font-size: 0.75rem;
                 line-height: 1.3;
             }
+
+            #topBanner .banner-nav {
+                gap: 6px;
+            }
+
+            .banner-nav-btn {
+                padding: 5px 10px;
+                font-size: 0.7rem;
+            }
         }
 
         /* Dashboard Layout Styles */
         .dashboard-wrapper {
-            display: flex;
-            gap: 24px;
-            margin-top: 16px;
-            position: relative;
+            display: none;
         }
 
         .hamburger-btn {
@@ -204,56 +253,8 @@
             transform: rotate(-45deg) translate(7px, -7px);
         }
 
-        .dashboard-sidebar {
-            width: 280px;
-            flex-shrink: 0;
-            background: white;
-            border-radius: 12px;
-            padding: 16px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            height: fit-content;
-            position: sticky;
-            top: 100px;
-            transition: all 0.3s ease;
-        }
-
-        .dashboard-sidebar h3 {
-            font-size: 1.1rem;
-            margin-bottom: 12px;
-            color: #2d3748;
-        }
-
-        .sidebar-section {
-            margin-bottom: 16px;
-            padding-bottom: 12px;
-            border-bottom: 1px solid #e2e8f0;
-        }
-
-        .sidebar-section:last-child {
-            border-bottom: none;
-            margin-bottom: 0;
-            padding-bottom: 0;
-        }
-
-        .sidebar-item {
-            display: block;
-            padding: 8px 10px;
-            margin: 4px 0;
-            background: #f7fafc;
-            border-radius: 6px;
-            color: #2d3748;
-            text-decoration: none;
-            transition: all 0.2s ease;
-            cursor: pointer;
-        }
-
-        .sidebar-item:hover {
-            background: #e2e8f0;
-            transform: translateX(4px);
-        }
-
         .dashboard-main-content {
-            flex: 1;
+            width: 100%;
             min-width: 0;
         }
 
@@ -308,27 +309,6 @@
 
             .hamburger-btn {
                 display: none;
-            }
-
-            .dashboard-sidebar {
-                width: 75%;
-                max-width: 320px;
-                position: fixed;
-                left: -100%;
-                top: 0;
-                height: 100vh;
-                max-height: none;
-                overflow-y: auto;
-                padding: 16px;
-                box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-                background: white;
-                z-index: 1000;
-                transition: left 0.3s ease;
-                margin-bottom: 0;
-            }
-
-            .dashboard-sidebar.open {
-                left: 0;
             }
         }
     </style>
@@ -412,25 +392,16 @@
                                     <strong>Email:</strong> <span id="dashboardEmail"></span>
                                 </div>
                             </div>
+                            <div class="banner-nav">
+                                <button class="banner-nav-btn" onclick="showDashboardSection('overview')">📊 Overview</button>
+                                <button class="banner-nav-btn" onclick="showDashboardSection('roles')">👤 Roles</button>
+                                <button class="banner-nav-btn" onclick="showDashboardSection('settings')">⚙️ Settings</button>
+                            </div>
                         </div>
                     </div>
                     <main class="dashboard-main">
                         <div class="dashboard-content container">
-                            <div class="dashboard-wrapper">
-                                <!-- SIDEBAR -->
-                                <aside class="dashboard-sidebar">
-                                    <h3>Menu</h3>
-                                    
-                                    <div class="sidebar-section">
-                                        <div class="sidebar-item" onclick="showDashboardSection('overview')">📊 Overview</div>
-                                        <div class="sidebar-item" onclick="showDashboardSection('projects')">📁 Projects</div>
-                                        <div class="sidebar-item" onclick="showDashboardSection('roles')">👤 Role Requests</div>
-                                        <div class="sidebar-item" onclick="showDashboardSection('settings')">⚙️ Settings</div>
-                                    </div>
-                                </aside>
-
-                                <!-- MAIN CONTENT -->
-                                <div class="dashboard-main-content">
+                            <div class="dashboard-main-content">
                                     <!-- Overview Section -->
                                     <div id="section-overview" class="content-card">
                                         <h2>Welcome Back!</h2>
@@ -611,24 +582,6 @@
             if (selectedSection) {
                 selectedSection.classList.remove('hidden');
             }
-
-            // Close sidebar on mobile after selecting
-            const sidebar = document.querySelector('.dashboard-sidebar');
-            const btn = document.querySelector('.floating-menu-btn');
-            if (window.innerWidth <= 768 && sidebar && btn) {
-                sidebar.classList.remove('open');
-                btn.innerHTML = '☰';
-                btn.style.background = 'white';
-                btn.style.color = '#2d3748';
-            }
-        }
-
-        // Toggle sidebar on mobile
-        function toggleMobileSidebar() {
-            const sidebar = document.querySelector('.dashboard-sidebar');
-            const btn = document.querySelector('.hamburger-btn');
-            sidebar.classList.toggle('open');
-            hamburger.classList.toggle('open');
         }
 
         // Role Request Functions
