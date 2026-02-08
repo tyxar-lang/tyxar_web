@@ -119,7 +119,7 @@ async function saveProfileChanges() {
     }
 
     alert('✅ Profile updated successfully!');
-    
+
     // Reload user data to reflect changes
     loadUser();
 }
