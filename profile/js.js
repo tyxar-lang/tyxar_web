@@ -260,7 +260,6 @@ function loadHTML(url, elementId) {
 
             // --- CRITICAL STEP ---
             // Re-run initialization to catch the *new* links in the footer 
-            // AND the sidebar links (since they use the global selector now)
             initializeContentLoader();
         })
         .catch(err => console.error(`Error loading ${url}:`, err));
