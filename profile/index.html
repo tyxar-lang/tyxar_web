@@ -24,6 +24,7 @@
                 min-height: 140px !important;
                 padding-bottom: 16px !important;
                 margin: -16px -16px 0 -16px !important;
+                overflow: visible !important;
             }
 
             #topBanner button[onclick="logout()"] {
@@ -35,13 +36,14 @@
                 font-size: 0.7rem !important;
             }
 
-            /* Main content container */
+            /* Main content container - flex row on mobile */
             #topBanner > div:nth-child(3) {
                 position: static !important;
                 padding: 12px !important;
                 display: flex !important;
+                flex-direction: row !important;
                 flex-wrap: wrap !important;
-                align-items: center !important;
+                align-items: flex-start !important;
                 gap: 12px !important;
                 justify-content: flex-start !important;
             }
@@ -78,8 +80,9 @@
         @media (max-width: 480px) {
             #topBanner {
                 height: auto !important;
-                min-height: 120px !important;
-                padding-bottom: 12px !important;
+                min-height: 100px !important;
+                padding-bottom: 10px !important;
+                overflow: visible !important;
             }
 
             #topBanner button[onclick="logout()"] {
@@ -90,7 +93,7 @@
             /* Main content container */
             #topBanner > div:nth-child(3) {
                 padding: 10px !important;
-                gap: 10px !important;
+                gap: 8px !important;
             }
 
             /* Avatar */
@@ -103,16 +106,16 @@
 
             /* Text container */
             #topBanner > div:nth-child(3) > div:last-child {
-                min-width: 130px !important;
+                min-width: 120px !important;
             }
 
             #topBanner > div:nth-child(3) > div:last-child h1 {
-                font-size: 0.8rem !important;
+                font-size: 0.75rem !important;
                 line-height: 1.2 !important;
             }
 
             #topBanner > div:nth-child(3) > div:last-child div {
-                font-size: 0.7rem !important;
+                font-size: 0.65rem !important;
                 line-height: 1.2 !important;
             }
         }
@@ -360,7 +363,7 @@
                       height: 220px;
                       background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
                       border-radius: 16px 16px 16px 16px;
-                      overflow: hidden;
+                      overflow: visible;
                       margin: -16px -16px 0 -16px;
                       box-shadow: 0 10px 30px -10px rgba(0,0,0,0.4);
                     ">
