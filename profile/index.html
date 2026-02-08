@@ -474,8 +474,49 @@
                                     <!-- Overview Section -->
                                     <div id="section-overview" class="content-card">
                                         <h2>Welcome Back!</h2>
-                                        <div class="placeholder-content">
-                                            📈 Overview Dashboard Placeholder
+
+                                        <!-- Admin Section -->
+                                        <div id="overview-admin" class="hidden" style="margin-bottom: 24px;">
+                                            <div style="background: linear-gradient(135deg, #ed8936 0%, #dd6b20 100%); border-radius: 12px; padding: 24px; color: white; margin-bottom: 16px;">
+                                                <h3 style="margin: 0 0 12px 0; font-size: 1.5rem;">👑 Admin Dashboard</h3>
+                                                <p style="margin: 0; opacity: 0.9;">Manage users, moderate content, and oversee the platform.</p>
+                                            </div>
+                                            <div class="placeholder-content">
+                                                🔧 Admin tools and analytics placeholder
+                                            </div>
+                                        </div>
+
+                                        <!-- Developer Section -->
+                                        <div id="overview-developer" class="hidden" style="margin-bottom: 24px;">
+                                            <div style="background: linear-gradient(135deg, #38a169 0%, #2f855a 100%); border-radius: 12px; padding: 24px; color: white; margin-bottom: 16px;">
+                                                <h3 style="margin: 0 0 12px 0; font-size: 1.5rem;">💻 Developer Dashboard</h3>
+                                                <p style="margin: 0; opacity: 0.9;">Access development tools, libraries, and code repositories.</p>
+                                            </div>
+                                            <div class="placeholder-content">
+                                                🚀 Developer resources and tools placeholder
+                                            </div>
+                                        </div>
+
+                                        <!-- Tester Section -->
+                                        <div id="overview-tester" class="hidden" style="margin-bottom: 24px;">
+                                            <div style="background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%); border-radius: 12px; padding: 24px; color: white; margin-bottom: 16px;">
+                                                <h3 style="margin: 0 0 12px 0; font-size: 1.5rem;">🧪 Tester Dashboard</h3>
+                                                <p style="margin: 0; opacity: 0.9;">Test new features, report bugs, and provide feedback.</p>
+                                            </div>
+                                            <div class="placeholder-content">
+                                                📋 Testing assignments and feedback portal placeholder
+                                            </div>
+                                        </div>
+
+                                        <!-- User Section (shown only when no other roles) -->
+                                        <div id="overview-user" class="hidden" style="margin-bottom: 24px;">
+                                            <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 12px; padding: 24px; color: white; margin-bottom: 16px;">
+                                                <h3 style="margin: 0 0 12px 0; font-size: 1.5rem;">👤 User Dashboard</h3>
+                                                <p style="margin: 0; opacity: 0.9;">Explore resources, read documentation, and join the community.</p>
+                                            </div>
+                                            <div class="placeholder-content">
+                                                📚 User resources and community placeholder
+                                            </div>
                                         </div>
                                     </div>
 
@@ -719,6 +760,36 @@
             if (currentRoleEl) currentRoleEl.textContent = displayRoles;
             const dashboardRoleEl = document.getElementById('dashboardRole');
             if (dashboardRoleEl) dashboardRoleEl.textContent = displayRoles;
+
+            // Show/hide overview sections based on roles
+            updateOverviewSections(rolesArray || []);
+        }
+
+        // Show/hide overview sections based on user's roles
+        function updateOverviewSections(rolesArray) {
+            const roles = new Set((rolesArray || []).map(r => String(r).toLowerCase()));
+
+            // Hide all role sections first
+            document.getElementById('overview-admin')?.classList.add('hidden');
+            document.getElementById('overview-developer')?.classList.add('hidden');
+            document.getElementById('overview-tester')?.classList.add('hidden');
+            document.getElementById('overview-user')?.classList.add('hidden');
+
+            // Show sections based on roles
+            if (roles.has('admin')) {
+                document.getElementById('overview-admin')?.classList.remove('hidden');
+            }
+            if (roles.has('developer')) {
+                document.getElementById('overview-developer')?.classList.remove('hidden');
+            }
+            if (roles.has('tester')) {
+                document.getElementById('overview-tester')?.classList.remove('hidden');
+            }
+
+            // User section shows only when user has no other roles
+            if (!roles.has('admin') && !roles.has('developer') && !roles.has('tester')) {
+                document.getElementById('overview-user')?.classList.remove('hidden');
+            }
         }
 
         // Load pending requests when role section is viewed
