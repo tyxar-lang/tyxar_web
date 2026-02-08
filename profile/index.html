@@ -52,13 +52,11 @@
             height: 168px;
             border-radius: 20px;
             border: 6px solid white;
-            background: #334155;
+            background: #334155; /* solid color placeholder instead of image */
             overflow: hidden;
             box-shadow: 0 8px 32px rgba(0,0,0,0.35);
             flex-shrink: 0;
-            background-size: cover;
-            background-position: center;
-            background-image: url('/tyxar_web/images/tyxar.png');
+            /* removed background-image/background-size/position to avoid any image usage */
         }
 
         #topBanner .banner-text {
@@ -138,6 +136,7 @@
                 flex: none;
             }
 
+            /* Avatar suppressed on small screens by targeting the element directly. */
             #topBanner .banner-avatar {
                 width: 60px;
                 height: 60px;
@@ -145,10 +144,7 @@
                 border: 3px solid white;
                 box-shadow: 0 4px 12px rgba(0,0,0,0.25);
                 flex-shrink: 0;
-            }
-
-            #topBanner .banner-text > div:first-child {
-                display: none;
+                display: none; /* hide avatar (no image usage) */
             }
 
             #topBanner .banner-text h1 {
@@ -202,7 +198,7 @@
                 line-height: 1.2;
             }
 
-            #topBanner .banner-text > div {
+            #topBanner .banner-text > div:last-child {
                 margin-top: 3px;
                 font-size: 0.75rem;
                 line-height: 1.3;
