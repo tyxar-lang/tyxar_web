@@ -98,10 +98,10 @@ async function loadAdminUserTable() {
     if (!adminTableBody) return; // Not an admin, table doesn't exist
 
     try {
-        // Fetch all user profiles (everyone who signed up)
+        // Fetch all user profiles
         const { data: profiles, error } = await supabaseClient
             .from('profiles')
-            .select('id, full_name, is_admin, is_developer, is_tester, is_user')
+            .select('id, is_admin, is_developer, is_tester, is_user')
             .order('created_at', { ascending: false });
 
         if (error) {
@@ -115,10 +115,18 @@ async function loadAdminUserTable() {
             return;
         }
 
+        // Note: We can't access auth.users metadata from the client side directly
+        // Users see their names in dashboard via auth.users metadata
+        // Admin table just shows a placeholder since we only have ID from profiles table
+        const profilesWithNames = profiles.map(profile => ({
+            ...profile,
+            displayName: `User (ID: ${profile.id.substring(0, 8)}...)`
+        }));
+
         // Build table rows
-        adminTableBody.innerHTML = profiles.map(profile => `
+        adminTableBody.innerHTML = profilesWithNames.map(profile => `
             <tr style="border-bottom: 1px solid #cbd5e0; hover: { background: #f7fafc; }">
-                <td style="padding: 12px; color: #2d3748; font-weight: 500;">${profile.full_name || 'Unknown'}</td>
+                <td style="padding: 12px; color: #2d3748; font-weight: 500;">${profile.displayName}</td>
                 <td style="padding: 12px; text-align: center;">
                     <input type="checkbox" ${profile.is_admin ? 'checked' : ''} onchange="toggleUserRole('${profile.id}', 'is_admin', this.checked)" style="cursor: pointer; width: 18px; height: 18px;">
                 </td>
@@ -332,7 +340,7 @@ async function loadUser() {
     const displayName = user.user_metadata?.full_name || user.user_metadata?.user_name || user.user_metadata?.name || 'User';
     dashboardName.textContent = displayName;
     dashboardEmail.textContent = user.email;
-    dashboardCreated.textContent = new Date(user.created_at).toLocaleDateString();
+    dashboardCreated.textContent = new Date(user.created_at).toLocaleDateString('en-GB', { year: 'numeric', month: 'long', day: 'numeric' });
 
     // Also populate settings form fields
     const settingNameInput = document.getElementById('settingName');
@@ -341,11 +349,25 @@ async function loadUser() {
     if (settingEmailInput) settingEmailInput.value = user.email;
 
     // Fetch boolean role flags from profiles table
-    const { data: profile } = await supabaseClient
+    const { data: profile, error: profileError } = await supabaseClient
         .from("profiles")
         .select("is_user, is_admin, is_developer, is_tester")
         .eq("id", user.id)
         .single();
+
+    // If profile doesn't exist yet, create it
+    if (profileError && profileError.code === 'PGRST116') {
+        const { error: insertError } = await supabaseClient
+            .from('profiles')
+            .insert({
+                id: user.id,
+                is_user: true,
+                is_admin: false,
+                is_developer: false,
+                is_tester: false
+            });
+        if (insertError) console.error('Error creating profile:', insertError);
+    }
 
     // Build roles array by checking each boolean flag in the profiles row
     const rolesArray = [];
