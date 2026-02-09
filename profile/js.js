@@ -91,8 +91,86 @@ async function logout() {
 }
 
 // ===============================
-// PROFILE UPDATE FUNCTION
+// ADMIN USER TABLE & ROLE MANAGEMENT
 // ===============================
+async function loadAdminUserTable() {
+    const adminTableBody = document.getElementById('adminTableBody');
+    if (!adminTableBody) return; // Not an admin, table doesn't exist
+
+    try {
+        // Fetch all user profiles (everyone who signed up)
+        const { data: profiles, error } = await supabaseClient
+            .from('profiles')
+            .select('id, full_name, is_admin, is_developer, is_tester, is_user')
+            .order('created_at', { ascending: false });
+
+        if (error) {
+            console.error('Error fetching users:', error);
+            adminTableBody.innerHTML = '<tr><td colspan="5" style="padding: 12px; text-align: center; color: #718096;">Error loading users</td></tr>';
+            return;
+        }
+
+        if (!profiles || profiles.length === 0) {
+            adminTableBody.innerHTML = '<tr><td colspan="5" style="padding: 12px; text-align: center; color: #718096;">No users found</td></tr>';
+            return;
+        }
+
+        // Build table rows
+        adminTableBody.innerHTML = profiles.map(profile => `
+            <tr style="border-bottom: 1px solid #cbd5e0; hover: { background: #f7fafc; }">
+                <td style="padding: 12px; color: #2d3748; font-weight: 500;">${profile.full_name || 'Unknown'}</td>
+                <td style="padding: 12px; text-align: center;">
+                    <input type="checkbox" ${profile.is_admin ? 'checked' : ''} onchange="toggleUserRole('${profile.id}', 'is_admin', this.checked)" style="cursor: pointer; width: 18px; height: 18px;">
+                </td>
+                <td style="padding: 12px; text-align: center;">
+                    <input type="checkbox" ${profile.is_developer ? 'checked' : ''} onchange="toggleUserRole('${profile.id}', 'is_developer', this.checked)" style="cursor: pointer; width: 18px; height: 18px;">
+                </td>
+                <td style="padding: 12px; text-align: center;">
+                    <input type="checkbox" ${profile.is_tester ? 'checked' : ''} onchange="toggleUserRole('${profile.id}', 'is_tester', this.checked)" style="cursor: pointer; width: 18px; height: 18px;">
+                </td>
+                <td style="padding: 12px; text-align: center;">
+                    <button onclick="viewUserDetails('${profile.id}')" style="padding: 6px 12px; background: #667eea; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 0.85rem; font-weight: 600;">View</button>
+                </td>
+            </tr>
+        `).join('');
+
+    } catch (err) {
+        console.error('Error in loadAdminUserTable:', err);
+        adminTableBody.innerHTML = '<tr><td colspan="5" style="padding: 12px; text-align: center; color: #e53e3e;">Error loading table</td></tr>';
+    }
+}
+
+async function toggleUserRole(userId, roleField, isChecked) {
+    try {
+        const { error } = await supabaseClient
+            .from('profiles')
+            .update({ [roleField]: isChecked })
+            .eq('id', userId);
+
+        if (error) {
+            alert(`Error updating role: ${error.message}`);
+            // Reload to revert the checkbox
+            loadAdminUserTable();
+        } else {
+            // Successful update - checkbox stays as is
+            console.log(`Updated ${roleField} for user ${userId} to ${isChecked}`);
+        }
+    } catch (err) {
+        console.error('Error toggling role:', err);
+        alert('Error updating role');
+        loadAdminUserTable();
+    }
+}
+
+function viewUserDetails(userId) {
+    alert(`Viewing details for user: ${userId}`);
+    // This can be expanded later to show more detailed view
+}
+
+// ===============================
+// PROFILE LOAD & DASHBOARD SETUP
+// ===============================
+
 async function saveProfileChanges() {
     const user = (await supabaseClient.auth.getUser()).data.user;
     if (!user) {
