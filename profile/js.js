@@ -97,16 +97,19 @@ async function loadAdminUserTable() {
     const adminTableBody = document.getElementById('adminTableBody');
     if (!adminTableBody) return; // Not an admin, table doesn't exist
 
+    // Show skeleton loader while fetching
+    showTableSkeleton(adminTableBody, 5);
+
     try {
-        // Fetch all user profiles with full_name
+        // Fetch all user profiles with full_name - optimized query
         const { data: profiles, error } = await supabaseClient
             .from('profiles')
-            .select('id, full_name, is_admin, is_developer, is_tester, is_user')
+            .select('id, full_name, is_admin, is_developer, is_tester')
             .order('created_at', { ascending: false });
 
         if (error) {
             console.error('Error fetching users:', error);
-            adminTableBody.innerHTML = '<tr><td colspan="5" style="padding: 12px; text-align: center; color: #718096;">Error loading users</td></tr>';
+            adminTableBody.innerHTML = '<tr><td colspan="5" style="padding: 12px; text-align: center; color: #e53e3e;">Error loading users</td></tr>';
             return;
         }
 
@@ -115,17 +118,9 @@ async function loadAdminUserTable() {
             return;
         }
 
-        // Note: We can't access auth.users metadata from the client side directly
-        // Users see their names in dashboard via auth.users metadata
-        // Admin table just shows a placeholder since we only have ID from profiles table
-        const profilesWithNames = profiles.map(profile => ({
-            ...profile,
-            displayName: `User (ID: ${profile.id.substring(0, 8)}...)`
-        }));
-
-        // Build table rows
-        adminTableBody.innerHTML = profilesWithNames.map(profile => `
-            <tr style="border-bottom: 1px solid #cbd5e0; hover: { background: #f7fafc; }">
+        // Build table rows immediately
+        adminTableBody.innerHTML = profiles.map(profile => `
+            <tr style="border-bottom: 1px solid #cbd5e0;">
                 <td style="padding: 12px; color: #2d3748; font-weight: 500;">${profile.full_name || 'Unknown'}</td>
                 <td style="padding: 12px; text-align: center;">
                     <input type="checkbox" ${profile.is_admin ? 'checked' : ''} onchange="toggleUserRole('${profile.id}', 'is_admin', this.checked)" style="cursor: pointer; width: 18px; height: 18px;">
@@ -146,6 +141,30 @@ async function loadAdminUserTable() {
         console.error('Error in loadAdminUserTable:', err);
         adminTableBody.innerHTML = '<tr><td colspan="5" style="padding: 12px; text-align: center; color: #e53e3e;">Error loading table</td></tr>';
     }
+}
+
+function showTableSkeleton(container, rows = 5) {
+    const skeletonRows = Array(rows).fill(0).map((_, i) => `
+        <tr style="border-bottom: 1px solid #cbd5e0; background: white;">
+            <td style="padding: 12px;">
+                <div style="height: 20px; background: linear-gradient(90deg, #e2e8f0 25%, #f1f5f9 50%, #e2e8f0 75%); background-size: 200% 100%; border-radius: 4px; animation: shimmer 2s infinite;"></div>
+            </td>
+            <td style="padding: 12px; text-align: center;">
+                <div style="height: 18px; width: 18px; background: linear-gradient(90deg, #e2e8f0 25%, #f1f5f9 50%, #e2e8f0 75%); background-size: 200% 100%; border-radius: 3px; animation: shimmer 2s infinite; margin: 0 auto;"></div>
+            </td>
+            <td style="padding: 12px; text-align: center;">
+                <div style="height: 18px; width: 18px; background: linear-gradient(90deg, #e2e8f0 25%, #f1f5f9 50%, #e2e8f0 75%); background-size: 200% 100%; border-radius: 3px; animation: shimmer 2s infinite; margin: 0 auto;"></div>
+            </td>
+            <td style="padding: 12px; text-align: center;">
+                <div style="height: 18px; width: 18px; background: linear-gradient(90deg, #e2e8f0 25%, #f1f5f9 50%, #e2e8f0 75%); background-size: 200% 100%; border-radius: 3px; animation: shimmer 2s infinite; margin: 0 auto;"></div>
+            </td>
+            <td style="padding: 12px; text-align: center;">
+                <div style="height: 32px; width: 70px; background: linear-gradient(90deg, #e2e8f0 25%, #f1f5f9 50%, #e2e8f0 75%); background-size: 200% 100%; border-radius: 4px; animation: shimmer 2s infinite; margin: 0 auto;"></div>
+            </td>
+        </tr>
+    `).join('');
+
+    container.innerHTML = skeletonRows;
 }
 
 async function toggleUserRole(userId, roleField, isChecked) {
