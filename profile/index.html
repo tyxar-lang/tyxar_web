@@ -407,6 +407,14 @@
                                                     </tbody>
                                                 </table>
                                             </div>
+
+                                            <!-- Pending Role Requests -->
+                                            <div id="adminPendingRequests" style="background: white; border-radius: 12px; padding: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-top: 24px;">
+                                                <h4 style="margin-top: 0; color: #2d3748; margin-bottom: 16px;">⏳ Pending Role Requests</h4>
+                                                <div id="adminPendingRequestsBody" style="display: flex; flex-direction: column; gap: 12px;">
+                                                    <div style="padding: 12px; text-align: center; color: #718096;">No pending requests</div>
+                                                </div>
+                                            </div>
                                         </div>
 
                                         <!-- Developer Section -->
@@ -767,9 +775,12 @@
                 loadPendingRequests();
             }
             if (sectionId === 'overview') {
-                // Load admin table if user is admin
+                // Load admin table and pending requests if user is admin
                 if (window.loadAdminUserTable) {
                     window.loadAdminUserTable();
+                }
+                if (window.loadAdminPendingRequests) {
+                    window.loadAdminPendingRequests();
                 }
             }
         };

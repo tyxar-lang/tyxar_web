@@ -167,6 +167,99 @@ function viewUserDetails(userId) {
     // This can be expanded later to show more detailed view
 }
 
+async function loadAdminPendingRequests() {
+    const pendingRequestsBody = document.getElementById('adminPendingRequestsBody');
+    if (!pendingRequestsBody) return; // Not an admin
+
+    try {
+        // Fetch all pending role requests
+        const { data: requests, error } = await supabaseClient
+            .from('role_requests')
+            .select('id, user_id, requested_role, created_at, status')
+            .eq('status', 'pending')
+            .order('created_at', { ascending: false });
+
+        if (error) {
+            console.error('Error fetching requests:', error);
+            pendingRequestsBody.innerHTML = '<div style="padding: 12px; text-align: center; color: #e53e3e;">Error loading requests</div>';
+            return;
+        }
+
+        if (!requests || requests.length === 0) {
+            pendingRequestsBody.innerHTML = '<div style="padding: 12px; text-align: center; color: #718096;">No pending requests</div>';
+            return;
+        }
+
+        // For each request, get the user's name
+        const requestsWithNames = await Promise.all(requests.map(async (req) => {
+            const { data: profile } = await supabaseClient
+                .from('profiles')
+                .select('full_name')
+                .eq('id', req.user_id)
+                .single();
+            return { ...req, userName: profile?.full_name || 'Unknown' };
+        }));
+
+        // Build request cards
+        pendingRequestsBody.innerHTML = requestsWithNames.map(req => `
+            <div style="border: 2px solid #f6ad55; border-radius: 8px; padding: 16px; background: #fffaf0; display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <div style="font-weight: 700; color: #2d3748; margin-bottom: 4px;">${req.userName}</div>
+                    <div style="font-size: 0.9rem; color: #718096;">Requested <strong>${req.requested_role.charAt(0).toUpperCase() + req.requested_role.slice(1)}</strong> on ${new Date(req.created_at).toLocaleDateString('en-GB')}</div>
+                </div>
+                <button id="approveBtn-${req.id}" onclick="approveRoleRequest('${req.id}', '${req.user_id}', '${req.requested_role}', this)" style="padding: 8px 16px; background: #38a169; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 0.9rem; white-space: nowrap; margin-left: 12px; transition: all 0.2s ease;" onmouseover="this.style.background='#2f855a'" onmouseout="this.style.background='#38a169'">✓ Approve</button>
+            </div>
+        `).join('');
+
+    } catch (err) {
+        console.error('Error in loadAdminPendingRequests:', err);
+        pendingRequestsBody.innerHTML = '<div style="padding: 12px; text-align: center; color: #e53e3e;">Error loading requests</div>';
+    }
+}
+
+async function approveRoleRequest(requestId, userId, roleName, buttonEl) {
+    try {
+        // Update the user's role flag in profiles table
+        const roleField = `is_${roleName}`;
+        const { error: updateError } = await supabaseClient
+            .from('profiles')
+            .update({ [roleField]: true })
+            .eq('id', userId);
+
+        if (updateError) {
+            alert(`Error approving request: ${updateError.message}`);
+            return;
+        }
+
+        // Mark the request as approved or delete it
+        const { error: deleteError } = await supabaseClient
+            .from('role_requests')
+            .delete()
+            .eq('id', requestId);
+
+        if (deleteError) {
+            console.error('Error deleting request:', deleteError);
+        }
+
+        // Make button inactive
+        buttonEl.disabled = true;
+        buttonEl.style.background = '#cbd5e0';
+        buttonEl.style.cursor = 'not-allowed';
+        buttonEl.textContent = '✓ Approved';
+        buttonEl.style.opacity = '0.6';
+
+        // Reload tables to reflect changes
+        setTimeout(() => {
+            loadAdminUserTable();
+            loadAdminPendingRequests();
+        }, 500);
+
+    } catch (err) {
+        console.error('Error approving request:', err);
+        alert('Error approving request');
+    }
+}
+
 // ===============================
 // PROFILE LOAD & DASHBOARD SETUP
 // ===============================
