@@ -98,10 +98,10 @@ async function loadAdminUserTable() {
     if (!adminTableBody) return; // Not an admin, table doesn't exist
 
     try {
-        // Fetch all user profiles
+        // Fetch all user profiles with full_name
         const { data: profiles, error } = await supabaseClient
             .from('profiles')
-            .select('id, is_admin, is_developer, is_tester, is_user')
+            .select('id, full_name, is_admin, is_developer, is_tester, is_user')
             .order('created_at', { ascending: false });
 
         if (error) {
@@ -126,7 +126,7 @@ async function loadAdminUserTable() {
         // Build table rows
         adminTableBody.innerHTML = profilesWithNames.map(profile => `
             <tr style="border-bottom: 1px solid #cbd5e0; hover: { background: #f7fafc; }">
-                <td style="padding: 12px; color: #2d3748; font-weight: 500;">${profile.displayName}</td>
+                <td style="padding: 12px; color: #2d3748; font-weight: 500;">${profile.full_name || 'Unknown'}</td>
                 <td style="padding: 12px; text-align: center;">
                     <input type="checkbox" ${profile.is_admin ? 'checked' : ''} onchange="toggleUserRole('${profile.id}', 'is_admin', this.checked)" style="cursor: pointer; width: 18px; height: 18px;">
                 </td>
@@ -351,22 +351,30 @@ async function loadUser() {
     // Fetch boolean role flags from profiles table
     const { data: profile, error: profileError } = await supabaseClient
         .from("profiles")
-        .select("is_user, is_admin, is_developer, is_tester")
+        .select("is_user, is_admin, is_developer, is_tester, full_name")
         .eq("id", user.id)
         .single();
 
-    // If profile doesn't exist yet, create it
+    // If profile doesn't exist yet, create it with full_name
     if (profileError && profileError.code === 'PGRST116') {
         const { error: insertError } = await supabaseClient
             .from('profiles')
             .insert({
                 id: user.id,
+                full_name: displayName,
                 is_user: true,
                 is_admin: false,
                 is_developer: false,
                 is_tester: false
             });
         if (insertError) console.error('Error creating profile:', insertError);
+    } else if (profile && profile.full_name !== displayName) {
+        // Sync full_name from auth.users to profiles if they differ
+        const { error: syncError } = await supabaseClient
+            .from('profiles')
+            .update({ full_name: displayName })
+            .eq('id', user.id);
+        if (syncError) console.error('Error syncing full_name:', syncError);
     }
 
     // Build roles array by checking each boolean flag in the profiles row
