@@ -123,6 +123,9 @@ async function loadAdminUserTable() {
     }
 
     try {
+        // Get current user id for debug/hinting (helps detect RLS issues)
+        const { data: currentUserData } = await supabaseClient.auth.getUser();
+        const currentUserId = currentUserData?.user?.id;
         // Show skeleton is already present in HTML; fetch only first page quickly
         const start = 0;
         const end = pageSize - 1;
@@ -146,6 +149,16 @@ async function loadAdminUserTable() {
         // Clear skeleton and render first page immediately
         adminTableBody.innerHTML = '';
         appendProfilesRows(firstPage);
+
+        // Debug: log how many rows returned for admin table
+        console.debug('Admin table: firstPage length =', firstPage?.length);
+
+        // If we only see a single row and that row is the current user,
+        // it's likely Row-Level Security is restricting the query to self.
+        if (firstPage.length === 1 && currentUserId && firstPage[0].id === currentUserId) {
+            adminTableBody.insertAdjacentHTML('afterbegin', `<tr><td colspan="5" style="padding:12px; text-align:center; color:#b7791f; font-size:0.95rem;">Only your profile is visible — if you expect to see all users, ensure Supabase RLS policies allow admins to read all profiles.</td></tr>`);
+            console.warn('Admin table appears to be limited to current user; check RLS policies.');
+        }
 
         // If we received a full page, load remaining pages in background
         if (firstPage.length === pageSize) {
