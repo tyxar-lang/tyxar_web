@@ -409,6 +409,8 @@ async function loadUser() {
         return;
     }
 
+    console.debug('loadUser: auth.getUser ->', user && { id: user.id, email: user.email });
+
     // Populate dashboard
     const displayName = user.user_metadata?.full_name || user.user_metadata?.user_name || user.user_metadata?.name || 'User';
     dashboardName.textContent = displayName;
@@ -422,25 +424,43 @@ async function loadUser() {
     if (settingEmailInput) settingEmailInput.value = user.email;
 
     // Fetch boolean role flags from profiles table
-    const { data: profile, error: profileError } = await supabaseClient
+    let { data: profile, error: profileError } = await supabaseClient
         .from("profiles")
         .select("is_user, is_admin, is_developer, is_tester, full_name")
         .eq("id", user.id)
         .single();
 
-    // If profile doesn't exist yet, create it with full_name
-    if (profileError && profileError.code === 'PGRST116') {
-        const { error: insertError } = await supabaseClient
-            .from('profiles')
-            .insert({
-                id: user.id,
-                full_name: displayName,
-                is_user: true,
-                is_admin: false,
-                is_developer: false,
-                is_tester: false
-            });
-        if (insertError) console.error('Error creating profile:', insertError);
+    console.debug('loadUser: profiles fetch ->', { profile, profileError });
+
+    // If profile doesn't exist yet (or fetch errored), create it and refetch
+    if (!profile) {
+        try {
+            const { error: insertError } = await supabaseClient
+                .from('profiles')
+                .insert({
+                    id: user.id,
+                    full_name: displayName,
+                    is_user: true,
+                    is_admin: false,
+                    is_developer: false,
+                    is_tester: false
+                });
+            if (insertError) {
+                console.error('Error creating profile:', insertError);
+            } else {
+                // refetch after insert
+                const refetch = await supabaseClient
+                    .from('profiles')
+                    .select('is_user, is_admin, is_developer, is_tester, full_name')
+                    .eq('id', user.id)
+                    .single();
+                profile = refetch.data;
+                profileError = refetch.error;
+                console.debug('loadUser: profiles refetch ->', { profile, profileError });
+            }
+        } catch (e) {
+            console.error('Unexpected error creating/refetching profile:', e);
+        }
     } else if (profile && profile.full_name !== displayName) {
         // Sync full_name from auth.users to profiles if they differ
         const { error: syncError } = await supabaseClient
@@ -553,3 +573,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
     loadHTML('/tyxar_web/header.html', 'header');
     loadHTML('/tyxar_web/footer.html', 'footer');
 });
+
+
+
+ 
