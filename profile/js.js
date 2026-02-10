@@ -47,27 +47,16 @@ async function login() {
     const email = emailInput.value;
     const password = passwordInput.value;
 
-    try {
-        const result = await supabaseClient.auth.signInWithPassword({ email, password });
-        const { data, error } = result;
+    const { error } = await supabaseClient.auth.signInWithPassword({
+        email,
+        password
+    });
 
-        if (error) {
-            authStatus.textContent = error.message;
-            console.error('Sign-in error:', error);
-            return;
-        }
+    authStatus.textContent = error
+        ? error.message
+        : "Logged in.";
 
-        authStatus.textContent = 'Logged in.';
-        // Log session state for debugging persistence
-        const session = await supabaseClient.auth.getSession();
-        console.debug('Post-login session:', session);
-
-        // Load user details and UI
-        await loadUser();
-    } catch (err) {
-        console.error('Unexpected login error:', err);
-        authStatus.textContent = 'Login failed';
-    }
+    loadUser();
 }
 
 async function loginWithGitHub() {
@@ -160,16 +149,6 @@ async function loadAdminUserTable() {
         // Clear skeleton and render first page immediately
         adminTableBody.innerHTML = '';
         appendProfilesRows(firstPage);
-
-        // Debug: log how many rows returned for admin table
-        console.debug('Admin table: firstPage length =', firstPage?.length);
-
-        // If we only see a single row and that row is the current user,
-        // it's likely Row-Level Security is restricting the query to self.
-        if (firstPage.length === 1 && currentUserId && firstPage[0].id === currentUserId) {
-            // RLS likely limiting results; debug logged but no UI hint shown.
-            console.warn('Admin table appears to be limited to current user; check RLS policies.');
-        }
 
         // If we received a full page, load remaining pages in background
         if (firstPage.length === pageSize) {
@@ -409,8 +388,6 @@ async function loadUser() {
         return;
     }
 
-    console.debug('loadUser: auth.getUser ->', user && { id: user.id, email: user.email });
-
     // Populate dashboard
     const displayName = user.user_metadata?.full_name || user.user_metadata?.user_name || user.user_metadata?.name || 'User';
     dashboardName.textContent = displayName;
@@ -424,43 +401,25 @@ async function loadUser() {
     if (settingEmailInput) settingEmailInput.value = user.email;
 
     // Fetch boolean role flags from profiles table
-    let { data: profile, error: profileError } = await supabaseClient
+    const { data: profile, error: profileError } = await supabaseClient
         .from("profiles")
         .select("is_user, is_admin, is_developer, is_tester, full_name")
         .eq("id", user.id)
         .single();
 
-    console.debug('loadUser: profiles fetch ->', { profile, profileError });
-
-    // If profile doesn't exist yet (or fetch errored), create it and refetch
-    if (!profile) {
-        try {
-            const { error: insertError } = await supabaseClient
-                .from('profiles')
-                .insert({
-                    id: user.id,
-                    full_name: displayName,
-                    is_user: true,
-                    is_admin: false,
-                    is_developer: false,
-                    is_tester: false
-                });
-            if (insertError) {
-                console.error('Error creating profile:', insertError);
-            } else {
-                // refetch after insert
-                const refetch = await supabaseClient
-                    .from('profiles')
-                    .select('is_user, is_admin, is_developer, is_tester, full_name')
-                    .eq('id', user.id)
-                    .single();
-                profile = refetch.data;
-                profileError = refetch.error;
-                console.debug('loadUser: profiles refetch ->', { profile, profileError });
-            }
-        } catch (e) {
-            console.error('Unexpected error creating/refetching profile:', e);
-        }
+    // If profile doesn't exist yet, create it with full_name
+    if (profileError && profileError.code === 'PGRST116') {
+        const { error: insertError } = await supabaseClient
+            .from('profiles')
+            .insert({
+                id: user.id,
+                full_name: displayName,
+                is_user: true,
+                is_admin: false,
+                is_developer: false,
+                is_tester: false
+            });
+        if (insertError) console.error('Error creating profile:', insertError);
     } else if (profile && profile.full_name !== displayName) {
         // Sync full_name from auth.users to profiles if they differ
         const { error: syncError } = await supabaseClient
@@ -539,7 +498,6 @@ if (window.location.hash.includes('access_token')) {
 
 supabaseClient.auth.onAuthStateChange((event, session) => {
     if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
-        console.debug('Auth state change:', event, session);
         loadUser();
     } else if (event === 'SIGNED_OUT') {
         showAuth();
@@ -573,7 +531,3 @@ document.addEventListener('DOMContentLoaded', (event) => {
     loadHTML('/tyxar_web/header.html', 'header');
     loadHTML('/tyxar_web/footer.html', 'footer');
 });
-
-
-
- 
