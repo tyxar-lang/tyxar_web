@@ -47,16 +47,27 @@ async function login() {
     const email = emailInput.value;
     const password = passwordInput.value;
 
-    const { error } = await supabaseClient.auth.signInWithPassword({
-        email,
-        password
-    });
+    try {
+        const result = await supabaseClient.auth.signInWithPassword({ email, password });
+        const { data, error } = result;
 
-    authStatus.textContent = error
-        ? error.message
-        : "Logged in.";
+        if (error) {
+            authStatus.textContent = error.message;
+            console.error('Sign-in error:', error);
+            return;
+        }
 
-    loadUser();
+        authStatus.textContent = 'Logged in.';
+        // Log session state for debugging persistence
+        const session = await supabaseClient.auth.getSession();
+        console.debug('Post-login session:', session);
+
+        // Load user details and UI
+        await loadUser();
+    } catch (err) {
+        console.error('Unexpected login error:', err);
+        authStatus.textContent = 'Login failed';
+    }
 }
 
 async function loginWithGitHub() {
@@ -508,6 +519,7 @@ if (window.location.hash.includes('access_token')) {
 
 supabaseClient.auth.onAuthStateChange((event, session) => {
     if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
+        console.debug('Auth state change:', event, session);
         loadUser();
     } else if (event === 'SIGNED_OUT') {
         showAuth();
