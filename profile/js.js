@@ -447,6 +447,13 @@ async function loadUser() {
     // Expose roles to other scripts and allow the UI to react
     window.currentUserRoles = rolesArray;
     if (window.updateRoleUI) window.updateRoleUI(rolesArray);
+    // If the current user is an admin, proactively load admin data so
+    // the admin table and pending requests are populated without
+    // requiring the user to click Overview a second time.
+    if (rolesArray && rolesArray.indexOf('admin') !== -1) {
+        if (window.loadAdminUserTable) window.loadAdminUserTable();
+        if (window.loadAdminPendingRequests) window.loadAdminPendingRequests();
+    }
     dashboardCreated.textContent = new Date(user.created_at).toLocaleDateString('en-GB', { year: 'numeric', month: 'long', day: 'numeric' });
 
     // Show dashboard, hide auth
