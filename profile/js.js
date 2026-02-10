@@ -97,27 +97,12 @@ async function loadAdminUserTable() {
     const adminTableBody = document.getElementById('adminTableBody');
     if (!adminTableBody) return; // Not an admin, table doesn't exist
 
-    try {
-        // Fetch all user profiles with full_name (optimized select)
-        const { data: profiles, error } = await supabaseClient
-            .from('profiles')
-            .select('id, full_name, is_admin, is_developer, is_tester, is_user', { count: 'exact' })
-            .order('created_at', { ascending: false })
-            .limit(1000); // Limit to 1000 users for performance
+    const pageSize = 50; // quick initial page for perceived speed
 
-        if (error) {
-            console.error('Error fetching users:', error);
-            adminTableBody.innerHTML = '<tr><td colspan="5" style="padding: 12px; text-align: center; color: #e53e3e;">Error loading users. Please try again.</td></tr>';
-            return;
-        }
-
-        if (!profiles || profiles.length === 0) {
-            adminTableBody.innerHTML = '<tr><td colspan="5" style="padding: 12px; text-align: center; color: #718096;">No users found</td></tr>';
-            return;
-        }
-
-        // Build table rows immediately (no unnecessary mapping)
-        adminTableBody.innerHTML = profiles.map(profile => `
+    // Helper to render rows and append
+    function appendProfilesRows(profiles) {
+        if (!profiles || profiles.length === 0) return;
+        const rows = profiles.map(profile => `
             <tr style="border-bottom: 1px solid #cbd5e0;">
                 <td style="padding: 12px; color: #2d3748; font-weight: 500;">${profile.full_name || 'Unknown'}</td>
                 <td style="padding: 12px; text-align: center;">
@@ -134,6 +119,76 @@ async function loadAdminUserTable() {
                 </td>
             </tr>
         `).join('');
+        adminTableBody.insertAdjacentHTML('beforeend', rows);
+    }
+
+    try {
+        // Show skeleton is already present in HTML; fetch only first page quickly
+        const start = 0;
+        const end = pageSize - 1;
+        const { data: firstPage, error: firstErr } = await supabaseClient
+            .from('profiles')
+            .select('id, full_name, is_admin, is_developer, is_tester, is_user')
+            .order('created_at', { ascending: false })
+            .range(start, end);
+
+        if (firstErr) {
+            console.error('Error fetching first page:', firstErr);
+            adminTableBody.innerHTML = '<tr><td colspan="5" style="padding: 12px; text-align: center; color: #e53e3e;">Error loading users. Please try again.</td></tr>';
+            return;
+        }
+
+        if (!firstPage || firstPage.length === 0) {
+            adminTableBody.innerHTML = '<tr><td colspan="5" style="padding: 12px; text-align: center; color: #718096;">No users found</td></tr>';
+            return;
+        }
+
+        // Clear skeleton and render first page immediately
+        adminTableBody.innerHTML = '';
+        appendProfilesRows(firstPage);
+
+        // If we received a full page, load remaining pages in background
+        if (firstPage.length === pageSize) {
+            // show loading-more row
+            const loadingRowId = 'admin-loading-more';
+            adminTableBody.insertAdjacentHTML('beforeend', `<tr id="${loadingRowId}"><td colspan="5" style="padding:12px; text-align:center; color:#718096;">Loading more users...</td></tr>`);
+
+            // Fetch subsequent pages asynchronously without blocking UI
+            (async () => {
+                let offset = pageSize;
+                while (true) {
+                    const { data: page, error: pgErr } = await supabaseClient
+                        .from('profiles')
+                        .select('id, full_name, is_admin, is_developer, is_tester, is_user')
+                        .order('created_at', { ascending: false })
+                        .range(offset, offset + pageSize - 1);
+
+                    if (pgErr) {
+                        console.error('Error fetching page:', pgErr);
+                        break;
+                    }
+
+                    if (!page || page.length === 0) break;
+
+                    // remove loading-more placeholder before appending
+                    const loadingEl = document.getElementById(loadingRowId);
+                    if (loadingEl) loadingEl.remove();
+
+                    appendProfilesRows(page);
+
+                    // add loading placeholder again if likely more
+                    adminTableBody.insertAdjacentHTML('beforeend', `<tr id="${loadingRowId}"><td colspan="5" style="padding:12px; text-align:center; color:#718096;">Loading more users...</td></tr>`);
+
+                    offset += pageSize;
+                    // small delay to avoid hammering DB
+                    await new Promise(r => setTimeout(r, 150));
+                }
+
+                // cleanup loading row
+                const loadingEl = document.getElementById('admin-loading-more');
+                if (loadingEl) loadingEl.remove();
+            })();
+        }
 
     } catch (err) {
         console.error('Error in loadAdminUserTable:', err);
