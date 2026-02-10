@@ -156,7 +156,7 @@ async function loadAdminUserTable() {
         // If we only see a single row and that row is the current user,
         // it's likely Row-Level Security is restricting the query to self.
         if (firstPage.length === 1 && currentUserId && firstPage[0].id === currentUserId) {
-            adminTableBody.insertAdjacentHTML('afterbegin', `<tr><td colspan="5" style="padding:12px; text-align:center; color:#b7791f; font-size:0.95rem;">Only your profile is visible — if you expect to see all users, ensure Supabase RLS policies allow admins to read all profiles.</td></tr>`);
+            // RLS likely limiting results; debug logged but no UI hint shown.
             console.warn('Admin table appears to be limited to current user; check RLS policies.');
         }
 
