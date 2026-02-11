@@ -231,7 +231,7 @@ async function loadAdminPendingRequests() {
     if (!pendingRequestsBody) return; // Not an admin
 
     try {
-        // Fetch all pending role requests (optimized)
+        // Fetch only PENDING role requests (approved/rejected won't show)
         const { data: requests, error } = await supabaseClient
             .from('role_requests')
             .select('id, user_id, requested_role, created_at, status')
@@ -260,14 +260,17 @@ async function loadAdminPendingRequests() {
             return { ...req, userName: profile?.full_name || 'Unknown' };
         }));
 
-        // Build request cards immediately
+        // Build request cards with Approve and Reject buttons
         pendingRequestsBody.innerHTML = requestsWithNames.map(req => `
             <div style="border: 2px solid #f6ad55; border-radius: 8px; padding: 16px; background: #fffaf0; display: flex; justify-content: space-between; align-items: center;">
                 <div>
                     <div style="font-weight: 700; color: #2d3748; margin-bottom: 4px;">${req.userName}</div>
                     <div style="font-size: 0.9rem; color: #718096;">Requested <strong>${req.requested_role.charAt(0).toUpperCase() + req.requested_role.slice(1)}</strong> on ${new Date(req.created_at).toLocaleDateString('en-GB')}</div>
                 </div>
-                <button id="approveBtn-${req.id}" onclick="approveRoleRequest('${req.id}', '${req.user_id}', '${req.requested_role}', this)" style="padding: 8px 16px; background: #38a169; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 0.9rem; white-space: nowrap; margin-left: 12px; transition: all 0.2s ease;" onmouseover="this.style.background='#2f855a'" onmouseout="this.style.background='#38a169'">✓ Approve</button>
+                <div style="display: flex; gap: 8px; margin-left: 12px;">
+                    <button id="approveBtn-${req.id}" onclick="approveRoleRequest('${req.id}', '${req.user_id}', '${req.requested_role}', this)" style="padding: 8px 16px; background: #38a169; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 0.9rem; white-space: nowrap; transition: all 0.2s ease;" onmouseover="this.style.background='#2f855a'" onmouseout="this.style.background='#38a169'">✓ Approve</button>
+                    <button id="rejectBtn-${req.id}" onclick="rejectRoleRequest('${req.id}', this)" style="padding: 8px 16px; background: #e53e3e; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 0.9rem; white-space: nowrap; transition: all 0.2s ease;" onmouseover="this.style.background='#c53030'" onmouseout="this.style.background='#e53e3e'">✗ Reject</button>
+                </div>
             </div>
         `).join('');
 
@@ -291,24 +294,24 @@ async function approveRoleRequest(requestId, userId, roleName, buttonEl) {
             return;
         }
 
-        // Mark the request as approved or delete it
-        const { error: deleteError } = await supabaseClient
+        // Mark the request as 'approved' (keep in DB for audit, just update status)
+        const { error: statusError } = await supabaseClient
             .from('role_requests')
-            .delete()
+            .update({ status: 'approved' })
             .eq('id', requestId);
 
-        if (deleteError) {
-            console.error('Error deleting request:', deleteError);
+        if (statusError) {
+            console.error('Error updating request status:', statusError);
         }
 
-        // Make button inactive
+        // Make button inactive and update text
         buttonEl.disabled = true;
         buttonEl.style.background = '#cbd5e0';
         buttonEl.style.cursor = 'not-allowed';
         buttonEl.textContent = '✓ Approved';
         buttonEl.style.opacity = '0.6';
 
-        // Reload tables to reflect changes
+        // Reload to remove from pending list
         setTimeout(() => {
             loadAdminUserTable();
             loadAdminPendingRequests();
@@ -317,6 +320,37 @@ async function approveRoleRequest(requestId, userId, roleName, buttonEl) {
     } catch (err) {
         console.error('Error approving request:', err);
         alert('Error approving request');
+    }
+}
+
+async function rejectRoleRequest(requestId, buttonEl) {
+    try {
+        // Mark the request as 'rejected' (keep in DB for audit, just update status)
+        const { error: statusError } = await supabaseClient
+            .from('role_requests')
+            .update({ status: 'rejected' })
+            .eq('id', requestId);
+
+        if (statusError) {
+            alert(`Error rejecting request: ${statusError.message}`);
+            return;
+        }
+
+        // Make button inactive and update text
+        buttonEl.disabled = true;
+        buttonEl.style.background = '#cbd5e0';
+        buttonEl.style.cursor = 'not-allowed';
+        buttonEl.textContent = '✗ Rejected';
+        buttonEl.style.opacity = '0.6';
+
+        // Reload to remove from pending list
+        setTimeout(() => {
+            loadAdminPendingRequests();
+        }, 500);
+
+    } catch (err) {
+        console.error('Error rejecting request:', err);
+        alert('Error rejecting request');
     }
 }
 
