@@ -497,22 +497,28 @@ async function loadUser() {
     authBox.classList.add("hidden");
     dashboard.classList.remove("hidden");
 
-    // Load actual header and footer into the dashboard (use site's header/footer)
+    // Load actual header and footer into the dashboard (if elements exist)
     try {
-        const headerResp = await fetch('/tyxar_web/header.html');
-        if (headerResp.ok) {
-            const headerHtml = await headerResp.text();
-            document.getElementById('siteHeader').innerHTML = headerHtml;
+        const headerEl = document.getElementById('siteHeader');
+        if (headerEl) {
+            const headerResp = await fetch('/tyxar_web/header.html');
+            if (headerResp.ok) {
+                const headerHtml = await headerResp.text();
+                headerEl.innerHTML = headerHtml;
+            }
         }
     } catch (e) {
         console.warn('Could not load header:', e);
     }
 
     try {
-        const footerResp = await fetch('/tyxar_web/footer.html');
-        if (footerResp.ok) {
-            const footerHtml = await footerResp.text();
-            document.getElementById('siteFooter').innerHTML = footerHtml;
+        const footerEl = document.getElementById('siteFooter');
+        if (footerEl) {
+            const footerResp = await fetch('/tyxar_web/footer.html');
+            if (footerResp.ok) {
+                const footerHtml = await footerResp.text();
+                footerEl.innerHTML = footerHtml;
+            }
         }
     } catch (e) {
         console.warn('Could not load footer:', e);
