@@ -401,14 +401,46 @@ async function loadUser() {
     if (settingEmailInput) settingEmailInput.value = user.email;
 
     // Fetch boolean role flags from profiles table
-    const { data: profile, error: profileError } = await supabaseClient
+    let { data: profile, error: profileError } = await supabaseClient
         .from("profiles")
         .select("is_user, is_admin, is_developer, is_tester, full_name")
         .eq("id", user.id)
         .single();
 
+    console.debug('[loadUser] profileError:', profileError, 'profile:', profile);
+    if (profile) {
+        console.debug('[loadUser] profile bools:', { is_user: profile.is_user, is_admin: profile.is_admin, is_developer: profile.is_developer, is_tester: profile.is_tester });
+    }
+
     // If profile doesn't exist yet, create it with full_name
-    if (profileError && profileError.code === 'PGRST116') {
+    if (!profile) {
+        console.debug('[loadUser] Profile missing, attempting to create...');
+        const { error: insertError } = await supabaseClient
+            .from('profiles')
+            .insert({
+                id: user.id,
+                full_name: displayName,
+                is_user: true,
+                is_admin: false,
+                is_developer: false,
+                is_tester: false
+            });
+        if (insertError) {
+            console.error('[loadUser] Error creating profile:', insertError);
+        } else {
+            // Refetch after insert
+            const { data: refetchProfile, error: refetchError } = await supabaseClient
+                .from("profiles")
+                .select("is_user, is_admin, is_developer, is_tester, full_name")
+                .eq("id", user.id)
+                .single();
+            console.debug('[loadUser] Profile refetch after insert:', { refetchProfile, refetchError });
+            if (refetchProfile) {
+                profile = refetchProfile;
+                profileError = null;
+            }
+        }
+    } else if (profileError && profileError.code === 'PGRST116') {
         const { error: insertError } = await supabaseClient
             .from('profiles')
             .insert({
@@ -435,6 +467,8 @@ async function loadUser() {
     if (profile?.is_admin) rolesArray.push('admin');
     if (profile?.is_developer) rolesArray.push('developer');
     if (profile?.is_tester) rolesArray.push('tester');
+
+    console.debug('[loadUser] rolesArray:', rolesArray);
 
     // Create a human-friendly display string (Title Case) while keeping the
     // canonical lowercase array available for logic/UI toggles.
