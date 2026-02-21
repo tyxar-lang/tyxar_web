@@ -310,6 +310,39 @@
             });
         }
     </script>
+    <script>
+        // Function to load external HTML content
+        function loadHTML(url, elementId) {
+            fetch(url)
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById(elementId).innerHTML = data;
+
+                    // --- CRITICAL STEP ---
+                    // Re-run initialization to catch the *new* links in the footer 
+                    // AND the sidebar links (since they use the global selector now)
+                    initializeContentLoader();
+
+                    // Initialize header search if header was loaded
+                    if (elementId === 'header' && window.initializeHeaderSearch) {
+                        setTimeout(() => window.initializeHeaderSearch(), 100);
+                    }
+                })
+                .catch(err => console.error(`Error loading ${url}:`, err));
+        }
+
+        // Call these functions when the main page loads:
+        document.addEventListener('DOMContentLoaded', (event) => {
+            // Load Header, Footer, and Sidebar
+            loadHTML('header.html', 'header');
+            loadHTML('footer.html', 'footer');
+
+            // If sidebar is only used in the 'doc' index.html, call it conditionally:
+            if (document.getElementById('sidebar')) {
+                loadHTML('docs/sidebar.html ', 'sidebar');
+            }
+        });
+    </script>
 </body>
 
 </html>
