@@ -161,14 +161,16 @@
             }
 
             .updates-filter {
-                flex-wrap: wrap;
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 10px;
+                overflow-x: visible;
             }
 
             .filter-btn {
-                flex: 1 1 auto;
-                min-width: 80px;
                 font-size: 0.85em;
-                padding: 6px 12px;
+                padding: 8px 12px;
+                text-align: center;
             }
 
             .update-header {
@@ -208,6 +210,7 @@
                 <button class="filter-btn" onclick="filterUpdates('release')">Releases</button>
                 <button class="filter-btn" onclick="filterUpdates('feature')">Features</button>
                 <button class="filter-btn" onclick="filterUpdates('bug')">Bug Fixes</button>
+                <button class="filter-btn" onclick="filterUpdates('security')">Security</button>
             </div>
 
             <!-- Updates -->
