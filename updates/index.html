@@ -37,11 +37,12 @@
 
         .updates-filter {
             display: flex;
+            flex-direction: row;
             gap: 10px;
             margin-bottom: 40px;
-            flex-wrap: nowrap;
+            flex-wrap:nowrap;
             justify-content: center;
-            overflow-x: auto;
+            overflow-x:auto;
         }
 
         .filter-btn {
@@ -157,6 +158,17 @@
         @media (max-width: 768px) {
             .updates-hero h1 {
                 font-size: 2em;
+            }
+
+            .updates-filter {
+                flex-wrap: wrap;
+            }
+
+            .filter-btn {
+                flex: 1 1 auto;
+                min-width: 80px;
+                font-size: 0.85em;
+                padding: 6px 12px;
             }
 
             .update-header {
