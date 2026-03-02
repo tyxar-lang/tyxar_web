@@ -7,6 +7,45 @@
     <link rel="shortcut icon" href="/tyxar_web/images/tyxar.ico" type="image/x-icon" >
     <title>Tyxar Programming Language</title>
     <link rel="stylesheet" href="/tyxar_web/styles.css">
+    <style>
+        /* Styles for latest update preview on homepage */
+        .latest-update .update-card {
+            background: white;
+            border-left: 5px solid var(--accent-blue);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        .latest-update .update-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .latest-update .update-title {
+            font-size: 1.25em;
+            font-weight: 700;
+            margin: 0;
+        }
+        .latest-update .update-tag {
+            padding: 3px 10px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            color: white;
+        }
+        .latest-update .update-tag.announcement { background: #ed8936; }
+        .latest-update .update-tag.feature { background: #48bb78; }
+        .latest-update .update-tag.bug { background: #f56565; }
+        .latest-update .update-tag.release { background: var(--accent-blue); }
+        .latest-update .update-snippet {
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+        .latest-update .btn {
+            margin-top: 10px;
+        }
+    </style>
 </head>
 
 <body>
@@ -109,6 +148,16 @@ if the age > 18, then
             </div>
         </section>
 
+        <!-- Latest Update Preview -->
+        <section class="latest-update">
+            <div class="container">
+                <h2>Latest Update</h2>
+                <div id="update-preview">
+                    <!-- JavaScript will inject the first update card preview here -->
+                </div>
+            </div>
+        </section>
+
         <!-- Use Cases -->
         <!--<section class="use-cases">
             <div class="container">
@@ -184,6 +233,43 @@ if the age > 18, then
                 if (document.getElementById('sidebar')) {
                     loadHTML('docs/sidebar.html ', 'sidebar');
                 }
+            });
+
+            // fetch the latest update from the updates page and inject a preview
+            function loadLatestUpdate() {
+                fetch('/tyxar_web/updates/index.html')
+                    .then(response => response.text())
+                    .then(html => {
+                        const parser = new DOMParser();
+                        const doc = parser.parseFromString(html, 'text/html');
+                        const card = doc.querySelector('.update-card');
+                        if (!card) return;
+
+                        const title = card.querySelector('.update-title')?.innerText || '';
+                        const category = card.dataset.category || '';
+                        const content = card.querySelector('.update-content')?.innerText || '';
+                        const snippet = content.trim().split('\n').map(s=>s.trim()).filter(Boolean).slice(0,3).join(' ');
+                        const prettyCat = category.charAt(0).toUpperCase() + category.slice(1);
+
+                        const container = document.getElementById('update-preview');
+                        if (!container) return;
+
+                        container.innerHTML = `
+                            <div class="update-card">
+                                <div class="update-header">
+                                    <h3 class="update-title">${title}</h3>
+                                    <span class="update-tag ${category}">${prettyCat}</span>
+                                </div>
+                                <p class="update-snippet">${snippet.substring(0,200)}${snippet.length>200? '...':''}</p>
+                                <a href="/tyxar_web/updates" class="btn btn-secondary">Read more</a>
+                            </div>
+                        `;
+                    })
+                    .catch(err => console.error('Error loading latest update:', err));
+            }
+
+            document.addEventListener('DOMContentLoaded', () => {
+                loadLatestUpdate();
             });
     </script>
 </body>
