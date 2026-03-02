@@ -41,6 +41,8 @@
         .latest-update .update-snippet {
             color: var(--text-dark);
             line-height: 1.6;
+            font-size: 0.9em;
+            text-align: left;
         }
         .latest-update .btn {
             margin-top: 10px;
@@ -253,7 +255,20 @@ if the age > 18, then
                         const title = card.querySelector('.update-title')?.innerText || '';
                         const category = card.dataset.category || '';
                         const content = card.querySelector('.update-content')?.innerText || '';
-                        const snippet = content.trim().split('\n').map(s=>s.trim()).filter(Boolean).slice(0,3).join(' ');
+                        // grab first sentence or first 20 words whichever is shorter
+                        let snippet = '';
+                        const sentences = content.split(/[\.\!\?]/).map(s=>s.trim()).filter(Boolean);
+                        if (sentences.length) {
+                            snippet = sentences[0];
+                        } else {
+                            snippet = content;
+                        }
+                        const words = snippet.split(/\s+/);
+                        if (words.length > 20) {
+                            snippet = words.slice(0,20).join(' ') + '...';
+                        } else if (sentences.length > 1) {
+                            snippet += '...';
+                        }
                         const prettyCat = category.charAt(0).toUpperCase() + category.slice(1);
 
                         const container = document.getElementById('update-preview');
