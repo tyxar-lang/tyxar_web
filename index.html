@@ -48,6 +48,12 @@
         .latest-update .btn {
             margin-top: 10px;
         }
+        .latest-update .update-readmore {
+            font-size: 0.85em;
+            color: var(--accent-blue);
+            text-decoration: none;
+            margin-left: 5px;
+        }
     </style>
 </head>
 
@@ -256,18 +262,11 @@ if the age > 18, then
                         const title = card.querySelector('.update-title')?.innerText || '';
                         const category = card.dataset.category || '';
                         const content = card.querySelector('.update-content')?.innerText || '';
-                        // grab first sentence or first 20 words whichever is shorter
-                        let snippet = '';
-                        const sentences = content.split(/[\.\!\?]/).map(s=>s.trim()).filter(Boolean);
-                        if (sentences.length) {
-                            snippet = sentences[0];
-                        } else {
-                            snippet = content;
-                        }
-                        const words = snippet.split(/\s+/);
-                        if (words.length > 20) {
-                            snippet = words.slice(0,20).join(' ') + '...';
-                        } else if (sentences.length > 1) {
+                        // take roughly half of the main body, capped at 50 words
+                        let body = content.trim();
+                        const words = body.split(/\s+/).filter(w=>w.length);
+                        let snippet = words.slice(0, Math.min(50, Math.ceil(words.length/2))).join(' ');
+                        if (words.length > snippet.split(/\s+/).length) {
                             snippet += '...';
                         }
                         const prettyCat = category.charAt(0).toUpperCase() + category.slice(1);
@@ -281,8 +280,7 @@ if the age > 18, then
                                     <h3 class="update-title">${title}</h3>
                                     <span class="update-tag ${category}">${prettyCat}</span>
                                 </div>
-                                <p class="update-snippet">${snippet.substring(0,200)}${snippet.length>200? '...':''}</p>
-                                <a href="/tyxar_web/updates" class="btn btn-secondary">Read more</a>
+                                <p class="update-snippet">${snippet} <a href="/tyxar_web/updates" class="update-readmore">read more →</a></p>
                             </div>
                         `;
                     })
