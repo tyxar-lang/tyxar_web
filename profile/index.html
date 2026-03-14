@@ -173,6 +173,10 @@
                 padding: 16px;
                 border-radius: 0;
             }
+
+            .dashboard-main-content {
+                max-width: 100%;
+            }
         }
 
         /* Small phone (max-width: 480px) */
@@ -221,6 +225,10 @@
                 padding: 12px;
                 border-radius: 0;
             }
+
+            .dashboard-main-content {
+                max-width: 100%;
+            }
         }
 
         /* Dashboard Layout Styles */
@@ -233,12 +241,15 @@
             width: 100%;
             padding: 0;
             margin: 0;
+            display: flex;
+            justify-content: center;
         }
 
         .dashboard-content {
-            max-width: 100%;
+            max-width: 1200px;
             margin: 0;
             padding: 0;
+            width: 100%;
         }
 
         .content-wrapper {
@@ -296,7 +307,7 @@
         .content-card {
             background: white;
             border-radius: 0;
-            padding: 24px;
+            padding: 24px 48px;
             margin-bottom: 0;
             box-shadow: none;
             border-bottom: 1px solid #e2e8f0;
@@ -642,7 +653,7 @@
                                         </div>
 
                                         <!-- Pending Requests -->
-                                        <div style="background: #edf2f7; border-left: 4px solid #4299e1; border-radius: 8px; padding: 16px; margin-top: 24px;">
+                                        <div style="background: #edf2f7; border-left: 0; border-radius: 0; padding: 16px; margin-top: 0;">
                                             <div style="font-weight: 700; color: #2d3748; margin-bottom: 8px;">📋 Pending Requests</div>
                                             <div id="pendingRequests" style="color: #718096; font-size: 0.9rem;">
                                                 No pending role requests at this time.
