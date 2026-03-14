@@ -24,13 +24,13 @@
             background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
             border-radius: 0;
             overflow: visible;
-            margin: 0 !important;
+            margin: 0;
             box-shadow: 0 10px 30px -10px rgba(0,0,0,0.4);
-            width: 100vw !important;
+            width: 100vw;
             left: 50%;
             right: 50%;
-            margin-left: -50vw !important;
-            margin-right: -50vw !important;
+            margin-left: -50vw;
+            margin-right: -50vw;
         }
 
         #topBanner > div:first-of-type {
@@ -262,11 +262,7 @@
             max-width: none !important;
             padding: 0 !important;
             margin: 0 !important;
-            width: 100vw !important;
-            margin-left: calc(-50vw + 50%) !important;
-            position: relative !important;
-            left: 50% !important;
-            right: 50% !important;
+            width: 100%;
         }
 
         .content-wrapper {
@@ -328,16 +324,11 @@
             background: white;
             border-radius: 0;
             padding: 24px 32px;
-            margin: 0 !important;
+            margin: 0;
             box-shadow: none;
             border-bottom: 1px solid #e2e8f0;
-            width: 100vw !important;
+            width: 100%;
             box-sizing: border-box;
-            position: relative !important;
-            left: 50%;
-            right: 50%;
-            margin-left: -50vw !important;
-            margin-right: -50vw !important;
         }
 
         .content-card h2 {
@@ -472,11 +463,11 @@
     </div>
 
     <!-- DASHBOARD (Full Page) -->
-    <div id="dashboard" class="hidden" style="width: 100vw; margin-left: -50vw; right: 50%; left: 50%;">
+    <div id="dashboard" class="hidden">
         <!-- Actual site header will be injected here on login -->
         <div id="header"></div>
-        <div class="profile-events" style="width: 100vw; margin-left: -50vw; right: 50%; left: 50%; overflow-x: hidden;">
-            <div id="content" class="content" style="width: 100%; margin: 0; padding: 0;">
+        <div class="profile-events">
+            <div id="content" class="content">
                 <div class="content-wrapper">
                     <div id="topBanner">
                         <div></div>
