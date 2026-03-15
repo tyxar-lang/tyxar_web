@@ -63,7 +63,7 @@ async function loginWithGitHub() {
     const { error } = await supabaseClient.auth.signInWithOAuth({
         provider: 'github',
         options: {
-            redirectTo: 'https://tyxar-lang.github.io/tyxar_web/auth/callback.html'
+            redirectTo: 'https://tyxar-lang.github.io/tyxar_web/profile/callback.html'
         }
     });
 
@@ -76,7 +76,7 @@ async function loginWithGoogle() {
     const { error } = await supabaseClient.auth.signInWithOAuth({
         provider: 'google',
         options: {
-            redirectTo: 'https://tyxar-lang.github.io/tyxar_web/auth/callback.html'
+            redirectTo: 'https://tyxar-lang.github.io/tyxar_web/profile/callback.html'
         }
     });
 
