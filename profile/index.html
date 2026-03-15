@@ -1,193 +1,21 @@
 <!DOCTYPE html>
-<html lang="en"
->
-
-    <div class="box">
-        <!-- LOGIN / SIGNUP DIALOGUE ONLY -->
-        <div id="auth">
-            <div class="logo">
-                <style>
-                    * {
-                        font-family: 'Times New Roman', Times, serif;
-                    }
-                    body {
-                        background: #f7fafc;
-                        margin: 0;
-                        min-height: 100vh;
-                    }
-                    .box {
-                        max-width: 400px;
-                        margin: 60px auto;
-                        background: #fff;
-                        border-radius: 12px;
-                        box-shadow: 0 4px 24px rgba(30, 58, 138, 0.08);
-                        padding: 32px 28px 28px 28px;
-                        display: flex;
-                        flex-direction: column;
-                        align-items: center;
-                    }
-                    .logo img {
-                        width: 64px;
-                        height: 64px;
-                        margin-bottom: 18px;
-                    }
-                    #loginForm, #signupForm {
-                        width: 100%;
-                        display: flex;
-                        flex-direction: column;
-                        gap: 12px;
-                    }
-                    #loginForm h2, #signupForm h2 {
-                        margin: 0 0 12px 0;
-                        text-align: center;
-                        color: #1e3a8a;
-                    }
-                    input[type="email"], input[type="password"], input[type="text"] {
-                        padding: 10px;
-                        border: 1px solid #cbd5e0;
-                        border-radius: 6px;
-                        font-size: 1rem;
-                        box-sizing: border-box;
-                    }
-                    button {
-                        padding: 10px 0;
-                        background: #3b82f6;
-                        color: white;
-                        border: none;
-                        border-radius: 6px;
-                        font-weight: 600;
-                        font-size: 1rem;
-                        cursor: pointer;
-                        transition: background 0.2s;
-                    }
-                    button:hover {
-                        background: #1e3a8a;
-                    }
-                    .auth-toggle {
-                        text-align: center;
-                        margin-top: 8px;
-                    }
-                    .auth-toggle a {
-                        color: #607DF0;
-                        text-decoration: none;
-                        font-size: 0.95rem;
-                    }
-                    .status {
-                        margin-top: 10px;
-                        color: #e53e3e;
-                        text-align: center;
-                        min-height: 20px;
-                    }
-                    @media (max-width: 500px) {
-                        .box {
-                            max-width: 98vw;
-                            padding: 18px 4vw 18px 4vw;
-                        }
-                    }
-                </style>
-                    if (quitBtn) quitBtn.classList.remove('hidden');
-                } else {
-                    if (requestBtn) requestBtn.classList.remove('hidden');
-                    if (quitBtn) quitBtn.classList.add('hidden');
-                }
-            });
-
-            const currentRoleEl = document.getElementById('currentRole');
-            const displayRoles = (rolesArray && rolesArray.length)
-                ? rolesArray.map(r => String(r).charAt(0).toUpperCase() + String(r).slice(1)).join(', ')
-                : '';
-            if (currentRoleEl) currentRoleEl.textContent = displayRoles;
-            const dashboardRoleEl = document.getElementById('dashboardRole');
-            if (dashboardRoleEl) dashboardRoleEl.textContent = displayRoles;
-
-            // Show/hide overview sections based on roles
-            updateOverviewSections(rolesArray || []);
-        }
-
-        // Show/hide overview sections based on user's roles
-        function updateOverviewSections(rolesArray) {
-            const roles = new Set((rolesArray || []).map(r => String(r).toLowerCase()));
-
-            // Hide all role sections first
-            document.getElementById('overview-admin')?.classList.add('hidden');
-            document.getElementById('overview-developer')?.classList.add('hidden');
-            document.getElementById('overview-tester')?.classList.add('hidden');
-            document.getElementById('overview-user')?.classList.add('hidden');
-
-            // Show sections based on roles
-            if (roles.has('admin')) {
-                document.getElementById('overview-admin')?.classList.remove('hidden');
-            }
-            if (roles.has('developer')) {
-                document.getElementById('overview-developer')?.classList.remove('hidden');
-            }
-            if (roles.has('tester')) {
-                document.getElementById('overview-tester')?.classList.remove('hidden');
-            }
-
-            // User section shows only when user has no other roles
-            if (!roles.has('admin') && !roles.has('developer') && !roles.has('tester')) {
-                document.getElementById('overview-user')?.classList.remove('hidden');
-            }
-        }
-
-        // Load pending requests when role section is viewed
-        const originalShowDashboardSection = showDashboardSection;
-        window.showDashboardSection = function(sectionId) {
-            originalShowDashboardSection(sectionId);
-            if (sectionId === 'roles') {
-                <div class="box">
-                    <div id="auth">
-                        <div class="logo">
-                            <img src="/tyxar_web/images/tyxar.png" alt="Tyxar Logo">
-                        </div>
-                        <div id="loginForm">
-                            <h2>Tyxar Account</h2>
-                            <input id="email" type="email" placeholder="Email" />
-                            <input id="password" type="password" placeholder="Password" />
-                            <button onclick="login()">Log in</button>
-                            <button onclick="loginWithGitHub()" style="background: #5e5f60; margin-top: 0.5rem;">
-                                <img src="/tyxar_web/images/github-icon.png" alt="Github Icon" style="vertical-align: middle; width: 18px; height: 18px; margin-right: 6px;">Login with GitHub
-                            </button>
-                            <button onclick="loginWithGoogle()" style="background: #4f85dd; color: white; margin-top: 0.5rem;">
-                                <img src="/tyxar_web/images/google-icon.png" alt="Google Icon" style="vertical-align: middle; width: 18px; height: 18px; margin-right: 6px;">Login with Google
-                            </button>
-                            <div class="auth-toggle">
-                                <a href="#" onclick="showSignup()">Don't have an account? Sign up</a>
-                            </div>
-                        </div>
-                        <div id="signupForm" class="hidden">
-                            <h2>Create Account</h2>
-                            <input id="signupName" type="text" placeholder="Full Name" />
-                            <input id="signupEmail" type="email" placeholder="Email" />
-                            <input id="signupPassword" type="password" placeholder="Password" />
-                            <button onclick="signup()">Sign up</button>
-                            <div class="auth-toggle">
-                                <a href="#" onclick="showLogin()">Already have an account? Log in</a>
-                            </div>
-                        </div>
-                        <div class="status" id="authStatus"></div>
-                    </div>
-                </div>
-                <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-                <script src="config.js"></script>
-                <script src="/tyxar_web/profile/js.js"></script>
-                <script>
-                // After login, redirect to dashboard
-                async function login() {
-                    const email = document.getElementById('email').value;
-                    const password = document.getElementById('password').value;
-                    const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
-                    if (error) {
-                        document.getElementById('authStatus').textContent = error.message;
-                        return;
-                    }
-                    window.location.href = '/tyxar_web/profile/dashboard/';
-                }
-                document.addEventListener('DOMContentLoaded', async () => {
-                    const { data } = await supabaseClient.auth.getUser();
-                    if (data && data.user) {
-                        window.location.href = '/tyxar_web/profile/dashboard/';
-                    }
-                });
-                </script>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="/tyxar_web/images/tyxar.ico" type="image/x-icon">
+    <title>Profile - Tyxar Programming Language</title>
+    <link rel="stylesheet" href="/tyxar_web/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="/tyxar_web/profile/config.js"></script>
+    <script src="/tyxar_web/profile/js.js"></script>
+    <style>
+        /* Place profile-specific styles here or import from styles.css */
+    </style>
+</head>
+<body>
+    <div id="dialogue" class="dialogue">
+        
+    </div>
+</body>
+</html>
