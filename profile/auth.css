@@ -2,13 +2,14 @@
 .auth-logo {
     display: block;
     margin: 0 auto 0.7rem auto;
-    width: 54px;
-    height: 54px;
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(30,40,60,0.10);
+        width: 32px;
+        height: 32px;
+        border-radius: 8px;
+        box-shadow: 0 1px 4px rgba(30, 40, 60, 0.08);
     object-fit: contain;
     background: #f7f9fb;
 }
+
 /* Tyxar Auth Page Styles */
 body {
     background: linear-gradient(135deg, #1a2233 0%, #2d3a4d 100%);
@@ -17,28 +18,39 @@ body {
     font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
     color: #222;
 }
+
 .auth-container {
     min-height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
 }
+
 .auth-dialog {
     background: #fff;
     border-radius: 16px;
-    box-shadow: 0 8px 32px rgba(30,40,60,0.18);
+    box-shadow: 0 8px 32px rgba(30, 40, 60, 0.18);
     padding: 1.5rem 2.2rem 1.2rem 2.2rem;
     width: 100%;
     max-width: 440px;
     display: flex;
     flex-direction: column;
     gap: 0.7rem;
-    animation: fadeIn 0.7s cubic-bezier(.4,0,.2,1);
+    animation: fadeIn 0.7s cubic-bezier(.4, 0, .2, 1);
 }
+
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(30px); }
-    to { opacity: 1; transform: none; }
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: none;
+    }
 }
+
 .auth-dialog h2 {
     margin: 0 0 0.3rem 0;
     font-size: 1.45rem;
@@ -46,17 +58,20 @@ body {
     color: #1a2233;
     letter-spacing: 0.01em;
 }
+
 .auth-dialog form {
     display: flex;
     flex-direction: column;
     gap: 0.45rem;
 }
+
 .auth-dialog label {
     font-size: 0.98rem;
     color: #2d3a4d;
     margin-bottom: 0.1rem;
     font-weight: 500;
 }
+
 .auth-dialog input[type="email"],
 .auth-dialog input[type="password"],
 .auth-dialog input[type="text"] {
@@ -67,11 +82,13 @@ body {
     background: #f7f9fb;
     transition: border 0.2s;
 }
+
 .auth-dialog input:focus {
     border-color: #3a7afe;
     outline: none;
     background: #fff;
 }
+
 .primary-btn {
     background: linear-gradient(90deg, #3a7afe 0%, #1a8cff 100%);
     color: #fff;
@@ -82,13 +99,15 @@ body {
     font-weight: 600;
     margin-top: 0.5rem;
     cursor: pointer;
-    box-shadow: 0 2px 8px rgba(58,122,254,0.08);
+    box-shadow: 0 2px 8px rgba(58, 122, 254, 0.08);
     transition: background 0.2s, box-shadow 0.2s;
 }
+
 .primary-btn:hover {
     background: linear-gradient(90deg, #1a8cff 0%, #3a7afe 100%);
-    box-shadow: 0 4px 16px rgba(58,122,254,0.13);
+    box-shadow: 0 4px 16px rgba(58, 122, 254, 0.13);
 }
+
 .auth-divider {
     text-align: center;
     color: #b0b8c9;
@@ -96,7 +115,9 @@ body {
     margin: 0.4rem 0 0.1rem 0;
     position: relative;
 }
-.auth-divider:before, .auth-divider:after {
+
+.auth-divider:before,
+.auth-divider:after {
     content: '';
     display: inline-block;
     width: 38%;
@@ -105,12 +126,14 @@ body {
     vertical-align: middle;
     margin: 0 0.5em;
 }
+
 .oauth-btns {
     display: flex;
     flex-direction: column;
     gap: 0.4rem;
     margin-bottom: 0.1rem;
 }
+
 .oauth-btn {
     display: flex;
     align-items: center;
@@ -126,36 +149,45 @@ body {
     cursor: pointer;
     transition: background 0.18s, border 0.18s;
 }
+
 .oauth-btn img {
     width: 28px;
     height: 28px;
     margin-right: 1em;
-    border-radius: 6px;
-    background: #fff;
-    box-shadow: 0 1px 4px rgba(30,40,60,0.10);
+        width: 22px;
+        height: 22px;
+        margin-right: 0.5em;
+        border-radius: 4px;
+        background: transparent;
+        box-shadow: none;
     object-fit: contain;
-    border: 1px solid #e3e7ef;
+        border: none;
 }
+
 .oauth-btn:hover {
     background: #eaf2ff;
     border-color: #3a7afe;
 }
+
 .auth-switch {
     text-align: center;
     font-size: 0.96rem;
     color: #6a7a8c;
     margin-top: 0.4rem;
 }
+
 .auth-switch a {
     color: #3a7afe;
     text-decoration: none;
     font-weight: 500;
     transition: color 0.18s;
 }
+
 .auth-switch a:hover {
     color: #1a8cff;
     text-decoration: underline;
 }
+
 @media (max-width: 500px) {
     .auth-dialog {
         padding: 1.2rem 0.7rem 1.2rem 0.7rem;

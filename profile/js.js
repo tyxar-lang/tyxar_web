@@ -7,19 +7,19 @@ document.addEventListener('DOMContentLoaded', function () {
     if (document.getElementById('signin-dialog')) {
         const signinDialog = document.getElementById('signin-dialog');
         const signupDialog = document.getElementById('signup-dialog');
-        document.getElementById('show-signup').onclick = function(e) {
+        document.getElementById('show-signup').onclick = function (e) {
             e.preventDefault();
             signinDialog.style.display = 'none';
             signupDialog.style.display = 'flex';
         };
-        document.getElementById('show-signin').onclick = function(e) {
+        document.getElementById('show-signin').onclick = function (e) {
             e.preventDefault();
             signupDialog.style.display = 'none';
             signinDialog.style.display = 'flex';
         };
 
         // Sign in with email/password
-        document.getElementById('signin-form').onsubmit = async function(e) {
+        document.getElementById('signin-form').onsubmit = async function (e) {
             e.preventDefault();
             const email = document.getElementById('signin-email').value.trim();
             const password = document.getElementById('signin-password').value;
@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', function () {
         };
 
         // Sign up with email/password
-        document.getElementById('signup-form').onsubmit = async function(e) {
+        document.getElementById('signup-form').onsubmit = async function (e) {
             e.preventDefault();
             const email = document.getElementById('signup-email').value.trim();
             const password = document.getElementById('signup-password').value;
@@ -64,10 +64,10 @@ document.addEventListener('DOMContentLoaded', function () {
             supabaseClient.auth.signInWithOAuth({ provider, options: { redirectTo: window.location.origin + '/tyxar_web/profile/dashboard/index.html' } })
                 .catch(() => showAuthError('OAuth failed.'));
         }
-        document.getElementById('google-signin').onclick = function(e) { e.preventDefault(); oauth('google'); };
-        document.getElementById('github-signin').onclick = function(e) { e.preventDefault(); oauth('github'); };
-        document.getElementById('google-signup').onclick = function(e) { e.preventDefault(); oauth('google'); };
-        document.getElementById('github-signup').onclick = function(e) { e.preventDefault(); oauth('github'); };
+        document.getElementById('google-signin').onclick = function (e) { e.preventDefault(); oauth('google'); };
+        document.getElementById('github-signin').onclick = function (e) { e.preventDefault(); oauth('github'); };
+        document.getElementById('google-signup').onclick = function (e) { e.preventDefault(); oauth('google'); };
+        document.getElementById('github-signup').onclick = function (e) { e.preventDefault(); oauth('github'); };
     }
 
     // Dashboard: Show user name if available
@@ -76,7 +76,7 @@ document.addEventListener('DOMContentLoaded', function () {
         // Try to get from localStorage first
         try {
             user = JSON.parse(localStorage.getItem('tyxar_user'));
-        } catch {}
+        } catch { }
         // If not found, get from supabase
         if (!user) {
             supabaseClient.auth.getUser().then(({ data }) => {
