@@ -15,8 +15,38 @@
 </head>
 
 <body>
-    <!-- User info will be injected here -->
-    <div id="dashboard-user-info"></div>
+    <div class="dashboard-wrapper">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <img src="/tyxar_web/images/tyxar.png" alt="Tyxar Logo" class="sidebar-logo"/>
+                <span class="sidebar-title">Tyxar</span>
+                <button class="sidebar-close" id="sidebarCloseBtn">×</button>
+            </div>
+            <div class="sidebar-user" id="sidebar-user"></div>
+            <nav class="sidebar-nav">
+                <a href="/tyxar_web/profile/dashboard/index.html" class="active">Dashboard</a>
+                <a href="/tyxar_web/profile/index.html">Profile</a>
+                <a href="/tyxar_web/docs/index.html">Docs</a>
+                <a href="/tyxar_web/download/index.html">Download</a>
+                <a href="#" id="logoutBtn">Logout</a>
+            </nav>
+        </aside>
+        <div class="dashboard-main">
+            <header class="dashboard-header">
+                <button class="sidebar-toggle" id="sidebarToggleBtn">&#9776;</button>
+                <span class="dashboard-header-title">Dashboard</span>
+            </header>
+            <main class="dashboard-content">
+                <div id="dashboard-user-info"></div>
+                <div class="dashboard-welcome">
+                    <h2>Welcome to Tyxar!</h2>
+                    <p>This is your dashboard. Use the sidebar to navigate.</p>
+                </div>
+            </main>
+        </div>
+    </div>
+    <link rel="stylesheet" href="/tyxar_web/profile/dashboard/dashboard.css">
+    <script src="/tyxar_web/profile/dashboard/dashboard.js"></script>
 </body>
 
 </html>

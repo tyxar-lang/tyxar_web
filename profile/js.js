@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', function () {
     if (document.getElementById('signin-dialog')) {
         supabaseClient.auth.getUser().then(({ data }) => {
             if (data && data.user) {
-                window.location.replace('/tyxar_web/profile/dashboard/index.html');
+                window.location.replace('/tyxar_web/profile/dashboard');
             }
         });
         const signinDialog = document.getElementById('signin-dialog');
@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (data && data.user) {
                     localStorage.setItem('tyxar_user', JSON.stringify(data.user));
                 }
-                window.location.replace('/tyxar_web/profile/dashboard/index.html');
+                window.location.replace('/tyxar_web/profile/dashboard');
             } catch (err) {
                 showAuthError('Sign in failed.');
             }
@@ -56,7 +56,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (data && data.user) {
                     localStorage.setItem('tyxar_user', JSON.stringify(data.user));
                 }
-                window.location.replace('/tyxar_web/profile/dashboard/index.html');
+                window.location.replace('/tyxar_web/profile/dashboard');
             } catch (err) {
                 showAuthError('Registration failed.');
             }
@@ -64,7 +64,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Google/GitHub OAuth
         function oauth(provider) {
-            supabaseClient.auth.signInWithOAuth({ provider, options: { redirectTo: window.location.origin + '/tyxar_web/profile/dashboard/index.html' } })
+            supabaseClient.auth.signInWithOAuth({ provider, options: { redirectTo: window.location.origin + '/tyxar_web/profile/dashboard' } })
                 .catch(() => showAuthError('OAuth failed.'));
         }
         document.getElementById('google-signin').onclick = function (e) { e.preventDefault(); oauth('google'); };
@@ -74,10 +74,10 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // Dashboard: Show user name if available, and redirect to login if not signed in
-    if (document.body && window.location.pathname.includes('/profile/dashboard/index.html')) {
+    if (document.body && window.location.pathname.includes('/profile/dashboard')) {
         supabaseClient.auth.getUser().then(({ data }) => {
             if (!data || !data.user) {
-                window.location.replace('/tyxar_web/profile/index.html');
+                window.location.replace('/tyxar_web/profile');
             } else {
                 let user = data.user;
                 localStorage.setItem('tyxar_user', JSON.stringify(user));
