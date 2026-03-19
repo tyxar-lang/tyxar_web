@@ -13,26 +13,9 @@
         /* Place dashboard-specific styles here or import from styles.css */
     </style>
 </head>
+
 <body>
-    <div id="dashboard-root"></div>
-    <script>
-    // Require login before showing dashboard
-    document.addEventListener('DOMContentLoaded', async () => {
-        const { data } = await supabaseClient.auth.getUser();
-        if (!data || !data.user) {
-            window.location.href = '/tyxar_web/profile/';
-            return;
-        }
-        // If logged in, render dashboard
-        // You can move your dashboard HTML and logic here
-        document.getElementById('dashboard-root').innerHTML = `
-            <!-- Dashboard content goes here -->
-            <h1>Welcome to your Dashboard, <span id="dashboardName"></span>!</h1>
-            <!-- Add dashboard sections/components here -->
-        `;
-        // Optionally, load user info and render
-        // Example: document.getElementById('dashboardName').textContent = data.user.email;
-    });
-    </script>
+    
 </body>
+
 </html>

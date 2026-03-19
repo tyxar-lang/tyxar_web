@@ -1,607 +1,78 @@
 
-// ===============================
-// ELEMENTS
-// ===============================
-const authBox = document.querySelector(".box");
-const dashboard = document.getElementById("dashboard");
-const authStatus = document.getElementById("authStatus");
+// --- Tyxar Auth Logic ---
+// Assumes Supabase client is initialized as 'supabase' in config.js
 
-const loginForm = document.getElementById("loginForm");
-const signupForm = document.getElementById("signupForm");
+document.addEventListener('DOMContentLoaded', function () {
+    // Switch between sign in and sign up dialogs
+    const signinDialog = document.getElementById('signin-dialog');
+    const signupDialog = document.getElementById('signup-dialog');
+    document.getElementById('show-signup').onclick = function(e) {
+        e.preventDefault();
+        signinDialog.style.display = 'none';
+        signupDialog.style.display = 'flex';
+    };
+    document.getElementById('show-signin').onclick = function(e) {
+        e.preventDefault();
+        signupDialog.style.display = 'none';
+        signinDialog.style.display = 'flex';
+    };
 
-const emailInput = document.getElementById("email");
-const passwordInput = document.getElementById("password");
-const signupNameInput = document.getElementById("signupName");
-const signupEmailInput = document.getElementById("signupEmail");
-const signupPasswordInput = document.getElementById("signupPassword");
-
-const dashboardName = document.getElementById("dashboardName");
-const dashboardEmail = document.getElementById("dashboardEmail");
-const dashboardRole = document.getElementById("dashboardRole");
-const dashboardCreated = document.getElementById("dashboardCreated");
-
-// ===============================
-// AUTH FUNCTIONS
-// ===============================
-async function signup() {
-    const name = signupNameInput.value;
-    const email = signupEmailInput.value;
-    const password = signupPasswordInput.value;
-
-    const { error } = await supabaseClient.auth.signUp({
-        email,
-        password,
-        options: {
-            data: {
-                full_name: name
-            }
+    // Sign in with email/password
+    document.getElementById('signin-form').onsubmit = async function(e) {
+        e.preventDefault();
+        const email = document.getElementById('signin-email').value.trim();
+        const password = document.getElementById('signin-password').value;
+        try {
+            const { error } = await supabase.auth.signInWithPassword({ email, password });
+            if (error) return showAuthError(error.message);
+            window.location.href = '/tyxar_web/dashboard/index.html';
+        } catch (err) {
+            showAuthError('Sign in failed.');
         }
-    });
-
-    authStatus.textContent = error
-        ? error.message
-        : "Check your email to confirm signup.";
-}
-
-async function login() {
-    const email = emailInput.value;
-    const password = passwordInput.value;
-
-    const { error } = await supabaseClient.auth.signInWithPassword({
-        email,
-        password
-    });
-
-    authStatus.textContent = error
-        ? error.message
-        : "Logged in.";
-
-    loadUser();
-}
-
-async function loginWithGitHub() {
-    const { error } = await supabaseClient.auth.signInWithOAuth({
-        provider: 'github',
-        options: {
-            redirectTo: 'https://tyxar-lang.github.io/tyxar_web/profile/callback.html'
-        }
-    });
-
-    authStatus.textContent = error
-        ? error.message
-        : "Redirecting to GitHub...";
-}
-
-async function loginWithGoogle() {
-    const { error } = await supabaseClient.auth.signInWithOAuth({
-        provider: 'google',
-        options: {
-            redirectTo: 'https://tyxar-lang.github.io/tyxar_web/profile/callback.html'
-        }
-    });
-
-    authStatus.textContent = error
-        ? error.message
-        : "Redirecting to Google...";
-}
-
-async function logout() {
-    await supabaseClient.auth.signOut();
-    showAuth();
-}
-
-// ===============================
-// ADMIN USER TABLE & ROLE MANAGEMENT
-// ===============================
-async function loadAdminUserTable() {
-    const adminTableBody = document.getElementById('adminTableBody');
-    if (!adminTableBody) return; // Not an admin, table doesn't exist
-
-    const pageSize = 50; // quick initial page for perceived speed
-
-    // Helper to render rows and append
-    function appendProfilesRows(profiles) {
-        if (!profiles || profiles.length === 0) return;
-        const rows = profiles.map(profile => `
-            <tr style="border-bottom: 1px solid #cbd5e0;">
-                <td style="padding: 12px; color: #2d3748; font-weight: 500;">${profile.full_name || 'Unknown'}</td>
-                <td style="padding: 12px; text-align: center;">
-                    <input type="checkbox" ${profile.is_admin ? 'checked' : ''} onchange="toggleUserRole('${profile.id}', 'is_admin', this.checked)" style="cursor: pointer; width: 18px; height: 18px;">
-                </td>
-                <td style="padding: 12px; text-align: center;">
-                    <input type="checkbox" ${profile.is_developer ? 'checked' : ''} onchange="toggleUserRole('${profile.id}', 'is_developer', this.checked)" style="cursor: pointer; width: 18px; height: 18px;">
-                </td>
-                <td style="padding: 12px; text-align: center;">
-                    <input type="checkbox" ${profile.is_tester ? 'checked' : ''} onchange="toggleUserRole('${profile.id}', 'is_tester', this.checked)" style="cursor: pointer; width: 18px; height: 18px;">
-                </td>
-                <td style="padding: 12px; text-align: center;">
-                    <button onclick="viewUserDetails('${profile.id}')" style="padding: 6px 12px; background: #667eea; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 0.85rem; font-weight: 600;">View</button>
-                </td>
-            </tr>
-        `).join('');
-        adminTableBody.insertAdjacentHTML('beforeend', rows);
-    }
-
-    try {
-        // Get current user id for debug/hinting (helps detect RLS issues)
-        const { data: currentUserData } = await supabaseClient.auth.getUser();
-        const currentUserId = currentUserData?.user?.id;
-        // Show skeleton is already present in HTML; fetch only first page quickly
-        const start = 0;
-        const end = pageSize - 1;
-        const { data: firstPage, error: firstErr } = await supabaseClient
-            .from('profiles')
-            .select('id, full_name, is_admin, is_developer, is_tester, is_user')
-            .order('created_at', { ascending: false })
-            .range(start, end);
-
-        if (firstErr) {
-            console.error('Error fetching first page:', firstErr);
-            adminTableBody.innerHTML = '<tr><td colspan="5" style="padding: 12px; text-align: center; color: #e53e3e;">Error loading users. Please try again.</td></tr>';
-            return;
-        }
-
-        if (!firstPage || firstPage.length === 0) {
-            adminTableBody.innerHTML = '<tr><td colspan="5" style="padding: 12px; text-align: center; color: #718096;">No users found</td></tr>';
-            return;
-        }
-
-        // Clear skeleton and render first page immediately
-        adminTableBody.innerHTML = '';
-        appendProfilesRows(firstPage);
-
-        // If we received a full page, load remaining pages in background
-        if (firstPage.length === pageSize) {
-            // show loading-more row
-            const loadingRowId = 'admin-loading-more';
-            adminTableBody.insertAdjacentHTML('beforeend', `<tr id="${loadingRowId}"><td colspan="5" style="padding:12px; text-align:center; color:#718096;">Loading more users...</td></tr>`);
-
-            // Fetch subsequent pages asynchronously without blocking UI
-            (async () => {
-                let offset = pageSize;
-                while (true) {
-                    const { data: page, error: pgErr } = await supabaseClient
-                        .from('profiles')
-                        .select('id, full_name, is_admin, is_developer, is_tester, is_user')
-                        .order('created_at', { ascending: false })
-                        .range(offset, offset + pageSize - 1);
-
-                    if (pgErr) {
-                        console.error('Error fetching page:', pgErr);
-                        break;
-                    }
-
-                    if (!page || page.length === 0) break;
-
-                    // remove loading-more placeholder before appending
-                    const loadingEl = document.getElementById(loadingRowId);
-                    if (loadingEl) loadingEl.remove();
-
-                    appendProfilesRows(page);
-
-                    // add loading placeholder again if likely more
-                    adminTableBody.insertAdjacentHTML('beforeend', `<tr id="${loadingRowId}"><td colspan="5" style="padding:12px; text-align:center; color:#718096;">Loading more users...</td></tr>`);
-
-                    offset += pageSize;
-                    // small delay to avoid hammering DB
-                    await new Promise(r => setTimeout(r, 150));
-                }
-
-                // cleanup loading row
-                const loadingEl = document.getElementById('admin-loading-more');
-                if (loadingEl) loadingEl.remove();
-            })();
-        }
-
-    } catch (err) {
-        console.error('Error in loadAdminUserTable:', err);
-        adminTableBody.innerHTML = '<tr><td colspan="5" style="padding: 12px; text-align: center; color: #e53e3e;">Error loading table</td></tr>';
-    }
-}
-
-async function toggleUserRole(userId, roleField, isChecked) {
-    try {
-        const { error } = await supabaseClient
-            .from('profiles')
-            .update({ [roleField]: isChecked })
-            .eq('id', userId);
-
-        if (error) {
-            alert(`Error updating role: ${error.message}`);
-            // Reload to revert the checkbox
-            loadAdminUserTable();
-        } else {
-            // Successful update - checkbox stays as is
-            console.log(`Updated ${roleField} for user ${userId} to ${isChecked}`);
-        }
-    } catch (err) {
-        console.error('Error toggling role:', err);
-        alert('Error updating role');
-        loadAdminUserTable();
-    }
-}
-
-function viewUserDetails(userId) {
-    alert(`Viewing details for user: ${userId}`);
-    // This can be expanded later to show more detailed view
-}
-
-async function loadAdminPendingRequests() {
-    const pendingRequestsBody = document.getElementById('adminPendingRequestsBody');
-    if (!pendingRequestsBody) return; // Not an admin
-
-    try {
-        // Fetch only PENDING role requests (approved/rejected won't show)
-        const { data: requests, error } = await supabaseClient
-            .from('role_requests')
-            .select('id, user_id, requested_role, created_at, status')
-            .eq('status', 'pending')
-            .order('created_at', { ascending: false })
-            .limit(100); // Limit for performance
-
-        if (error) {
-            console.error('Error fetching requests:', error);
-            pendingRequestsBody.innerHTML = '<div style="padding: 12px; text-align: center; color: #e53e3e;">Error loading requests</div>';
-            return;
-        }
-
-        if (!requests || requests.length === 0) {
-            pendingRequestsBody.innerHTML = '<div style="padding: 12px; text-align: center; color: #718096;">No pending requests</div>';
-            return;
-        }
-
-        // For each request, fetch user's full_name from profiles (optimized with Promise.all)
-        const requestsWithNames = await Promise.all(requests.map(async (req) => {
-            const { data: profile } = await supabaseClient
-                .from('profiles')
-                .select('full_name')
-                .eq('id', req.user_id)
-                .single();
-            return { ...req, userName: profile?.full_name || 'Unknown' };
-        }));
-
-        // Build request cards with Approve and Reject buttons
-        pendingRequestsBody.innerHTML = requestsWithNames.map(req => `
-            <div style="border: 2px solid #f6ad55; border-radius: 8px; padding: 16px; background: #fffaf0; display: flex; justify-content: space-between; align-items: center;">
-                <div>
-                    <div style="font-weight: 700; color: #2d3748; margin-bottom: 4px;">${req.userName}</div>
-                    <div style="font-size: 0.9rem; color: #718096;">Requested <strong>${req.requested_role.charAt(0).toUpperCase() + req.requested_role.slice(1)}</strong> on ${new Date(req.created_at).toLocaleDateString('en-GB')}</div>
-                </div>
-                <div style="display: flex; gap: 8px; margin-left: 12px;">
-                    <button id="approveBtn-${req.id}" onclick="approveRoleRequest('${req.id}', '${req.user_id}', '${req.requested_role}', this)" style="padding: 8px 16px; background: #38a169; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 0.9rem; white-space: nowrap; transition: all 0.2s ease;" onmouseover="this.style.background='#2f855a'" onmouseout="this.style.background='#38a169'">✓ Approve</button>
-                    <button id="rejectBtn-${req.id}" onclick="rejectRoleRequest('${req.id}', this)" style="padding: 8px 16px; background: #e53e3e; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 0.9rem; white-space: nowrap; transition: all 0.2s ease;" onmouseover="this.style.background='#c53030'" onmouseout="this.style.background='#e53e3e'">✗ Reject</button>
-                </div>
-            </div>
-        `).join('');
-
-    } catch (err) {
-        console.error('Error in loadAdminPendingRequests:', err);
-        pendingRequestsBody.innerHTML = '<div style="padding: 12px; text-align: center; color: #e53e3e;">Error loading requests</div>';
-    }
-}
-
-async function approveRoleRequest(requestId, userId, roleName, buttonEl) {
-    try {
-        // Update the user's role flag in profiles table
-        const roleField = `is_${roleName}`;
-        const { error: updateError } = await supabaseClient
-            .from('profiles')
-            .update({ [roleField]: true })
-            .eq('id', userId);
-
-        if (updateError) {
-            alert(`Error approving request: ${updateError.message}`);
-            return;
-        }
-
-        // Mark the request as 'approved' (keep in DB for audit, just update status)
-        const { error: statusError } = await supabaseClient
-            .from('role_requests')
-            .update({ status: 'approved' })
-            .eq('id', requestId);
-
-        if (statusError) {
-            console.error('Error updating request status:', statusError);
-        }
-
-        // Make button inactive and update text
-        buttonEl.disabled = true;
-        buttonEl.style.background = '#cbd5e0';
-        buttonEl.style.cursor = 'not-allowed';
-        buttonEl.textContent = '✓ Approved';
-        buttonEl.style.opacity = '0.6';
-
-        // Reload to remove from pending list
-        setTimeout(() => {
-            loadAdminUserTable();
-            loadAdminPendingRequests();
-        }, 500);
-
-    } catch (err) {
-        console.error('Error approving request:', err);
-        alert('Error approving request');
-    }
-}
-
-async function rejectRoleRequest(requestId, buttonEl) {
-    try {
-        // Mark the request as 'rejected' (keep in DB for audit, just update status)
-        const { error: statusError } = await supabaseClient
-            .from('role_requests')
-            .update({ status: 'rejected' })
-            .eq('id', requestId);
-
-        if (statusError) {
-            alert(`Error rejecting request: ${statusError.message}`);
-            return;
-        }
-
-        // Make button inactive and update text
-        buttonEl.disabled = true;
-        buttonEl.style.background = '#cbd5e0';
-        buttonEl.style.cursor = 'not-allowed';
-        buttonEl.textContent = '✗ Rejected';
-        buttonEl.style.opacity = '0.6';
-
-        // Reload to remove from pending list
-        setTimeout(() => {
-            loadAdminPendingRequests();
-        }, 500);
-
-    } catch (err) {
-        console.error('Error rejecting request:', err);
-        alert('Error rejecting request');
-    }
-}
-
-// ===============================
-// PROFILE LOAD & DASHBOARD SETUP
-// ===============================
-
-async function saveProfileChanges() {
-    const user = (await supabaseClient.auth.getUser()).data.user;
-    if (!user) {
-        alert('You must be logged in to save changes.');
-        return;
-    }
-
-    const newName = document.getElementById('settingName').value.trim();
-
-    if (!newName) {
-        alert('Please enter a name.');
-        return;
-    }
-
-    // Update user metadata in auth.users
-    const { error: updateError } = await supabaseClient.auth.updateUser({
-        data: { full_name: newName }
-    });
-
-    if (updateError) {
-        alert(`Error saving changes: ${updateError.message}`);
-        console.error(updateError);
-        return;
-    }
-
-    alert('✅ Profile updated successfully!');
-
-    // Reload user data to reflect changes
-    loadUser();
-}
-
-// ===============================
-// FORM TOGGLE FUNCTIONS
-// ===============================
-function showSignup() {
-    loginForm.classList.add("hidden");
-    signupForm.classList.remove("hidden");
-    authStatus.textContent = "";
-}
-
-function showLogin() {
-    signupForm.classList.add("hidden");
-    loginForm.classList.remove("hidden");
-    authStatus.textContent = "";
-}
-
-function showAuth() {
-    dashboard.classList.add("hidden");
-    authBox.classList.remove("hidden");
-    showLogin(); // Default to login form
-}
-
-// ===============================
-// USER STATE
-// ===============================
-async function loadUser() {
-    const { data } = await supabaseClient.auth.getUser();
-    const user = data.user;
-
-    if (!user) {
-        showAuth();
-        return;
-    }
-
-    // Populate dashboard
-    const displayName = user.user_metadata?.full_name || user.user_metadata?.user_name || user.user_metadata?.name || 'User';
-    dashboardName.textContent = displayName;
-    dashboardEmail.textContent = user.email;
-    dashboardCreated.textContent = new Date(user.created_at).toLocaleDateString('en-GB', { year: 'numeric', month: 'long', day: 'numeric' });
-
-    // Also populate settings form fields
-    const settingNameInput = document.getElementById('settingName');
-    const settingEmailInput = document.getElementById('settingEmail');
-    if (settingNameInput) settingNameInput.value = displayName;
-    if (settingEmailInput) settingEmailInput.value = user.email;
-
-    // Fetch boolean role flags from profiles table
-    let { data: profile, error: profileError } = await supabaseClient
-        .from("profiles")
-        .select("is_user, is_admin, is_developer, is_tester, full_name")
-        .eq("id", user.id)
-        .single();
-
-    console.debug('[loadUser] profileError:', profileError, 'profile:', profile);
-    if (profile) {
-        console.debug('[loadUser] profile bools:', { is_user: profile.is_user, is_admin: profile.is_admin, is_developer: profile.is_developer, is_tester: profile.is_tester });
-    }
-
-    // If profile doesn't exist yet, create it with full_name
-    if (!profile) {
-        console.debug('[loadUser] Profile missing, attempting to create...');
-        const { error: insertError } = await supabaseClient
-            .from('profiles')
-            .insert({
-                id: user.id,
-                full_name: displayName,
-                is_user: true,
-                is_admin: false,
-                is_developer: false,
-                is_tester: false
+    };
+
+    // Sign up with email/password
+    document.getElementById('signup-form').onsubmit = async function(e) {
+        e.preventDefault();
+        const email = document.getElementById('signup-email').value.trim();
+        const password = document.getElementById('signup-password').value;
+        const firstName = document.getElementById('signup-firstname').value.trim();
+        const lastName = document.getElementById('signup-lastname').value.trim();
+        try {
+            const { error } = await supabase.auth.signUp({
+                email,
+                password,
+                options: { data: { first_name: firstName, last_name: lastName } }
             });
-        if (insertError) {
-            console.error('[loadUser] Error creating profile:', insertError);
-        } else {
-            // Refetch after insert
-            const { data: refetchProfile, error: refetchError } = await supabaseClient
-                .from("profiles")
-                .select("is_user, is_admin, is_developer, is_tester, full_name")
-                .eq("id", user.id)
-                .single();
-            console.debug('[loadUser] Profile refetch after insert:', { refetchProfile, refetchError });
-            if (refetchProfile) {
-                profile = refetchProfile;
-                profileError = null;
-            }
+            if (error) return showAuthError(error.message);
+            window.location.href = '/tyxar_web/dashboard/index.html';
+        } catch (err) {
+            showAuthError('Registration failed.');
         }
-    } else if (profileError && profileError.code === 'PGRST116') {
-        const { error: insertError } = await supabaseClient
-            .from('profiles')
-            .insert({
-                id: user.id,
-                full_name: displayName,
-                is_user: true,
-                is_admin: false,
-                is_developer: false,
-                is_tester: false
-            });
-        if (insertError) console.error('Error creating profile:', insertError);
-    } else if (profile && profile.full_name !== displayName) {
-        // Sync full_name from auth.users to profiles if they differ
-        const { error: syncError } = await supabaseClient
-            .from('profiles')
-            .update({ full_name: displayName })
-            .eq('id', user.id);
-        if (syncError) console.error('Error syncing full_name:', syncError);
+    };
+
+    // Google OAuth (sign in/up)
+    function oauth(provider) {
+        supabase.auth.signInWithOAuth({ provider, options: { redirectTo: window.location.origin + '/tyxar_web/dashboard/index.html' } })
+            .catch(() => showAuthError('OAuth failed.'));
     }
-
-    // Build roles array by checking each boolean flag in the profiles row
-    const rolesArray = [];
-    if (profile?.is_user) rolesArray.push('user');
-    if (profile?.is_admin) rolesArray.push('admin');
-    if (profile?.is_developer) rolesArray.push('developer');
-    if (profile?.is_tester) rolesArray.push('tester');
-
-    console.debug('[loadUser] rolesArray:', rolesArray);
-
-    // Create a human-friendly display string (Title Case) while keeping the
-    // canonical lowercase array available for logic/UI toggles.
-    const displayRoles = rolesArray.map(r => String(r).charAt(0).toUpperCase() + String(r).slice(1));
-
-    // Only display roles returned from Supabase. If none, show empty.
-    dashboardRole.textContent = displayRoles.length ? displayRoles.join(', ') : '';
-
-    // Also update the currentRole element (if the role UI exists on the page)
-    const currentRoleEl = document.getElementById('currentRole');
-    if (currentRoleEl) currentRoleEl.textContent = displayRoles.length ? displayRoles.join(', ') : '';
-
-    // Expose roles to other scripts and allow the UI to react
-    window.currentUserRoles = rolesArray;
-    if (window.updateRoleUI) window.updateRoleUI(rolesArray);
-    // If the current user is an admin, proactively load admin data so
-    // the admin table and pending requests are populated without
-    // requiring the user to click Overview a second time.
-    if (rolesArray && rolesArray.indexOf('admin') !== -1) {
-        if (window.loadAdminUserTable) window.loadAdminUserTable();
-        if (window.loadAdminPendingRequests) window.loadAdminPendingRequests();
-    }
-    dashboardCreated.textContent = new Date(user.created_at).toLocaleDateString('en-GB', { year: 'numeric', month: 'long', day: 'numeric' });
-
-    // Show dashboard, hide auth
-    authBox.classList.add("hidden");
-    dashboard.classList.remove("hidden");
-
-    // Load actual header and footer into the dashboard (if elements exist)
-    try {
-        const headerEl = document.getElementById('siteHeader');
-        if (headerEl) {
-            const headerResp = await fetch('/tyxar_web/header.html');
-            if (headerResp.ok) {
-                const headerHtml = await headerResp.text();
-                headerEl.innerHTML = headerHtml;
-            }
-        }
-    } catch (e) {
-        console.warn('Could not load header:', e);
-    }
-
-    try {
-        const footerEl = document.getElementById('siteFooter');
-        if (footerEl) {
-            const footerResp = await fetch('/tyxar_web/footer.html');
-            if (footerResp.ok) {
-                const footerHtml = await footerResp.text();
-                footerEl.innerHTML = footerHtml;
-            }
-        }
-    } catch (e) {
-        console.warn('Could not load footer:', e);
-    }
-}
-
-// ===============================
-// INIT
-// ===============================
-loadUser();
-
-// CLEANUP & SHOW ACCOUNT AFTER LOGIN
-
-if (window.location.hash.includes('access_token')) {
-    window.history.replaceState({}, document.title, window.location.pathname);
-}
-
-supabaseClient.auth.onAuthStateChange((event, session) => {
-    if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
-        loadUser();
-    } else if (event === 'SIGNED_OUT') {
-        showAuth();
-    }
+    document.getElementById('google-signin').onclick = function(e) { e.preventDefault(); oauth('google'); };
+    document.getElementById('github-signin').onclick = function(e) { e.preventDefault(); oauth('github'); };
+    document.getElementById('google-signup').onclick = function(e) { e.preventDefault(); oauth('google'); };
+    document.getElementById('github-signup').onclick = function(e) { e.preventDefault(); oauth('github'); };
 });
 
-// Initial check in case page loads with existing session
-(async () => {
-    const { data: { session } } = await supabaseClient.auth.getSession();
-    if (session) loadUser();
-})();
-
-
-// Function to load external HTML content
-function loadHTML(url, elementId) {
-    fetch(url)
-        .then(response => response.text())
-        .then(data => {
-            document.getElementById(elementId).innerHTML = data;
-
-            // --- CRITICAL STEP ---
-            // Re-run initialization to catch the *new* links in the footer 
-            initializeContentLoader();
-        })
-        .catch(err => console.error(`Error loading ${url}:`, err));
+function showAuthError(msg) {
+    let err = document.getElementById('auth-error');
+    if (!err) {
+        err = document.createElement('div');
+        err.id = 'auth-error';
+        err.style.color = '#d32f2f';
+        err.style.textAlign = 'center';
+        err.style.margin = '0.5em 0 0.2em 0';
+        err.style.fontWeight = '500';
+        const dialog = document.querySelector('.auth-dialog[style*="display: flex"]') || document.querySelector('.auth-dialog');
+        dialog.insertBefore(err, dialog.firstChild.nextSibling);
+    }
+    err.textContent = msg;
 }
-
-// Call these functions when the main page loads:
-document.addEventListener('DOMContentLoaded', (event) => {
-    // Load Header, Footer
-    loadHTML('/tyxar_web/header.html', 'header');
-    loadHTML('/tyxar_web/footer.html', 'footer');
-});

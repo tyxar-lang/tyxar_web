@@ -6,157 +6,58 @@
     <link rel="shortcut icon" href="/tyxar_web/images/tyxar.ico" type="image/x-icon">
     <title>Profile - Tyxar Programming Language</title>
     <link rel="stylesheet" href="/tyxar_web/styles.css">
-    <!--<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link rel="stylesheet" href="/tyxar_web/profile/auth.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="/tyxar_web/profile/config.js"></script>
-    <script src="/tyxar_web/profile/js.js"></script>-->
-    <style>
-        body {
-            background: #f7fafc;
-            margin: 0;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .flip-container {
-            perspective: 1200px;
-            width: 350px;
-            height: 420px;
-        }
-        .flipper {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            transition: transform 0.6s cubic-bezier(.4,2,.6,1);
-            transform-style: preserve-3d;
-        }
-        .flip-container.flipped .flipper {
-            transform: rotateY(180deg);
-        }
-        .card {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            backface-visibility: hidden;
-            background: #fff;
-            border-radius: 14px;
-            box-shadow: 0 4px 24px rgba(30,58,138,0.10);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 32px 28px 28px 28px;
-        }
-        .card .logo img {
-            width: 56px;
-            height: 56px;
-            margin-bottom: 18px;
-        }
-        .card h2 {
-            margin: 0 0 18px 0;
-            text-align: center;
-            color: #1e3a8a;
-        }
-        .card input[type="email"], .card input[type="password"], .card input[type="text"] {
-            padding: 10px;
-            border: 1px solid #cbd5e0;
-            border-radius: 6px;
-            font-size: 1rem;
-            box-sizing: border-box;
-            margin-bottom: 10px;
-            width: 100%;
-        }
-        .card button {
-            padding: 10px 0;
-            background: #3b82f6;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            font-weight: 600;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: background 0.2s;
-            width: 100%;
-            margin-bottom: 8px;
-        }
-        .card button:hover {
-            background: #1e3a8a;
-        }
-        .card .oauth-btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            background: #f1f5f9;
-            color: #222;
-            border: 1px solid #cbd5e0;
-            font-weight: 500;
-        }
-        .card .oauth-btn img {
-            width: 20px;
-            height: 20px;
-        }
-        .card .toggle-link {
-            color: #607DF0;
-            text-decoration: none;
-            font-size: 0.97rem;
-            margin-top: 10px;
-            cursor: pointer;
-            text-align: center;
-            display: block;
-        }
-        .card .status {
-            margin-top: 8px;
-            color: #e53e3e;
-            text-align: center;
-            min-height: 20px;
-        }
-        @media (max-width: 500px) {
-            .flip-container {
-                width: 98vw;
-                height: 98vw;
-                max-width: 370px;
-                max-height: 480px;
-            }
-        }
-    </style>
+    <script src="/tyxar_web/profile/js.js"></script>
+
 </head>
+
 <body>
-    <div class="flip-container" id="flipContainer">
-        <div class="flipper">
-            <!-- Login Card -->
-            <div class="card front">
-                <div class="logo">
-                    <img src="/tyxar_web/images/tyxar.png" alt="Tyxar Logo">
-                </div>
-                <h2>Login to Tyxar</h2>
-                <button class="oauth-btn" onclick="loginWithGoogle()">
-                    <img src="/tyxar_web/images/google-icon.png" alt="Google Icon">Login with Google
-                </button>
-                <button class="oauth-btn" onclick="loginWithGitHub()">
-                    <img src="/tyxar_web/images/github-icon.png" alt="GitHub Icon">Login with GitHub
-                </button>
-                <input id="email" type="email" placeholder="Email" autocomplete="username">
-                <input id="password" type="password" placeholder="Password" autocomplete="current-password">
-                <button onclick="login()">Log in</button>
-                <span class="toggle-link" onclick="flipToSignup()">Don't have an account? Sign up</span>
-                <div class="status" id="authStatus"></div>
-            </div>
-            <!-- Signup Card -->
-            <div class="card back" style="transform: rotateY(180deg);">
-                <div class="logo">
-                    <img src="/tyxar_web/images/tyxar.png" alt="Tyxar Logo">
-                </div>
-                <h2>Create Account</h2>
-                <input id="signupName" type="text" placeholder="Full Name">
-                <input id="signupEmail" type="email" placeholder="Email" autocomplete="username">
-                <input id="signupPassword" type="password" placeholder="Password" autocomplete="new-password">
-                <button onclick="signup()">Sign up</button>
-                <span class="toggle-link" onclick="flipToLogin()">Already have an account? Log in</span>
-                <div class="status" id="signupStatus"></div>
-            </div>
+</body>
+
+<div class="auth-container">
+    <div class="auth-dialog" id="signin-dialog">
+        <h2>Sign in to Tyxar</h2>
+        <form id="signin-form">
+            <label for="signin-email">Email</label>
+            <input type="email" id="signin-email" name="email" required autocomplete="email">
+            <label for="signin-password">Password</label>
+            <input type="password" id="signin-password" name="password" required autocomplete="current-password">
+            <button type="submit" class="primary-btn">Sign In</button>
+        </form>
+        <div class="auth-divider">or</div>
+        <div class="oauth-btns">
+            <button class="oauth-btn" id="google-signin"><img src="/tyxar_web/images/google-icon.png" alt="Google"/>Sign in with Google</button>
+            <button class="oauth-btn" id="github-signin"><img src="/tyxar_web/images/github-icon.png" alt="GitHub"/>Sign in with GitHub</button>
+        </div>
+        <div class="auth-switch">
+            Don’t have an account? <a href="#" id="show-signup">Register</a>
         </div>
     </div>
-    
+    <div class="auth-dialog" id="signup-dialog" style="display:none;">
+        <h2>Register for Tyxar</h2>
+        <form id="signup-form">
+            <label for="signup-firstname">First Name</label>
+            <input type="text" id="signup-firstname" name="firstname" required autocomplete="given-name">
+            <label for="signup-lastname">Last Name</label>
+            <input type="text" id="signup-lastname" name="lastname" required autocomplete="family-name">
+            <label for="signup-email">Email</label>
+            <input type="email" id="signup-email" name="email" required autocomplete="email">
+            <label for="signup-password">Password</label>
+            <input type="password" id="signup-password" name="password" required autocomplete="new-password">
+            <button type="submit" class="primary-btn">Register</button>
+        </form>
+        <div class="auth-divider">or</div>
+        <div class="oauth-btns">
+            <button class="oauth-btn" id="google-signup"><img src="/tyxar_web/images/google-icon.png" alt="Google"/>Sign up with Google</button>
+            <button class="oauth-btn" id="github-signup"><img src="/tyxar_web/images/github-icon.png" alt="GitHub"/>Sign up with GitHub</button>
+        </div>
+        <div class="auth-switch">
+            Already have an account? <a href="#" id="show-signin">Sign in</a>
+        </div>
+    </div>
+</div>
 </body>
+
 </html>
