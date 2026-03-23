@@ -20,12 +20,10 @@ body {
 }
 
 .auth-container {
-    position: relative;
     min-height: 100vh;
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     justify-content: center;
-    padding-top: 70px; /* space for header */
 }
 
 .auth-dialog {
@@ -39,11 +37,6 @@ body {
     flex-direction: column;
     gap: 0.7rem;
     animation: fadeIn 0.7s cubic-bezier(.4, 0, .2, 1);
-    position: absolute;
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 10;
 }
 
 @keyframes fadeIn {

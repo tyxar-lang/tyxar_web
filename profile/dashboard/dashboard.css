@@ -162,9 +162,10 @@ body {
         transform: translateX(-100%);
         position: fixed;
         left: 0;
-        top: 0;
+        top: 56px; /* anchor below header */
         bottom: 0;
         width: 220px;
+        height: calc(100vh - 56px);
     }
 
     .sidebar.open {
