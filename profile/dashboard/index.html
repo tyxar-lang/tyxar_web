@@ -37,13 +37,12 @@
 </head>
 
 <body>
-</body>
-    <div id="dashboard-container">
+    <div class="dashboard-container">
         <!-- Sidebar -->
         <nav id="sidebar" class="sidebar">
             <div class="sidebar-header">
                 <span class="sidebar-logo">Tyxar</span>
-                <button class="sidebar-close" id="sidebarCloseBtn" aria-label="Close sidebar">&times;</button>
+                <button id="closeSidebar" class="sidebar-close" aria-label="Close sidebar">&times;</button>
             </div>
             <div class="sidebar-profile">
                 <img src="/tyxar_web/images/tyxar.ico" alt="Admin avatar" class="sidebar-avatar">
@@ -59,13 +58,13 @@
         </nav>
 
         <!-- Hamburger for mobile -->
-        <button id="hamburgerBtn" class="hamburger" aria-label="Open sidebar">
+        <button id="openSidebar" class="hamburger" aria-label="Open sidebar">
             <span></span>
             <span></span>
             <span></span>
         </button>
 
-        <!-- Main dashboard content -->
+        <!-- Main Content -->
         <main class="dashboard-main">
             <div class="dashboard-header">
                 <h2>Welcome back, Anish <span class="emoji">😎</span></h2>
@@ -75,20 +74,21 @@
                 <div class="dashboard-card">
                     <div class="card-title">Products</div>
                     <div class="card-icon">📦</div>
-                    <div class="card-value">5</div>
+                    <div class="card-value" id="productsCount">5</div>
                 </div>
                 <div class="dashboard-card">
                     <div class="card-title">Users</div>
                     <div class="card-icon">👤</div>
-                    <div class="card-value">5</div>
+                    <div class="card-value" id="usersCount">5</div>
                 </div>
                 <div class="dashboard-card">
                     <div class="card-title">Orders</div>
                     <div class="card-icon">🛒</div>
-                    <div class="card-value">5</div>
+                    <div class="card-value" id="ordersCount">5</div>
                 </div>
             </div>
         </main>
     </div>
+    <script src="/tyxar_web/profile/dashboard/dashboard.js"></script>
 </body>
 </html>
