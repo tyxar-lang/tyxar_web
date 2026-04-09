@@ -1557,3 +1557,18 @@ button[onclick*="Google"]:hover {
         padding: 15px;
     }
 }
+
+/* Changelog Sidebar Styling */
+.parting {
+    display: flex;
+    gap: 20px;
+    justify-content: space-between;
+}
+
+.parting .txr {
+    flex: 1;
+}
+
+.parting .bld {
+    flex: 1;
+}
