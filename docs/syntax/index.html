@@ -26,14 +26,15 @@
                     <p>
                         Annotations, commonly known as <strong>comments</strong>, are crucial for documenting your code.
                         They enable you to explain your logic, document your decision-making process, and help future readers
-                        (including your future self) understand why you wrote something a particular way.
-                        In Tyxar, comments are completely ignored by the compiler and serve purely as documentation.
+                        (including your future self—who will stare at this code in six months wondering <em>why on earth</em> you wrote it that way)
+                        understand your reasoning. In Tyxar, comments are completely ignored by the compiler and serve purely as documentation.
                     </p>
 
                     <h3>Comment Syntax</h3>
                     <p>
                         Tyxar uses a distinctive <strong>delimiter-based comment syntax</strong> that embraces symmetry and clarity.
                         All annotations must be surrounded by the <strong><code>#</code></strong> character on both sides.
+                        Think of it as verbal bookends—your comment gets safely wrapped in protective symbols.
                         This approach works for <strong>both single-line and multi-line comments</strong>,
                         making it intuitive and consistent regardless of comment length.
                     </p>
@@ -43,34 +44,36 @@
 
                     <h3>Single-Line Comments</h3>
                     <p>
-                        For brief annotations on a single line,
-                        simply wrap your comment with <code>#</code> delimiters:
+                        For brief annotations on a single line, simply wrap your comment with <code>#</code> delimiters.
+                        Perfect for those "oh, that's why I did that" moments:
                     </p>
                     <pre><code># This is a single-line comment #
 
-# Initialize the user counter #
+# Initialize the user counter (because negative users would be weird) #
 the count is 0
 
-# Tyxar will ignore this entire line #</code></pre>
+# Tyxar will ignore this entire line (and pretend it never happened) #</code></pre>
 
                     <h3>Multi-Line Comments</h3>
                     <p>
                         Tyxar's comment syntax naturally extends to multiple lines.
                         Open your comment with <code>#</code>, write multiple lines of documentation,
-                        then close with <code>#</code>. Everything between the delimiters is ignored by the compiler:
+                        then close with <code>#</code>. Everything between the delimiters is ignored—
+                        it's like having a secret conversation with anyone who reads your code later:
                     </p>
                     <pre><code># This is a multi-line comment that spans
 several lines of documentation. Tyxar will
 ignore all of this text completely, allowing
 you to write extensive explanations, documentation,
-and reasoning without impacting code execution #
+and reasoning. No judgment here. #
 
 the name is "Alice"
 
 # The following section implements the core
 business logic. We use a digit state to ensure
-type safety for our calculations, and we validate
-input at runtime to prevent invalid states #
+type safety for our calculations. Spent three hours
+debugging this. Don't touch it. It works now.
+I don't know why, but it does. #
 the total is 100</code></pre>
 
                     <h3>Comment Placement and Best Practices</h3>
@@ -80,6 +83,7 @@ the total is 100</code></pre>
                     <ul>
                         <li>
                             <strong>Above code blocks</strong> – Explain what the following section does or why it exists
+                            (spoiler: sometimes the only explanation is "legacy code")
                         </li>
                         <li>
                             <strong>Beside variable declarations</strong> – Document the purpose and expected values
@@ -98,6 +102,7 @@ Program Documentation
 Author: Your Name
 Purpose: Calculate user statistics
 Last Updated: April 2026
+This took way longer than expected but we got there
 ======================================== #
 
 Variables:
@@ -107,7 +112,7 @@ Variables:
     # Full name stored as phrase for display #
     the user_name is "John Doe" as a phrase
     
-    # Core calculation variables #
+    # Core calculation variables (don't ask why these numbers, they just work) #
     the total_purchases is 0 as a decimal
     the transaction_count is 0 as a digit
 
@@ -115,89 +120,160 @@ Variables:
 This section processes all user transactions #
 
 write the user_name
-write the user_id
-
-# Calculate statistics (keep comments aligned with code structure) #
-write the total_purchases</code></pre>
+write the user_id</code></pre>
 
                     <h3>Important Notes on Comments</h3>
                     <ul>
                         <li>
-                            <strong>Comments are completely ignored</strong> – They have zero impact on program execution
-                            or performance, so don't hesitate to document thoroughly.
+                            <strong>Comments are completely ignored</strong> – They have zero impact on program execution,
+                            so feel free to vent to your code. It listens without judgment.
                         </li>
                         <li>
                             <strong>Nested delimiters not supported</strong> – You cannot nest <code>#</code> delimiters
-                            within comments. If you need literal <code>#</code> characters, place them outside comments.
+                            within comments. Simple rules, simple life.
                         </li>
                         <li>
                             <strong>Whitespace is preserved</strong> – Formatting and indentation within comments
                             are preserved as you write them, so you can create formatted documentation.
                         </li>
                         <li>
-                            <strong>Use comments wisely</strong> – While comments are valuable, write code that is self-documenting
-                            through clear naming and logical structure. Comments should explain <strong>why</strong>, not <strong>what</strong>.
+                            <strong>Use comments wisely</strong> – Write code that is self-documenting through clear naming.
+                            Comments should explain <strong>why</strong>, not <strong>what</strong>.
+                            If someone has to read your comment to understand what the code does, the code probably needs simplifying.
                         </li>
                     </ul>
                 </section>
             
                 <section id="variables">
-                    <h2>Variables</h2>
-                    <p>Variables are used to store data values. They are declared under the variables <i><a href="tyxar_web/docs/terminologies#umbrella">umbrella</a></i>: <br>
-                        <code>VARIABLES:</code> or <br>
-                        <code>Variables:</code> or <br>
-                        <code>VAR:</code><br>
-                        followed by indented variable declarations.
+                    <h2>Variables: Storing Your Data</h2>
+                    <p>
+                        <strong>Variables</strong> are containers that store data values throughout your program.
+                        Think of them as labeled boxes where you can put things for safekeeping and retrieve them later.
+                        In Tyxar, all variables must be declared in the <strong><a href="/tyxar_web/docs/terminologies#umbrella">Variables Umbrella</a></strong>,
+                        which lives at the very top of your program—keeping everything organized and easy to find.
                     </p>
-                    <p>This provides the relief from scanning through out a file for any declared variables,
-                        as all the variables to be used -
-                        regardless whether it is empty or not - are declared at the start of a program. Any changes to the variables would be made in the program body.
+                    <p>
+                        This approach is refreshingly different from many languages where variables scatter throughout your code
+                        like forgotten coffee cups across a desk. In Tyxar, there's one place to look: the Variables Umbrella.
+                        Want to know what data your program works with? Check the umbrella. It's beautifully organized chaos prevention.
                     </p>
-            
-                    <h3>Variable Declaration</h3>
-                    <p>Variables declarations in Tyxar are slightly different to many other languages. As variable names
-                        generally tend to be nouns, variables must always have the <i><a href="tyxar_web/docs/terminologies#keyword">keyword</a></i>: <br>
-                        <code>The</code> or <br>
-                        <code>the</code> <br> 
-                        just before the variable names. Variables are all declared in an indentation level from the 
-                        variables <i><a href="tyxar_web/docs/terminologies#umbrella">umbrella</a></i>.
+
+                    <h3>The Variables Umbrella Declaration</h3>
+                    <p>
+                        All variables must be declared under the Variables Umbrella at the start of your program.
+                        The umbrella heading can take several equivalent forms:
                     </p>
-                    <h4>Examples:</h4>
-                    <pre><code>VAR:
-    The age is 3
-    the name is "John"
-                        </code></pre>
-            
-                    <h3>Variable Naming</h3>
                     <ul>
-                        <li>Variable names can contain letters, numbers, and underscores between multi-worded variables</li>
-                        <li>Variable names are case-sensitive</li>
-                        <li>Use descriptive names that explain the purpose of the variable</li>
+                        <li><code>Variables:</code></li>
+                        <li><code>VARIABLES:</code></li>
+                        <li><code>VAR:</code></li>
                     </ul>
-            
-                    <h3>Variable States</h3>
-                    <p>Tyxar currently supports several data states:</p>
+                    <p>
+                        All variable declarations must be indented under this umbrella heading.
+                        This visual nesting makes it immediately clear which variables belong together—
+                        your code organization gets a promotion from "chaotic" to "intentional."
+                    </p>
+
+                    <h3>Variable Declaration Syntax</h3>
+                    <p>
+                        Variables in Tyxar follow a natural English pattern. Every variable declaration must begin with
+                        the keyword <strong><code>the</code></strong> (or <strong><code>The</code></strong>—case doesn't matter here).
+                        This mimics natural language and makes your code read more like documentation:
+                    </p>
+                    <p>
+                        <strong>Pattern:</strong> <code>the [variable_name] is [value]</code>
+                    </p>
+                    <pre><code>Variables:
+    the age is ""
+    the name is "Bob"</code></pre>
+
+                    <h3>Variable Naming Conventions</h3>
                     <ul>
-                        <li><strong>Number:</strong> Integers and floating-point numbers. </li>
-                        <li><strong>Phrase:</strong> Any data enclosed in quotes. </li>
-                        <li><strong>Digit:</strong> Integers only. </li>
-                        <li><strong>Decimal:</strong> Floating-point numbers only. </li>
-                        <li><strong>Letter:</strong> Single alphabetic characters only. </li>
-                        <li><strong>Symbol:</strong> Non-alphanumeric characters only. </li>
-                        <li><strong>Constant:</strong> Any data, but never changes. </li>
+                        <li>
+                            <strong>Letters, numbers, and underscores only</strong> – Variable names can contain these characters,
+                            but must start with a letter.
+                        </li>
+                        <li>
+                            <strong>Case-sensitive</strong> – <code>the_name</code> and <code>The_Name</code> are different variables
+                            (which is why clarity beats cleverness every time).
+                        </li>
+                        <li>
+                            <strong>Use underscores for spaces</strong> – Since spaces aren't allowed, use underscores for multi-word names:
+                            <code>the_user_age</code>, <code>the_total_purchases</code>
+                        </li>
+                        <li>
+                            <strong>Be descriptive</strong> – <code>the_user_id</code> is infinitely better than <code>the_x</code>.
+                            Your future self will thank you, and code reviewers won't need therapy.
+                        </li>
                     </ul>
-                    <p>To apply data states to variables, the
-                     <i><a href="tyxar_web/docs/terminologies#key-phrase">key-phrase</a></i>
-                      <code>as a</code></p>
-                    <h4>Examples:</h4>
-                    <pre><code>variables:
-    the age is 3 as a number
-    The name is "Bob" as a phrase
-    the year is 2026 as a digit
-    The result is 3.14 as a decimal
-    the 1st_letter is "j" as a letter
-    The currency is "£" as a symbol
-    the code is "alive!" as a constant</code></pre>
+
+                    <h3>Specifying States (Optional)</h3>
+                    <p>
+                        Variables can be assigned specific <strong><a href="/tyxar_web/docs/terminologies#state">States</a></strong>
+                        using the <code>as a</code> keyword. This is optional—Tyxar can infer states automatically—
+                        but explicit states improve code clarity and serve as documentation:
+                    </p>
+                    <p>
+                        <strong>Pattern:</strong> <code>the [name] is [value] as a [state]</code>
+                    </p>
+
+                    <h3>Comprehensive Variables Example</h3>
+                    <pre><code>Variables:
+    # Using explicit states for clarity
+    the age is "" as a digit
+    the name is "John" as a phrase
+    the background is 2
+    the num is 1+1*2/3^6</code></pre>
+
+                    <h3>More Complex Examples with All States</h3>
+                    <pre><code>Variables:
+    # Numeric states
+    the user_age is 25 as a digit
+    the user_balance is 3500.50 as a decimal
+    
+    # Text states
+    the greeting is "Hello, World!" as a phrase
+    the initial is 'J' as a letter
+    the separator is '|' as a symbol
+    
+    # Special states
+    the max_users is 100 as a constant</code></pre>
+
+                    <h3>State Inference vs. Explicit Declaration</h3>
+                    <p>
+                        Tyxar is intelligent enough to figure out what state your variables should be.
+                        You can omit the <code>as a [state]</code> part and let Tyxar do the heavy lifting:
+                    </p>
+                    <pre><code>Variables:
+    # Tyxar automatically figures these out
+    the count is 42                 (automatically a digit)
+    the price is 19.99              (automatically a decimal)
+    the message is "Hello"          (automatically a phrase)
+    
+    # But being explicit is fine too
+    the count is 42 as a digit
+    the price is 19.99 as a decimal
+    the message is "Hello" as a phrase</code></pre>
+
+                    <h3>Important Variable Notes</h3>
+                    <ul>
+                        <li>
+                            <strong>Umbrella must be at the top</strong> – All Variables Umbrellas go at the very beginning
+                            of your program, before any other code.
+                        </li>
+                        <li>
+                            <strong>Variables can be empty</strong> – You can declare a variable with an empty value:
+                            <code>the name is ""</code> is perfectly valid. Useful for placeholders.
+                        </li>
+                        <li>
+                            <strong>Variables can have expressions</strong> – Mathematical calculations are allowed:
+                            <code>the total is 1+1*2/3^6</code> works just fine.
+                        </li>
+                        <li>
+                            <strong>Use state id for debugging</strong> – If you're unsure about a value's state,
+                            use the <code>state id</code> command to check: <code>write the state id for the_variable</code>
+                        </li>
+                    </ul>
                 </section>
 
                 <section id="input-output">
