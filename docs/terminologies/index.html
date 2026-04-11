@@ -19,19 +19,206 @@
         <div id="content" class="content">
 
             <div class="content-wrapper">
-                <h1>Terminologies</h1>
+                <h1>Core Terminologies & Concepts</h1>
+                <p>
+                    Tyxar introduces distinctive terminology that reimagines how developers think about programming constructs.
+                    Understanding these foundational concepts is essential for writing effective, expressive Tyxar code.
+                </p>
 
                 <section id="umbrella">
-                    <h2>Umbrella</h2>
-                </section>  
+                    <h2>Umbrellas: Organized Code Structure</h2>
+                    <p>
+                        <strong>Umbrellas</strong> are declaration containers that organize and structure your code at the top level.
+                        Think of them as organized buckets that group related declarations together—they keep your code dry and protected,
+                        much like actual umbrellas protect you from the rain (except these protect you from code confusion).
+                    </p>
+                    <p>
+                        Umbrellas must be placed at the very beginning of your Tyxar program and serve as the primary mechanism
+                        for declaring variables, functions, imports, and other program elements.
+                    </p>
+
+                    <h3>Available Umbrellas</h3>
+                    <p>
+                        Currently, the <strong>Variables Umbrella</strong> is available for use in all versions of Tyxar.
+                        Future versions will introduce additional umbrella types to expand language capabilities:
+                    </p>
+                    <ul>
+                        <li>
+                            <strong>Variables Umbrella</strong> <em>(Currently Available)</em>
+                            – Declare and initialize variables for use throughout your program
+                        </li>
+                        <li>
+                            <strong>Functions Umbrella</strong> <em>(Future)</em>
+                            – Define reusable functions with parameters and return values
+                        </li>
+                        <li>
+                            <strong>Library Import Umbrella</strong> <em>(Future)</em>
+                            – Import external libraries and modules into your program
+                        </li>
+                        <li>
+                            <strong>Abilities Umbrella</strong> <em>(Future)</em>
+                            – Enable and configure advanced language features and capabilities
+                        </li>
+                    </ul>
+
+                    <h3>Variables Umbrella: Declaring Your Data</h3>
+                    <p>
+                        The Variables Umbrella allows you to declare all variables used in your program.
+                        Each variable declaration follows Tyxar's natural English-like syntax:
+                    </p>
+                    <pre><code>Variables:
+    the age is "" as a digit
+    the name is "John" as a phrase
+    the background is 2
+    the calculation is 1+1*2/3^6</code></pre>
+                    <p>
+                        Each line within the Variables Umbrella follows the pattern:
+                        <strong><code>the [name] is [value] [as a state]</code></strong>
+                    </p>
+                    <p>
+                        The <strong><code>as a state</code></strong> portion is optional—Tyxar's intelligent type inference
+                        will automatically determine the appropriate state if you omit it.
+                    </p>
+
+                    <h3>Future Umbrella Examples</h3>
+                    <p>
+                        To provide a glimpse into Tyxar's future capabilities, here's how functions might be declared
+                        in an upcoming Functions Umbrella (not yet available):
+                    </p>
+                    <pre><code>Functions:
+    func1: par1, par2
+        (...function body...)</code></pre>
+                </section>
 
                 <section id="state">
-                    <h2>State</h2>
+                    <h2>States: Tyxar's Take on Types</h2>
+                    <p>
+                        In Tyxar, we call them <strong>States</strong> instead of "types" because, well, why stick with convention
+                        when you can be delightfully different? States define the fundamental nature of data and what operations
+                        can be performed on them. They work identically to types in other languages—Tyxar just gives them a cooler name.
+                    </p>
+                    <p>
+                        Tyxar provides <strong>automatic state inference</strong>, meaning the language automatically determines the state
+                        of your data based on its value. However, you can also <strong>hard-code states explicitly</strong>
+                        for clarity, documentation, or validation purposes.
+                    </p>
+
+                    <h3>Built-in States</h3>
+                    <p>
+                        Tyxar includes a comprehensive set of built-in states to represent different kinds of data:
+                    </p>
+
+                    <h4>Numeric States</h4>
+                    <ul>
+                        <li>
+                            <strong><code>digit</code></strong> (aka <strong>integer</strong>)
+                            – Whole numbers without decimal points (e.g., <code>42</code>, <code>-17</code>, <code>0</code>)
+                        </li>
+                        <li>
+                            <strong><code>decimal</code></strong> (aka <strong>float</strong>)
+                            – Numbers with decimal precision (e.g., <code>3.14</code>, <code>-2.5</code>, <code>0.001</code>)
+                        </li>
+                    </ul>
+
+                    <h4>Text States</h4>
+                    <ul>
+                        <li>
+                            <strong><code>phrase</code></strong> (aka <strong>string</strong>)
+                            – Sequences of characters enclosed in quotes (e.g., <code>"Hello, World!"</code>, <code>"Tyxar"</code>)
+                        </li>
+                        <li>
+                            <strong><code>letter</code></strong>
+                            – A single alphabetic character (e.g., <code>'a'</code>, <code>'Z'</code>)
+                        </li>
+                    </ul>
+
+                    <h4>Special Character State</h4>
+                    <ul>
+                        <li>
+                            <strong><code>symbol</code></strong>
+                            – A non-alphanumeric character (e.g., <code>!</code>, <code>@</code>, <code>#</code>)
+                        </li>
+                    </ul>
+
+                    <h4>Immutability State</h4>
+                    <ul>
+                        <li>
+                            <strong><code>constant</code></strong>
+                            – A value that cannot be modified after initial assignment, even if modification is attempted.
+                            Constants provide guarantees that certain values remain unchanged throughout program execution.
+                        </li>
+                    </ul>
+
+                    <h3>State Inference vs. Explicit Declaration</h3>
+                    <p>
+                        Tyxar intelligently infers states from the values you assign. However, you can explicitly declare
+                        the state for added clarity or validation:
+                    </p>
+                    <pre><code>Variables:
+    the implicit_age is 25                    (automatically inferred as digit)
+    the explicit_age is 25 as a digit         (explicitly declared as digit)
+    
+    the implicit_pi is 3.14159                (automatically inferred as decimal)
+    the explicit_pi is 3.14159 as a decimal   (explicitly declared as decimal)
+    
+    the implicit_name is "Alice"              (automatically inferred as phrase)
+    the explicit_name is "Alice" as a phrase  (explicitly declared as phrase)</code></pre>
+
+                    <h3>Discovering State Information: state id</h3>
+                    <p>
+                        To programmatically determine or display the state of any piece of data, use the <strong><code>state id</code></strong> command.
+                        This is particularly useful for debugging, validation, or when you need to dynamically understand what you're working with:
+                    </p>
+                    <pre><code>write the state id for "hello"           (outputs: phrase)
+write the state id for 42                   (outputs: digit)
+write the state id for 3.14                 (outputs: decimal)
+write the state id for the name             (outputs: phrase, since name = "John")</code></pre>
+
+                    <h3>State Usage Examples</h3>
+                    <p>
+                        Here's a comprehensive example demonstrating Variables Umbrella declarations with various states:
+                    </p>
+                    <pre><code>Variables:
+    the user_age is "" as a digit
+    the user_name is "John" as a phrase
+    the background_value is 2
+    the calculation_result is 1+1*2/3^6
+    the pi is 3.14159 as a decimal
+    the first_letter is 'A' as a letter
+    the separator is '|' as a symbol
+    
+write the user_age
+write the state id for the user_name
+write the state id for "hello"
+write the calculation_result</code></pre>
                 </section>
 
-                <section id="key-phrase">
-                    <h2>Key-Phrase</h2>
+                <section id="best-practices">
+                    <h2>Best Practices for Umbrellas and States</h2>
+                    <ul>
+                        <li>
+                            <strong>Place Umbrellas at the Top</strong>
+                            – Always declare your Umbrellas at the beginning of your program for maximum clarity and organization.
+                        </li>
+                        <li>
+                            <strong>Use Explicit States When Unclear</strong>
+                            – While type inference is powerful, explicitly declaring states for complex or non-obvious assignments
+                            improves code readability and serves as documentation.
+                        </li>
+                        <li>
+                            <strong>Leverage state id for Debugging</strong>
+                            – When you're uncertain about a value's state or need to understand data flow, use <code>state id</code>
+                            to quickly verify.
+                        </li>
+                        <li>
+                            <strong>Consider Constants for Fixed Values</strong>
+                            – Use the <code>constant</code> state for values that should never change,
+                            providing compile-time guarantees and reducing runtime errors.
+                        </li>
+                    </ul>
                 </section>
+
+            </div>
                 
 <!-- Scripts -->
 <script src="/tyxar_web/script.js"></script>
