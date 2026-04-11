@@ -22,20 +22,123 @@
                 <h1>Language Basics</h1>
             
                 <section id="annotate">
-                    <h2>Annotations</h2>
-                    <p>Annotations or comments made in code should be written with
-                        <code>#</code> on each side of the comment or anotation.
+                    <h2>Annotations and Comments</h2>
+                    <p>
+                        Annotations, commonly known as <strong>comments</strong>, are crucial for documenting your code.
+                        They enable you to explain your logic, document your decision-making process, and help future readers
+                        (including your future self) understand why you wrote something a particular way.
+                        In Tyxar, comments are completely ignored by the compiler and serve purely as documentation.
                     </p>
-                    <p>This works for both single lines and more. All text or characters within
-                        <code>#...#</code> would be ignored.
-                    </p>
-                    <h4>Examples:</h4>
-                    <pre><code>
-# This is a comment #
 
-# This part of the
-code calls the x function#
-</code></pre>
+                    <h3>Comment Syntax</h3>
+                    <p>
+                        Tyxar uses a distinctive <strong>delimiter-based comment syntax</strong> that embraces symmetry and clarity.
+                        All annotations must be surrounded by the <strong><code>#</code></strong> character on both sides.
+                        This approach works for <strong>both single-line and multi-line comments</strong>,
+                        making it intuitive and consistent regardless of comment length.
+                    </p>
+                    <p>
+                        The basic structure is: <strong><code># your comment here #</code></strong>
+                    </p>
+
+                    <h3>Single-Line Comments</h3>
+                    <p>
+                        For brief annotations on a single line,
+                        simply wrap your comment with <code>#</code> delimiters:
+                    </p>
+                    <pre><code># This is a single-line comment #
+
+# Initialize the user counter #
+the count is 0
+
+# Tyxar will ignore this entire line #</code></pre>
+
+                    <h3>Multi-Line Comments</h3>
+                    <p>
+                        Tyxar's comment syntax naturally extends to multiple lines.
+                        Open your comment with <code>#</code>, write multiple lines of documentation,
+                        then close with <code>#</code>. Everything between the delimiters is ignored by the compiler:
+                    </p>
+                    <pre><code># This is a multi-line comment that spans
+several lines of documentation. Tyxar will
+ignore all of this text completely, allowing
+you to write extensive explanations, documentation,
+and reasoning without impacting code execution #
+
+the name is "Alice"
+
+# The following section implements the core
+business logic. We use a digit state to ensure
+type safety for our calculations, and we validate
+input at runtime to prevent invalid states #
+the total is 100</code></pre>
+
+                    <h3>Comment Placement and Best Practices</h3>
+                    <p>
+                        Comments can appear <strong>anywhere in your code</strong>, but strategic placement enhances readability:
+                    </p>
+                    <ul>
+                        <li>
+                            <strong>Above code blocks</strong> – Explain what the following section does or why it exists
+                        </li>
+                        <li>
+                            <strong>Beside variable declarations</strong> – Document the purpose and expected values
+                        </li>
+                        <li>
+                            <strong>Before complex logic</strong> – Explain non-obvious algorithms or business rules
+                        </li>
+                        <li>
+                            <strong>At the top of programs</strong> – Provide overview, author information, or usage instructions
+                        </li>
+                    </ul>
+
+                    <h3>Comprehensive Comment Examples</h3>
+                    <pre><code># ========================================
+Program Documentation
+Author: Your Name
+Purpose: Calculate user statistics
+Last Updated: April 2026
+======================================== #
+
+Variables:
+    # User identification and tracking #
+    the user_id is 12345 as a digit
+    
+    # Full name stored as phrase for display #
+    the user_name is "John Doe" as a phrase
+    
+    # Core calculation variables #
+    the total_purchases is 0 as a decimal
+    the transaction_count is 0 as a digit
+
+# Main program logic begins here
+This section processes all user transactions #
+
+write the user_name
+write the user_id
+
+# Calculate statistics (keep comments aligned with code structure) #
+write the total_purchases</code></pre>
+
+                    <h3>Important Notes on Comments</h3>
+                    <ul>
+                        <li>
+                            <strong>Comments are completely ignored</strong> – They have zero impact on program execution
+                            or performance, so don't hesitate to document thoroughly.
+                        </li>
+                        <li>
+                            <strong>Nested delimiters not supported</strong> – You cannot nest <code>#</code> delimiters
+                            within comments. If you need literal <code>#</code> characters, place them outside comments.
+                        </li>
+                        <li>
+                            <strong>Whitespace is preserved</strong> – Formatting and indentation within comments
+                            are preserved as you write them, so you can create formatted documentation.
+                        </li>
+                        <li>
+                            <strong>Use comments wisely</strong> – While comments are valuable, write code that is self-documenting
+                            through clear naming and logical structure. Comments should explain <strong>why</strong>, not <strong>what</strong>.
+                        </li>
+                    </ul>
                 </section>
             
                 <section id="variables">
