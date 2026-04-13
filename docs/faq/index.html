@@ -399,8 +399,74 @@ tyxar explain myprogram.txr --steps</code></pre>
                 </li>
             </ol>
         </section>
+
         <section id="error-codes">
-            <h2></h2>
+            <h2>Common Error Codes</h2>
+            <p>
+                When Tyxar encounters issues, it provides error codes to help you identify and resolve problems quickly.
+                Here are some of the most common error codes you might encounter:
+            </p>
+
+            <h3>ERR_UMBRELLA_NOT_FOUND (E001)</h3>
+            <p>
+                <strong>Meaning:</strong>
+                Tyxar couldn't find a required Umbrella declaration (e.g., Variables Umbrella) at the beginning of your program.
+            </p>
+            <p>
+                <strong>Solution:</strong>
+                Ensure your Variables Umbrella is declared at the very top of your file using one of these formats:
+                <code>Variables:</code>, <code>VARIABLES:</code>, or <code>VAR:</code>
+            </p>
+        </section>
+
+        <section id="best-practices">
+            <h2>Best Practices: Writing Better Tyxar Code</h2>
+            <p>
+                Following these best practices will help you write clearer, more maintainable Tyxar code
+                that's easier to debug and collaborate on with teammates.
+            </p>
+
+            <h3>1. Always Organize Variables in Umbrellas at the Top</h3>
+            <p>
+                <strong>Why This Matters:</strong>
+                Declaring all variables upfront provides immediate visibility into what data your program uses.
+                Developers reading your code don't have to hunt through hundreds of lines to understand your data model.
+            </p>
+            <p>
+                <strong>Good Practice:</strong>
+            </p>
+            <pre><code>Variables:
+    the user_name is ""
+    the user_age is 0
+    the total_balance is 0.00
+
+# Main program logic follows below #
+write the user_name</code></pre>
+            <p>
+                <strong>Avoid This:</strong>
+            </p>
+            <pre><code># Don't scatter variable declarations throughout your code #
+write the user_name
+the user_age is 25
+write the user_age</code></pre>
+
+            <h3>2. Use Explicit States When Clarity Matters</h3>
+            <p>
+                <strong>Why This Matters:</strong>
+                While Tyxar's state inference is powerful, explicitly declaring states serves as documentation
+                and prevents subtle bugs from type confusion.
+            </p>
+            <p>
+                <strong>Good Practice:</strong>
+            </p>
+            <pre><code>Variables:
+    the user_id is 12345 as a digit
+    the user_email is "user@example.com" as a phrase
+    the account_balance is 1500.50 as a decimal</code></pre>
+            <p>
+                <strong>Why It's Better:</strong>
+                Code reviewers immediately understand what types are expected, and the compiler can catch type mismatches early.
+            </p>
         </section>
     </div>
 </div>
