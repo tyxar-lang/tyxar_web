@@ -194,12 +194,210 @@
         </section>
 
         <section id="common-issues">
-                    <h2>Common Issues</h2>
-                    <h3><i>My ... isn't working...</i></h3>
-                    <ul>
-                        <li>Try x,y,z</li>
-                        <li>If not, try a,b,c</li>
-                    </ul>
+            <h2>Troubleshooting: When Things Aren't Quite Right</h2>
+            <p>
+                Welcome to the reality of programming. Even in a language designed to make life easier,
+                you'll occasionally encounter situations where things stubbornly refuse to work.
+                Here are the most common culprits (and how to dispatch them):
+            </p>
+
+            <h3>"My Variables Umbrella Isn't Recognized"</h3>
+            <p>
+                <strong>Symptoms:</strong>
+                You get an error saying the Variables Umbrella isn't defined, or Tyxar acts like your variables don't exist.
+            </p>
+            <p>
+                <strong>Likely Causes & Solutions:</strong>
+            </p>
+            <ul>
+                <li>
+                    <strong>The umbrella isn't at the top of your file.</strong>
+                    Variables Umbrellas <em>must</em> come before any other code. Not after some comments, not after a few declarations—at the very top.
+                    Think of it like putting your umbrella in the coat closet before you take off your jacket.
+                </li>
+                <li>
+                    <strong>You used the wrong capitalization.</strong>
+                    <code>Variables:</code>, <code>VARIABLES:</code>, and <code>VAR:</code> all work. <code>variables:</code> also works.
+                    What doesn't work: <code>Var:</code>, <code>VARIABLE:</code>, or <code>VaRiAbLeS:</code> (though bonus points for style).
+                </li>
+                <li>
+                    <strong>Missing colon.</strong>
+                    It's <code>Variables:</code> not <code>Variables</code>. That colon is doing some serious lifting.
+                </li>
+                <li>
+                    <strong>Indentation is off.</strong>
+                    Variables must be indented under the umbrella. If your variables aren't indented, Tyxar gets confused
+                    and starts doubting whether they actually exist. (Existential crisis in your code.)
+                </li>
+            </ul>
+
+            <h3>"I Used 'the' but Tyxar Still Isn't Recognizing My Variable"</h3>
+            <p>
+                <strong>Symptoms:</strong>
+                You declared <code>the name is "Bob"</code> but when you try to use it, Tyxar acts like it's never heard of this "name" thing.
+            </p>
+            <p>
+                <strong>Likely Causes & Solutions:</strong>
+            </p>
+            <ul>
+                <li>
+                    <strong>Typo in variable name.</strong>
+                    You declared <code>the_user_name</code> but called it <code>the user name</code> or <code>username</code>.
+                    Variable names are case-sensitive AND require underscores for spaces. Copy-paste is your friend here.
+                </li>
+                <li>
+                    <strong>Variable hasn't been declared yet.</strong>
+                    All variables must be in the Variables Umbrella. If you try to define a variable in your main code,
+                    Tyxar will give you the programming equivalent of a confused stare.
+                </li>
+                <li>
+                    <strong>Missing the keyword 'the' during declaration.</strong>
+                    Variables need <code>the</code> in the umbrella: <code>the name is "Bob"</code>.
+                    Without it, Tyxar thinks you're just writing random English.
+                </li>
+            </ul>
+
+            <h3>"My Comments Keep Breaking My Code"</h3>
+            <p>
+                <strong>Symptoms:</strong>
+                Your program works fine until you add a comment, then suddenly everything breaks. Tyxar acts like your comment is code.
+            </p>
+            <p>
+                <strong>Likely Causes & Solutions:</strong>
+            </p>
+            <ul>
+                <li>
+                    <strong>Missing closing hash (#).</strong>
+                    Comments need <code>#</code> on both sides: <code># this is a comment #</code>.
+                    If you forget the closing <code>#</code>, Tyxar interprets everything after that hash as a comment.
+                    Your actual code becomes invisible. (It's still there, but comment-land is mysterious and unmerciful.)
+                </li>
+                <li>
+                    <strong>Nested hashes inside comments.</strong>
+                    You can't nest <code>#</code> inside comments. If you need literal hash symbols, don't put them between the delimiters.
+                    This is one of those "seemed like a good idea until someone tried it" edge cases.
+                </li>
+                <li>
+                    <strong>Hash in wrong position.</strong>
+                    It's not <code># comment with # in it #</code> because that closes early.
+                    Keep it simple. Your future self will appreciate the restraint.
+                </li>
+            </ul>
+
+            <h3>"I'm Assigning a State and Tyxar Disagrees with Me"</h3>
+            <p>
+                <strong>Symptoms:</strong>
+                You declared <code>the age is "25" as a digit</code> but Tyxar says it's actually a phrase,
+                not a digit. (Existential question: who's right—you or the language?)
+            </p>
+            <p>
+                <strong>Likely Causes & Solutions:</strong>
+            </p>
+            <ul>
+                <li>
+                    <strong>You put quotes around your number.</strong>
+                    <code>"25"</code> is a phrase (text). <code>25</code> is a digit.
+                    The quotes transform it into text, even though it looks like a number.
+                    Tyxar is technically correct, which as we all know, is the best kind of correct.
+                </li>
+                <li>
+                    <strong>You used the wrong state name.</strong>
+                    It's <code>digit</code>, <code>decimal</code>, <code>phrase</code>, <code>letter</code>, or <code>symbol</code>.
+                    <code>number</code>, <code>int</code>, or <code>string</code> won't work.
+                    Tyxar has opinions about terminology and isn't shy about them.
+                </li>
+                <li>
+                    <strong>You're mixing text and numbers.</strong>
+                    <code>the value is 10 + "5"</code> is confusing even to Tyxar.
+                    Either make everything numbers or make everything text, but don't make Tyxar guess your intentions. It gets cranky.
+                </li>
+            </ul>
+
+            <h3>"My Code Works Locally but Something's Off"</h3>
+            <p>
+                <strong>Symptoms:</strong>
+                Program runs, produces output, but the results don't match your expectations.
+            </p>
+            <p>
+                <strong>Likely Causes & Solutions:</strong>
+            </p>
+            <ul>
+                <li>
+                    <strong>Variables have unexpected values.</strong>
+                    Use <code>write the state id for variable_name</code> to verify what state it actually is.
+                    Sometimes state inference surprises you (usually in a bad way, at 2 AM).
+                </li>
+                <li>
+                    <strong>Order of operations isn't what you expected.</strong>
+                    Mathematical expressions follow standard order: exponents, multiplication/division, then addition/subtraction.
+                    <code>1+1*2</code> is <code>3</code>, not <code>4</code>. (If you expected 4, welcome to programming.)
+                </li>
+                <li>
+                    <strong>Comments are hiding code.</strong>
+                    Ensure all your comments are properly closed with <code>#</code> on both ends.
+                    Use the <code>explain</code> command to see what Tyxar actually thinks your code does.
+                </li>
+                <li>
+                    <strong>Variable mutation issues.</strong>
+                    If you declared something as a <code>constant</code>, it can't be changed.
+                    If you're trying to modify it, Tyxar will refuse. Constants are called constants for a reason.
+                </li>
+            </ul>
+
+            <h3>"I'm Getting Spammed with Error Messages"</h3>
+            <p>
+                <strong>Symptoms:</strong>
+                Tyxar is telling you about problems, but you can barely parse what it's saying.
+            </p>
+            <p>
+                <strong>Solution:</strong>
+            </p>
+            <ul>
+                <li>
+                    <strong>Use the <code>scan</code> command first.</strong>
+                    <code>tyxar scan yourprogram.txr</code> will check for errors without running the code.
+                    This helps you catch structural problems before they cascade.
+                </li>
+                <li>
+                    <strong>Use verbose mode for details.</strong>
+                    <code>tyxar scan yourprogram.txr --verbose</code> gives you more context about what's wrong
+                    and often suggests fixes. It's like Tyxar having a patient parent mode.
+                </li>
+                <li>
+                    <strong>Use the <code>explain</code> command.</strong>
+                    <code>tyxar explain yourprogram.txr --steps</code> shows you exactly what your code is doing.
+                    Watching this step-by-step explanation often reveals the error immediately.
+                </li>
+            </ul>
+
+            <h3>"I Want to Know What Tyxar Thinks My Code Does"</h3>
+            <p>
+                <strong>Solution:</strong>
+                This isn't an error, but a really valuable debugging technique:
+            </p>
+            <pre><code>tyxar explain myprogram.txr
+tyxar explain myprogram.txr --steps</code></pre>
+            <p>
+                Tyxar will explain your code in plain English. If the explanation doesn't match what you intended,
+                you've found your bug. It's like having a rubber duck that actually speaks.
+            </p>
+
+            <h3>"I Still Can't Figure Out What's Wrong"</h3>
+            <p>
+                <strong>Step-by-step debugging approach:</strong>
+            </p>
+            <ol>
+                <li>Run <code>tyxar scan yourprogram.txr --verbose</code> and read carefully</li>
+                <li>Run <code>tyxar explain yourprogram.txr --steps</code> and compare to your expectations</li>
+                <li>Check your Variables Umbrella is at the top and properly formatted</li>
+                <li>Verify all variable declarations use <code>the variable_name is value</code> format</li>
+                <li>Verify all comments have <code>#</code> on both sides</li>
+                <li>Check that state names are spelled correctly (digit, decimal, phrase, letter, symbol, constant)</li>
+                <li>
+                    Still stuck? The answer is usually indentation, a missing colon, or a typo.
+                    (In 99% of debugging sessions, the error is somewhere stupidly obvious that you've stared past 47 times.)
+                </li>
+            </ol>
         </section>
         <section id="error-codes">
             <h2></h2>
