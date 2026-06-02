@@ -17,7 +17,7 @@
         }
 
         .updates-hero h1 {
-            font-size: 3em;
+            font-size: 3rem;
             margin-bottom: 10px;
             font-weight: 700;
         }
@@ -59,13 +59,13 @@
 
         .filter-btn:hover,
         .filter-btn.active {
-            background: var(--accent-blue);
+            background: #63b3ed;;
             color: white;
         }
 
         .update-card {
             background: white;
-            border-left: 5px solid var(--accent-blue);
+            border-left: 5px solid #63b3ed;;
             padding: 25px;
             margin-bottom: 25px;
             border-radius: 8px;
@@ -105,10 +105,45 @@
             color: var(--metal-light);
             font-weight: 600;
         }
+        .update-concern{
+            font-weight: 600;
+            font-style: italic;
+            color: #34507a;
+            padding-left: 2px;
+            border-left: 1px solid #2a3439;
+        }
+
+        .con-btn {
+            padding: 8px 16px;
+            border: 2px solid #4a5568;
+            background: linear-gradient(135deg, #2a3439 0%, #4a5568 100%);
+            color: white;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            font-size: 0.95em;
+            margin-right: 10px;
+        }
+
+        .con-btn:hover,
+        .con-btn.active {
+            background: linear-gradient(135deg, #63b3ed 0%, #214059 100%);
+            color: white;
+            border-color: #63b3ed;
+        }
+
+        .categories {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
 
         .update-tag {
             display: inline-block;
-            background: var(--accent-blue);
+            background: #63b3ed;;
             color: white;
             padding: 4px 12px;
             border-radius: 20px;
@@ -129,7 +164,7 @@
         }
 
         .update-tag.release {
-            background: var(--accent-blue);
+            background: #63b3ed;;
         }
 
         .update-content {
@@ -203,6 +238,11 @@
         </section>
 
         <section class="updates-container">
+            <div class="categories">
+                <button class="con-btn" onclick="filterconcern('all')">ALL</button>
+                <button class="con-btn" onclick="filterconcern('tyxar')">Tyxar</button>
+                <button class="con-btn" onclick="filterconcern('blade')">BLADE</button>
+            </div>
             <!-- Filter -->
             <div class="updates-filter">
                 <button class="filter-btn active" onclick="filterUpdates('all')">All</button>
@@ -215,10 +255,11 @@
 
             <!-- Updates -->
             <div id="updates-feed">
-                <div class="update-card" data-category="announcement">
+                <div class="update-card" data-category="announcement" data-concern="tyxar">
                     <div class="update-header">
                         <h2 class="update-title">Tyxar v1.0.0 Release Coming Soon</h2>
                         <div class="update-meta">
+                            <span class="update-concern">Tyxar</span>
                             <span class="update-date">February 21, 2026</span>
                             <span class="update-tag announcement">Announcement</span>
                         </div>
@@ -235,10 +276,11 @@
                     </div>
                 </div>
 
-                <div class="update-card" data-category="feature">
+                <div class="update-card" data-category="feature" data-concern="blade">
                     <div class="update-header">
                         <h2 class="update-title">New BLADE Syntax Enhancements</h2>
                         <div class="update-meta">
+                            <span class="update-concern">BLADE</span>
                             <span class="update-date">February 15, 2026</span>
                             <span class="update-tag feature">Feature</span>
                         </div>
@@ -253,10 +295,11 @@
                     </div>
                 </div>
 
-                <div class="update-card" data-category="bug">
+                <div class="update-card" data-category="bug" data-concern="tyxar">
                     <div class="update-header">
                         <h2 class="update-title">Critical Bug Fixes in Latest Build</h2>
                         <div class="update-meta">
+                            <span class="update-concern">Tyxar</span>
                             <span class="update-date">February 10, 2026</span>
                             <span class="update-tag bug">Bug Fix</span>
                         </div>
@@ -272,10 +315,11 @@
                     </div>
                 </div>
 
-                <div class="update-card" data-category="release">
+                <div class="update-card" data-category="release" data-concern="tyxar">
                     <div class="update-header">
                         <h2 class="update-title">Beta 3.2 Released</h2>
                         <div class="update-meta">
+                            <span class="update-concern">Tyxar</span>
                             <span class="update-date">February 1, 2026</span>
                             <span class="update-tag release">Release</span>
                         </div>
@@ -286,10 +330,11 @@
                     </div>
                 </div>
 
-                <div class="update-card" data-category="announcement">
+                <div class="update-card" data-category="announcement" data-concern="tyxar">
                     <div class="update-header">
                         <h2 class="update-title">Documentation Portal Launch</h2>
                         <div class="update-meta">
+                            <span class="update-concern">Tyxar</span>
                             <span class="update-date">January 25, 2026</span>
                             <span class="update-tag announcement">Announcement</span>
                         </div>
@@ -318,6 +363,25 @@
             // Filter cards
             cards.forEach(card => {
                 if (category === 'all' || card.dataset.category === category) {
+                    card.style.display = 'block';
+                    setTimeout(() => card.style.opacity = '1', 0);
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        function filterconcern(concern){
+            const cards = document.querySelectorAll('.update-card');
+            const buttons = document.querySelectorAll('.con-btn');
+
+            // Update button states
+            buttons.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            // Filter cards
+            cards.forEach(card => {
+                if (concern === 'all' || card.dataset.concern === concern) {
                     card.style.display = 'block';
                     setTimeout(() => card.style.opacity = '1', 0);
                 } else {
