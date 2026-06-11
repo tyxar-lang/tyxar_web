@@ -35,14 +35,86 @@
             padding: 0 20px;
         }
 
+        /* Concern Filter Section - More Distinctive */
+        .concern-filter-section {
+            background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+            padding: 30px 20px;
+            margin-bottom: 50px;
+            border-radius: 12px;
+            border-left: 5px solid #63b3ed;
+        }
+
+        .concern-filter-label {
+            display: block;
+            font-size: 0.9em;
+            font-weight: 700;
+            color: #2d3748;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .concern-filters {
+            display: flex;
+            flex-direction: row;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .concern-btn {
+            padding: 12px 24px;
+            border: 2px solid transparent;
+            background: white;
+            color: #4a5568;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            font-size: 0.95em;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .concern-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+        }
+
+        .concern-btn.active {
+            color: white;
+            font-weight: 700;
+        }
+
+        .concern-btn.active.tyxar-active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-color: #667eea;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .concern-btn.active.blade-active {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            border-color: #f5576c;
+            box-shadow: 0 4px 15px rgba(245, 87, 108, 0.4);
+        }
+
+        .concern-btn.active.all-active {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            border-color: #4facfe;
+            box-shadow: 0 4px 15px rgba(79, 172, 254, 0.4);
+        }
+
+        /* Category Filter - Updated */
         .updates-filter {
             display: flex;
             flex-direction: row;
             gap: 10px;
             margin-bottom: 40px;
-            flex-wrap:nowrap;
+            flex-wrap: wrap;
             justify-content: center;
-            overflow-x:auto;
+            overflow-x: auto;
         }
 
         .filter-btn {
@@ -59,13 +131,13 @@
 
         .filter-btn:hover,
         .filter-btn.active {
-            background: #63b3ed;;
+            background: #63b3ed;
             color: white;
         }
 
         .update-card {
             background: white;
-            border-left: 5px solid #63b3ed;;
+            border-left: 5px solid #63b3ed;
             padding: 25px;
             margin-bottom: 25px;
             border-radius: 8px;
@@ -105,32 +177,28 @@
             color: var(--metal-light);
             font-weight: 600;
         }
-        .update-concern{
-            font-weight: 600;
-            font-style: italic;
-            color: #34507a;
-            padding-left: 2px;
-            border-left: 1px solid #2a3439;
-        }
 
-        .con-btn {
-            padding: 8px 16px;
-            border: 2px solid #4a5568;
-            background: linear-gradient(135deg, #2a3439 0%, #4a5568 100%);
-            color: white;
+        .update-concern {
+            font-weight: 700;
+            padding: 4px 12px;
             border-radius: 6px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            font-size: 0.95em;
-            margin-right: 10px;
+            font-size: 0.85em;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
-        .con-btn:hover,
-        .con-btn.active {
-            background: linear-gradient(135deg, #63b3ed 0%, #214059 100%);
-            color: white;
-            border-color: #63b3ed;
+        .update-concern.tyxar {
+            background: rgba(102, 126, 234, 0.15);
+            color: #667eea;
+            border-left: 3px solid #667eea;
+            padding-left: 9px;
+        }
+
+        .update-concern.blade {
+            background: rgba(245, 87, 108, 0.15);
+            color: #f5576c;
+            border-left: 3px solid #f5576c;
+            padding-left: 9px;
         }
 
         .categories {
@@ -143,7 +211,7 @@
 
         .update-tag {
             display: inline-block;
-            background: #63b3ed;;
+            background: #63b3ed;
             color: white;
             padding: 4px 12px;
             border-radius: 20px;
@@ -164,7 +232,11 @@
         }
 
         .update-tag.release {
-            background: #63b3ed;;
+            background: #63b3ed;
+        }
+
+        .update-tag.security {
+            background: #9f7aea;
         }
 
         .update-content {
@@ -193,6 +265,19 @@
         @media (max-width: 768px) {
             .updates-hero h1 {
                 font-size: 2em;
+            }
+
+            .concern-filter-section {
+                padding: 20px 15px;
+            }
+
+            .concern-filters {
+                gap: 8px;
+            }
+
+            .concern-btn {
+                padding: 10px 18px;
+                font-size: 0.9em;
             }
 
             .updates-filter {
@@ -238,19 +323,24 @@
         </section>
 
         <section class="updates-container">
-            <div class="categories">
-                <button class="con-btn" onclick="filterconcern('all')">ALL</button>
-                <button class="con-btn" onclick="filterconcern('tyxar')">Tyxar</button>
-                <button class="con-btn" onclick="filterconcern('blade')">BLADE</button>
+            <!-- Concern Filter - More Distinctive -->
+            <div class="concern-filter-section">
+                <label class="concern-filter-label">Filter by Product</label>
+                <div class="concern-filters">
+                    <button class="concern-btn active all-active" onclick="filterByConcern('all')">All Products</button>
+                    <button class="concern-btn" onclick="filterByConcern('tyxar')">Tyxar</button>
+                    <button class="concern-btn" onclick="filterByConcern('blade')">BLADE</button>
+                </div>
             </div>
-            <!-- Filter -->
+
+            <!-- Category Filter -->
             <div class="updates-filter">
-                <button class="filter-btn active" onclick="filterUpdates('all')">All</button>
-                <button class="filter-btn" onclick="filterUpdates('announcement')">Announcements</button>
-                <button class="filter-btn" onclick="filterUpdates('release')">Releases</button>
-                <button class="filter-btn" onclick="filterUpdates('feature')">Features</button>
-                <button class="filter-btn" onclick="filterUpdates('bug')">Bug Fixes</button>
-                <button class="filter-btn" onclick="filterUpdates('security')">Security</button>
+                <button class="filter-btn active" onclick="filterByCategory('all')">All</button>
+                <button class="filter-btn" onclick="filterByCategory('announcement')">Announcements</button>
+                <button class="filter-btn" onclick="filterByCategory('release')">Releases</button>
+                <button class="filter-btn" onclick="filterByCategory('feature')">Features</button>
+                <button class="filter-btn" onclick="filterByCategory('bug')">Bug Fixes</button>
+                <button class="filter-btn" onclick="filterByCategory('security')">Security</button>
             </div>
 
             <!-- Updates -->
@@ -259,13 +349,13 @@
                     <div class="update-header">
                         <h2 class="update-title">Tyxar v1.0.0 Release Coming Soon</h2>
                         <div class="update-meta">
-                            <span class="update-concern">Tyxar</span>
+                            <span class="update-concern tyxar">Tyxar</span>
                             <span class="update-date">February 21, 2026</span>
                             <span class="update-tag announcement">Announcement</span>
                         </div>
                     </div>
                     <div class="update-content">
-                        <p>We're thrilled to announce that Tyxar v1.0.0 is on track for release in mid-2026! This is a major milestone for the Tyxar programming language. Learn more about what's coming by checking our roadmap.</p>
+                        <p>We're thrilled to announce that Tyxar v1.0.0 is on track for release in mid-2026! This is a major milestone for the Tyxar programming language. Learn more about what's coming[...]
                         <p><strong>What to expect:</strong></p>
                         <ul>
                             <li>Stable core language features</li>
@@ -280,13 +370,13 @@
                     <div class="update-header">
                         <h2 class="update-title">New BLADE Syntax Enhancements</h2>
                         <div class="update-meta">
-                            <span class="update-concern">BLADE</span>
+                            <span class="update-concern blade">BLADE</span>
                             <span class="update-date">February 15, 2026</span>
                             <span class="update-tag feature">Feature</span>
                         </div>
                     </div>
                     <div class="update-content">
-                        <p>We've introduced several syntax improvements to BLADE to make it more intuitive and powerful. These enhancements focus on improving code readability and reducing boilerplate.</p>
+                        <p>We've introduced several syntax improvements to BLADE to make it more intuitive and powerful. These enhancements focus on improving code readability and reducing boilerplate[...]
                         <ul>
                             <li>Simplified module imports</li>
                             <li>Enhanced pattern matching</li>
@@ -299,7 +389,7 @@
                     <div class="update-header">
                         <h2 class="update-title">Critical Bug Fixes in Latest Build</h2>
                         <div class="update-meta">
-                            <span class="update-concern">Tyxar</span>
+                            <span class="update-concern tyxar">Tyxar</span>
                             <span class="update-date">February 10, 2026</span>
                             <span class="update-tag bug">Bug Fix</span>
                         </div>
@@ -319,7 +409,7 @@
                     <div class="update-header">
                         <h2 class="update-title">Beta 3.2 Released</h2>
                         <div class="update-meta">
-                            <span class="update-concern">Tyxar</span>
+                            <span class="update-concern tyxar">Tyxar</span>
                             <span class="update-date">February 1, 2026</span>
                             <span class="update-tag release">Release</span>
                         </div>
@@ -334,14 +424,34 @@
                     <div class="update-header">
                         <h2 class="update-title">Documentation Portal Launch</h2>
                         <div class="update-meta">
-                            <span class="update-concern">Tyxar</span>
+                            <span class="update-concern tyxar">Tyxar</span>
                             <span class="update-date">January 25, 2026</span>
                             <span class="update-tag announcement">Announcement</span>
                         </div>
                     </div>
                     <div class="update-content">
-                        <p>Our completely redesigned documentation portal is now live! With improved organization, interactive examples, and better search functionality, learning Tyxar has never been easier.</p>
+                        <p>Our completely redesigned documentation portal is now live! With improved organization, interactive examples, and better search functionality, learning Tyxar has never been easier[...]
                         <p>Explore the new documentation at <a href="/tyxar_web/docs">/docs</a>.</p>
+                    </div>
+                </div>
+
+                <div class="update-card" data-category="security" data-concern="blade">
+                    <div class="update-header">
+                        <h2 class="update-title">BLADE Security Patch Released</h2>
+                        <div class="update-meta">
+                            <span class="update-concern blade">BLADE</span>
+                            <span class="update-date">January 20, 2026</span>
+                            <span class="update-tag security">Security</span>
+                        </div>
+                    </div>
+                    <div class="update-content">
+                        <p>A security patch has been released addressing potential vulnerability in BLADE's module system.</p>
+                        <ul>
+                            <li>Fixed unauthorized module access vulnerability</li>
+                            <li>Enhanced input validation</li>
+                            <li>Improved error handling</li>
+                        </ul>
+                        <p>We recommend all users update immediately.</p>
                     </div>
                 </div>
             </div>
@@ -352,42 +462,75 @@
 
     <script src="/tyxar_web/script.js"></script>
     <script>
-        function filterUpdates(category) {
-            const cards = document.querySelectorAll('.update-card');
-            const buttons = document.querySelectorAll('.filter-btn');
+        // Global state for current filters
+        let currentConcern = 'all';
+        let currentCategory = 'all';
+
+        function filterByConcern(concern) {
+            currentConcern = concern;
+            updateFilters();
 
             // Update button states
-            buttons.forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
-
-            // Filter cards
-            cards.forEach(card => {
-                if (category === 'all' || card.dataset.category === category) {
-                    card.style.display = 'block';
-                    setTimeout(() => card.style.opacity = '1', 0);
-                } else {
-                    card.style.display = 'none';
-                }
+            const buttons = document.querySelectorAll('.concern-btn');
+            buttons.forEach(btn => {
+                btn.classList.remove('active', 'all-active', 'tyxar-active', 'blade-active');
             });
+            event.target.classList.add('active');
+            if (concern === 'all') {
+                event.target.classList.add('all-active');
+            } else if (concern === 'tyxar') {
+                event.target.classList.add('tyxar-active');
+            } else if (concern === 'blade') {
+                event.target.classList.add('blade-active');
+            }
         }
 
-        function filterconcern(concern){
-            const cards = document.querySelectorAll('.update-card');
-            const buttons = document.querySelectorAll('.con-btn');
+        function filterByCategory(category) {
+            currentCategory = category;
+            updateFilters();
 
             // Update button states
+            const buttons = document.querySelectorAll('.updates-filter .filter-btn');
             buttons.forEach(btn => btn.classList.remove('active'));
             event.target.classList.add('active');
+        }
 
-            // Filter cards
+        function updateFilters() {
+            const cards = document.querySelectorAll('.update-card');
+            let visibleCount = 0;
+
             cards.forEach(card => {
-                if (concern === 'all' || card.dataset.concern === concern) {
+                const cardConcern = card.dataset.concern;
+                const cardCategory = card.dataset.category;
+
+                // Check if card matches both filters
+                const concernMatch = (currentConcern === 'all') || (cardConcern === currentConcern);
+                const categoryMatch = (currentCategory === 'all') || (cardCategory === currentCategory);
+
+                if (concernMatch && categoryMatch) {
                     card.style.display = 'block';
                     setTimeout(() => card.style.opacity = '1', 0);
+                    visibleCount++;
                 } else {
                     card.style.display = 'none';
                 }
             });
+
+            // Show no updates message if needed
+            const feed = document.getElementById('updates-feed');
+            let noUpdatesDiv = feed.querySelector('.no-updates');
+            if (visibleCount === 0) {
+                if (!noUpdatesDiv) {
+                    noUpdatesDiv = document.createElement('div');
+                    noUpdatesDiv.className = 'no-updates';
+                    noUpdatesDiv.textContent = 'No updates found for the selected filters.';
+                    feed.appendChild(noUpdatesDiv);
+                }
+            } else {
+                if (noUpdatesDiv) {
+                    noUpdatesDiv.remove();
+                }
+            }
         }
     </script>
     <script>
