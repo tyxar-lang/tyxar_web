@@ -1,0 +1,534 @@
+<style>
+  /* Timeline Container Styles */
+  .timeline-wrapper {
+    width: 100%;
+    background: linear-gradient(135deg, #0f172a 0%, #1a1f36 100%);
+    padding: 80px 0;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .timeline-wrapper::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(to right, transparent, rgba(59, 130, 246, 0.5), transparent);
+  }
+
+  .timeline-wrapper::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(to right, transparent, rgba(59, 130, 246, 0.5), transparent);
+  }
+
+  .timeline-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 40px;
+  }
+
+  .timeline-header {
+    text-align: center;
+    margin-bottom: 70px;
+  }
+
+  .timeline-header h2 {
+    font-size: 48px;
+    font-weight: 700;
+    background: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 15px;
+    letter-spacing: -1px;
+  }
+
+  .timeline-header p {
+    font-size: 18px;
+    color: #cbd5e1;
+    font-weight: 400;
+  }
+
+  /* Horizontal Scroll Timeline */
+  .timeline-scroll-container {
+    position: relative;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-behavior: smooth;
+    padding: 40px 0;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(59, 130, 246, 0.5) rgba(15, 23, 42, 0.1);
+  }
+
+  .timeline-scroll-container::-webkit-scrollbar {
+    height: 6px;
+  }
+
+  .timeline-scroll-container::-webkit-scrollbar-track {
+    background: rgba(15, 23, 42, 0.1);
+    border-radius: 10px;
+  }
+
+  .timeline-scroll-container::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, #3b82f6, #60a5fa);
+    border-radius: 10px;
+  }
+
+  .timeline-scroll-container::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, #2563eb, #3b82f6);
+  }
+
+  /* Timeline Track */
+  .timeline-track {
+    display: flex;
+    gap: 40px;
+    min-width: min-content;
+    padding: 20px 0;
+  }
+
+  /* Timeline Items */
+  .timeline-item {
+    position: relative;
+    flex: 0 0 380px;
+    scroll-snap-align: start;
+    animation: slideIn 0.6s ease-out forwards;
+    opacity: 0;
+  }
+
+  .timeline-item:nth-child(1) { animation-delay: 0.1s; }
+  .timeline-item:nth-child(2) { animation-delay: 0.2s; }
+  .timeline-item:nth-child(3) { animation-delay: 0.3s; }
+  .timeline-item:nth-child(4) { animation-delay: 0.4s; }
+  .timeline-item:nth-child(5) { animation-delay: 0.5s; }
+
+  @keyframes slideIn {
+    from {
+      opacity: 0;
+      transform: translateX(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  .timeline-dot {
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    background: #3b82f6;
+    border: 3px solid #0f172a;
+    border-radius: 50%;
+    top: -38px;
+    left: 30px;
+    z-index: 10;
+    box-shadow: 0 0 0 8px rgba(59, 130, 246, 0.1);
+    transition: all 0.3s ease;
+  }
+
+  .timeline-line {
+    position: absolute;
+    width: 2px;
+    height: 30px;
+    background: linear-gradient(to bottom, #3b82f6, transparent);
+    top: -30px;
+    left: 37px;
+    z-index: 5;
+  }
+
+  .timeline-card {
+    background: linear-gradient(135deg, rgba(30, 41, 59, 0.8) 0%, rgba(15, 23, 42, 0.6) 100%);
+    border: 1px solid rgba(59, 130, 246, 0.2);
+    border-radius: 16px;
+    padding: 32px;
+    height: 100%;
+    transition: all 0.4s cubic-bezier(0.23, 1, 0.320, 1);
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+  }
+
+  .timeline-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(to right, transparent, rgba(59, 130, 246, 0.5), transparent);
+  }
+
+  .timeline-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, transparent 100%);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    pointer-events: none;
+  }
+
+  .timeline-item:hover .timeline-card {
+    border-color: rgba(59, 130, 246, 0.6);
+    background: linear-gradient(135deg, rgba(30, 41, 59, 1) 0%, rgba(15, 23, 42, 0.8) 100%);
+    transform: translateY(-8px);
+    box-shadow: 0 20px 60px rgba(59, 130, 246, 0.15);
+  }
+
+  .timeline-item:hover .timeline-card::after {
+    opacity: 1;
+  }
+
+  .timeline-item:hover .timeline-dot {
+    width: 24px;
+    height: 24px;
+    top: -42px;
+    left: 26px;
+    box-shadow: 0 0 30px rgba(59, 130, 246, 0.6);
+  }
+
+  .timeline-item:hover .timeline-line {
+    height: 40px;
+  }
+
+  /* Timeline Card Content */
+  .timeline-year {
+    display: inline-block;
+    font-size: 14px;
+    font-weight: 700;
+    color: #3b82f6;
+    background: rgba(59, 130, 246, 0.1);
+    padding: 6px 12px;
+    border-radius: 20px;
+    margin-bottom: 16px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .timeline-card h3 {
+    font-size: 22px;
+    font-weight: 600;
+    color: #f1f5f9;
+    margin-bottom: 12px;
+    line-height: 1.3;
+    position: relative;
+    z-index: 2;
+  }
+
+  .timeline-card p {
+    font-size: 15px;
+    color: #cbd5e1;
+    line-height: 1.6;
+    position: relative;
+    z-index: 2;
+  }
+
+  /* Timeline Milestone Badge */
+  .timeline-milestone {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 18px;
+    padding-top: 18px;
+    border-top: 1px solid rgba(59, 130, 246, 0.2);
+    position: relative;
+    z-index: 2;
+  }
+
+  .milestone-icon {
+    font-size: 18px;
+  }
+
+  .milestone-text {
+    font-size: 13px;
+    color: #94a3b8;
+    font-weight: 500;
+  }
+
+  /* Navigation Arrows */
+  .timeline-nav {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    margin-top: 40px;
+  }
+
+  .timeline-nav-btn {
+    width: 48px;
+    height: 48px;
+    border: 2px solid rgba(59, 130, 246, 0.3);
+    background: transparent;
+    color: #3b82f6;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    font-weight: bold;
+  }
+
+  .timeline-nav-btn:hover {
+    border-color: #3b82f6;
+    background: rgba(59, 130, 246, 0.1);
+    transform: scale(1.1);
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+  }
+
+  .timeline-nav-btn:active {
+    transform: scale(0.95);
+  }
+
+  /* Progress Indicator */
+  .timeline-progress {
+    height: 3px;
+    background: rgba(59, 130, 246, 0.1);
+    border-radius: 2px;
+    margin-top: 30px;
+    overflow: hidden;
+  }
+
+  .timeline-progress-bar {
+    height: 100%;
+    background: linear-gradient(to right, #3b82f6, #60a5fa);
+    border-radius: 2px;
+    width: 0%;
+    transition: width 0.3s ease;
+  }
+
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .timeline-wrapper {
+      padding: 60px 0;
+    }
+
+    .timeline-container {
+      padding: 0 20px;
+    }
+
+    .timeline-header h2 {
+      font-size: 36px;
+    }
+
+    .timeline-item {
+      flex: 0 0 320px;
+    }
+
+    .timeline-card {
+      padding: 24px;
+    }
+
+    .timeline-card h3 {
+      font-size: 18px;
+    }
+
+    .timeline-card p {
+      font-size: 14px;
+    }
+
+    .timeline-scroll-container {
+      padding: 30px 0;
+    }
+
+    .timeline-track {
+      gap: 30px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .timeline-header h2 {
+      font-size: 28px;
+    }
+
+    .timeline-header p {
+      font-size: 16px;
+    }
+
+    .timeline-item {
+      flex: 0 0 280px;
+    }
+
+    .timeline-card {
+      padding: 20px;
+    }
+
+    .timeline-card h3 {
+      font-size: 16px;
+    }
+
+    .timeline-card p {
+      font-size: 13px;
+    }
+
+    .timeline-year {
+      font-size: 12px;
+    }
+
+    .timeline-nav-btn {
+      width: 40px;
+      height: 40px;
+      font-size: 18px;
+    }
+  }
+</style>
+
+<div class="timeline-wrapper">
+  <div class="timeline-container">
+    <!-- Timeline Header -->
+    <div class="timeline-header">
+      <h2>Tyxar's Journey</h2>
+      <p>From vision to reality — the evolution of a revolutionary programming language</p>
+    </div>
+
+    <!-- Timeline Scroll Container -->
+    <div class="timeline-scroll-container" id="timelineScroll">
+      <div class="timeline-track" id="timelineTrack">
+        <!-- Timeline Item 1 -->
+        <div class="timeline-item">
+          <div class="timeline-line"></div>
+          <div class="timeline-dot"></div>
+          <div class="timeline-card">
+            <span class="timeline-year">2022</span>
+            <h3>Concept & Vision</h3>
+            <p>The founding team identifies a critical gap in programming education. The vision of bridging human language and machine code begins to take shape.</p>
+            <div class="timeline-milestone">
+              <span class="milestone-icon">💡</span>
+              <span class="milestone-text">Vision established</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Timeline Item 2 -->
+        <div class="timeline-item">
+          <div class="timeline-line"></div>
+          <div class="timeline-dot"></div>
+          <div class="timeline-card">
+            <span class="timeline-year">2023</span>
+            <h3>Design & Architecture</h3>
+            <p>Comprehensive language design documentation completed. Core architecture and syntax patterns defined to maximize human readability and expressiveness.</p>
+            <div class="timeline-milestone">
+              <span class="milestone-icon">🏗️</span>
+              <span class="milestone-text">Foundation built</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Timeline Item 3 -->
+        <div class="timeline-item">
+          <div class="timeline-line"></div>
+          <div class="timeline-dot"></div>
+          <div class="timeline-card">
+            <span class="timeline-year">2024</span>
+            <h3>First Prototype</h3>
+            <p>The first working compiler and interpreter released. Community feedback drives rapid iteration and refinement of language features.</p>
+            <div class="timeline-milestone">
+              <span class="milestone-icon">🚀</span>
+              <span class="milestone-text">Launch v0.1</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Timeline Item 4 -->
+        <div class="timeline-item">
+          <div class="timeline-line"></div>
+          <div class="timeline-dot"></div>
+          <div class="timeline-card">
+            <span class="timeline-year">Early 2025</span>
+            <h3>Community Growth</h3>
+            <p>Tyxar gains momentum with thousands of developers joining. Comprehensive documentation and tutorial library launched to support learners worldwide.</p>
+            <div class="timeline-milestone">
+              <span class="milestone-icon">🌱</span>
+              <span class="milestone-text">Community thrives</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Timeline Item 5 -->
+        <div class="timeline-item">
+          <div class="timeline-line"></div>
+          <div class="timeline-dot"></div>
+          <div class="timeline-card">
+            <span class="timeline-year">2025 & Beyond</span>
+            <h3>Evolution & Impact</h3>
+            <p>Tyxar continues to evolve with new features, integrations, and tools. The vision of accessible programming for all becomes reality.</p>
+            <div class="timeline-milestone">
+              <span class="milestone-icon">✨</span>
+              <span class="milestone-text">Future awaits</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Navigation Controls -->
+    <div class="timeline-nav">
+      <button class="timeline-nav-btn" id="timelineLeftBtn">←</button>
+      <button class="timeline-nav-btn" id="timelineRightBtn">→</button>
+    </div>
+
+    <!-- Progress Indicator -->
+    <div class="timeline-progress">
+      <div class="timeline-progress-bar" id="timelineProgressBar"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Timeline Scroll Manager
+  function initializeTimeline() {
+    const scrollContainer = document.getElementById('timelineScroll');
+    const track = document.getElementById('timelineTrack');
+    const leftBtn = document.getElementById('timelineLeftBtn');
+    const rightBtn = document.getElementById('timelineRightBtn');
+    const progressBar = document.getElementById('timelineProgressBar');
+
+    if (!scrollContainer || !track) return;
+
+    // Smooth scroll function
+    function scroll(direction) {
+      const scrollAmount = 420; // card width + gap
+      scrollContainer.scrollBy({
+        left: direction === 'left' ? -scrollAmount : scrollAmount,
+        behavior: 'smooth'
+      });
+    }
+
+    // Update progress bar
+    function updateProgress() {
+      const scrollWidth = scrollContainer.scrollWidth - scrollContainer.clientWidth;
+      const scrollLeft = scrollContainer.scrollLeft;
+      const progress = scrollWidth > 0 ? (scrollLeft / scrollWidth) * 100 : 0;
+      progressBar.style.width = progress + '%';
+    }
+
+    // Event listeners
+    if (leftBtn) leftBtn.addEventListener('click', () => scroll('left'));
+    if (rightBtn) rightBtn.addEventListener('click', () => scroll('right'));
+    scrollContainer.addEventListener('scroll', updateProgress);
+
+    // Initial progress update
+    updateProgress();
+
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft') scroll('left');
+      if (e.key === 'ArrowRight') scroll('right');
+    });
+  }
+
+  // Initialize when DOM is ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeTimeline);
+  } else {
+    initializeTimeline();
+  }
+</script>
