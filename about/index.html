@@ -81,6 +81,9 @@
         </section>
         </section>
 
+        <!-- Timeline Section -->
+        <div id="timelineContainer"></div>
+
         <!-- Values Section -->
         <section class="features" style="background: #f7fafc;">
             <div class="container">
@@ -139,44 +142,60 @@
 
     <!-- Scripts -->
     <script src="/tyxar_web/script.js"></script>
-    <script>document.addEventListener('DOMContentLoaded', function() { const scrollingQuotes = document.querySelector('.scrolling_quotes'); if (scrollingQuotes) { const quotes = scrollingQuotes.innerHTML; scrollingQuotes.innerHTML = quotes + quotes; let scrollPosition = 0; const speed = 1; function animate() { scrollPosition += speed; if (scrollPosition >= scrollingQuotes.scrollWidth / 2) { scrollPosition = 0; } scrollingQuotes.style.transform = `translateX(-${scrollPosition}px)`; requestAnimationFrame(animate); } animate(); } });</script><script>
+    <script>
         // Function to load external HTML content
-            function loadHTML(url, elementId) {
-                fetch(url)
+        function loadHTML(url, elementId) {
+            fetch(url)
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById(elementId).innerHTML = data;
+
+                    // --- CRITICAL STEP ---
+                    // Re-run initialization to catch the *new* links in the footer 
+                    // AND the sidebar links (since they use the global selector now)
+                    initializeContentLoader();
+                })
+                .catch(err => console.error(`Error loading ${url}:`, err));
+        }
+
+        // Load timeline component
+        function loadTimeline() {
+            const timelineContainer = document.getElementById('timelineContainer');
+            if (timelineContainer) {
+                fetch('/tyxar_web/about/timeline.html')
                     .then(response => response.text())
                     .then(data => {
-                        document.getElementById(elementId).innerHTML = data;
-
-                        // --- CRITICAL STEP ---
-                        // Re-run initialization to catch the *new* links in the footer 
-                        // AND the sidebar links (since they use the global selector now)
-                        initializeContentLoader();
+                        timelineContainer.innerHTML = data;
                     })
-                    .catch(err => console.error(`Error loading ${url}:`, err));
+                    .catch(err => console.error('Error loading timeline:', err));
             }
+        }
 
-            // Call these functions when the main page loads:
-            document.addEventListener('DOMContentLoaded', (event) => {
-                // Load Header, Footer, and Sidebar
-                loadHTML('/tyxar_web/header.html', 'header');
-                loadHTML('/tyxar_web/footer.html', 'footer');
+        // Call these functions when the main page loads:
+        document.addEventListener('DOMContentLoaded', (event) => {
+            // Load Header, Footer, and Sidebar
+            loadHTML('/tyxar_web/header.html', 'header');
+            loadHTML('/tyxar_web/footer.html', 'footer');
 
-                // If sidebar is only used in the 'doc' index.html, call it conditionally:
-                if (document.getElementById('sidebar')) {
-                    loadHTML('doc/ ', 'sidebar');
+            // Load Timeline
+            loadTimeline();
+
+            // If sidebar is only used in the 'doc' index.html, call it conditionally:
+            if (document.getElementById('sidebar')) {
+                loadHTML('doc/ ', 'sidebar');
+            }
+        });
+
+        // Initialize header search after it loads
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+                if (window.initializeHeaderSearch) {
+                    window.initializeHeaderSearch();
                 }
-            });
+            }, 100);
+        });
 
-            // Initialize header search after it loads
-            document.addEventListener('DOMContentLoaded', () => {
-                setTimeout(() => {
-                    if (window.initializeHeaderSearch) {
-                        window.initializeHeaderSearch();
-                    }
-                }, 100);
-            });
-
-            
+        
 
     </script>
 </body>
