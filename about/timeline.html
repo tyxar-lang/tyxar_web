@@ -1,8 +1,15 @@
 <style>
+  :root {
+    --timeline-accent: var(--accent-blue, #63b3ed);
+    --timeline-accent-strong: var(--accent-blue-dark, #4299e1);
+    --timeline-accent-soft: rgba(99, 179, 237, 0.16);
+    --timeline-accent-glow: rgba(99, 179, 237, 0.24);
+  }
+
   /* Timeline Container Styles */
   .timeline-wrapper {
     width: 100%;
-    background: linear-gradient(135deg, #0f172a 0%, #1a1f36 100%);
+    background: linear-gradient(135deg, #7d7d7d 0%, #78b3fb 100%);
     padding: 80px 0;
     position: relative;
     overflow: hidden;
@@ -15,7 +22,7 @@
     left: 0;
     right: 0;
     height: 1px;
-    background: linear-gradient(to right, transparent, rgba(99, 179, 237, 0.5), transparent);
+    background: linear-gradient(to right, transparent, var(--timeline-accent-soft), transparent);
   }
 
   .timeline-wrapper::after {
@@ -25,7 +32,7 @@
     left: 0;
     right: 0;
     height: 1px;
-    background: linear-gradient(to right, transparent, rgba(99, 179, 237, 0.5), transparent);
+    background: linear-gradient(to right, transparent, var(--timeline-accent-soft), transparent);
   }
 
   .timeline-container {
@@ -42,7 +49,7 @@
   .timeline-header h2 {
     font-size: 48px;
     font-weight: 700;
-    background: linear-gradient(135deg, #63b3ed 0%, #8abbf6 100%);
+    background: linear-gradient(135deg, var(--timeline-accent) 0%, var(--timeline-accent-strong) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -64,7 +71,7 @@
     scroll-behavior: smooth;
     padding: 40px 0;
     scrollbar-width: thin;
-    scrollbar-color: rgba(99, 179, 237, 0.5) rgba(15, 23, 42, 0.1);
+    scrollbar-color: var(--timeline-accent-soft) rgba(15, 23, 42, 0.1);
   }
 
   .timeline-scroll-container::-webkit-scrollbar {
@@ -77,12 +84,12 @@
   }
 
   .timeline-scroll-container::-webkit-scrollbar-thumb {
-    background: linear-gradient(135deg, #63b3ed, #8abbf6);
+    background: linear-gradient(135deg, var(--timeline-accent) 0%, var(--timeline-accent-strong) 100%);
     border-radius: 10px;
   }
 
   .timeline-scroll-container::-webkit-scrollbar-thumb:hover {
-    background: linear-gradient(135deg, #4299e1, #63b3ed);
+    background: linear-gradient(135deg, var(--timeline-accent-strong) 0%, var(--timeline-accent) 100%);
   }
 
   /* Timeline Track */
@@ -123,13 +130,13 @@
     position: absolute;
     width: 16px;
     height: 16px;
-    background: #63b3ed;
+    background: var(--timeline-accent);
     border: 3px solid #0f172a;
     border-radius: 50%;
     top: -38px;
     left: 30px;
     z-index: 10;
-    box-shadow: 0 0 0 8px rgba(99, 179, 237, 0.1);
+    box-shadow: 0 0 0 8px var(--timeline-accent-soft);
     transition: all 0.3s ease;
   }
 
@@ -137,7 +144,7 @@
     position: absolute;
     width: 2px;
     height: 30px;
-    background: linear-gradient(to bottom, #63b3ed, transparent);
+    background: linear-gradient(to bottom, var(--timeline-accent), transparent);
     top: -30px;
     left: 37px;
     z-index: 5;
@@ -145,7 +152,7 @@
 
   .timeline-card {
     background: linear-gradient(135deg, rgba(30, 41, 59, 0.8) 0%, rgba(15, 23, 42, 0.6) 100%);
-    border: 1px solid rgba(99, 179, 237, 0.2);
+    border: 1px solid var(--timeline-accent-soft);
     border-radius: 16px;
     padding: 32px;
     height: 100%;
@@ -163,24 +170,24 @@
     left: 0;
     right: 0;
     height: 1px;
-    background: linear-gradient(to right, transparent, rgba(99, 179, 237, 0.5), transparent);
+    background: linear-gradient(to right, transparent, var(--timeline-accent-soft), transparent);
   }
 
   .timeline-card::after {
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(135deg, rgba(99, 179, 237, 0.1) 0%, transparent 100%);
+    background: linear-gradient(135deg, var(--timeline-accent-soft) 0%, transparent 100%);
     opacity: 0;
     transition: opacity 0.4s ease;
     pointer-events: none;
   }
 
   .timeline-item:hover .timeline-card {
-    border-color: rgba(99, 179, 237, 0.6);
+    border-color: var(--timeline-accent);
     background: linear-gradient(135deg, rgba(30, 41, 59, 1) 0%, rgba(15, 23, 42, 0.8) 100%);
     transform: translateY(-8px);
-    box-shadow: 0 20px 60px rgba(99, 179, 237, 0.15);
+    box-shadow: 0 20px 60px var(--timeline-accent-glow);
   }
 
   .timeline-item:hover .timeline-card::after {
@@ -192,7 +199,7 @@
     height: 24px;
     top: -42px;
     left: 26px;
-    box-shadow: 0 0 30px rgba(99, 179, 237, 0.6);
+    box-shadow: 0 0 30px var(--timeline-accent-glow);
   }
 
   .timeline-item:hover .timeline-line {
@@ -204,8 +211,8 @@
     display: inline-block;
     font-size: 14px;
     font-weight: 700;
-    color: #63b3ed;
-    background: rgba(99, 179, 237, 0.1);
+    color: var(--timeline-accent);
+    background: var(--timeline-accent-soft);
     padding: 6px 12px;
     border-radius: 20px;
     margin-bottom: 16px;
@@ -238,7 +245,7 @@
     gap: 8px;
     margin-top: 18px;
     padding-top: 18px;
-    border-top: 1px solid rgba(99, 179, 237, 0.2);
+    border-top: 1px solid var(--timeline-accent-soft);
     position: relative;
     z-index: 2;
   }
@@ -264,9 +271,9 @@
   .timeline-nav-btn {
     width: 48px;
     height: 48px;
-    border: 2px solid rgba(99, 179, 237, 0.3);
+    border: 2px solid var(--timeline-accent-soft);
     background: transparent;
-    color: #63b3ed;
+    color: var(--timeline-accent);
     border-radius: 50%;
     cursor: pointer;
     font-size: 20px;
@@ -278,10 +285,10 @@
   }
 
   .timeline-nav-btn:hover {
-    border-color: #63b3ed;
-    background: rgba(99, 179, 237, 0.1);
+    border-color: var(--timeline-accent);
+    background: var(--timeline-accent-soft);
     transform: scale(1.1);
-    box-shadow: 0 0 20px rgba(99, 179, 237, 0.3);
+    box-shadow: 0 0 20px var(--timeline-accent-glow);
   }
 
   .timeline-nav-btn:active {
@@ -291,7 +298,7 @@
   /* Progress Indicator */
   .timeline-progress {
     height: 3px;
-    background: rgba(99, 179, 237, 0.1);
+    background: var(--timeline-accent-soft);
     border-radius: 2px;
     margin-top: 30px;
     overflow: hidden;
@@ -299,7 +306,7 @@
 
   .timeline-progress-bar {
     height: 100%;
-    background: linear-gradient(to right, #63b3ed, #8abbf6);
+    background: linear-gradient(to right, var(--timeline-accent) 0%, var(--timeline-accent-strong) 100%);
     border-radius: 2px;
     width: 0%;
     transition: width 0.3s ease;
