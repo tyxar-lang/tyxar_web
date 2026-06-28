@@ -162,14 +162,36 @@
             // Load timeline component
             function loadTimeline() {
                 const timelineContainer = document.getElementById('timelineContainer');
-                if (timelineContainer) {
-                    fetch('/tyxar_web/about/timeline.html')
-                        .then(response => response.text())
-                        .then(data => {
-                            timelineContainer.innerHTML = data;
-                        })
-                        .catch(err => console.error('Error loading timeline:', err));
-                }
+                if (!timelineContainer) return;
+
+                fetch('/tyxar_web/about/timeline.html')
+                    .then(response => response.text())
+                    .then(data => {
+                        const tempContainer = document.createElement('div');
+                        tempContainer.innerHTML = data;
+
+                        const scripts = Array.from(tempContainer.querySelectorAll('script'));
+                        const htmlWithoutScripts = tempContainer.innerHTML.replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '');
+
+                        timelineContainer.innerHTML = htmlWithoutScripts;
+
+                        scripts.forEach(script => {
+                            const newScript = document.createElement('script');
+                            if (script.src) {
+                                newScript.src = script.src;
+                            } else {
+                                newScript.textContent = script.textContent;
+                            }
+                            document.body.appendChild(newScript);
+                        });
+
+                        setTimeout(() => {
+                            if (window.initializeTimeline) {
+                                window.initializeTimeline();
+                            }
+                        }, 0);
+                    })
+                    .catch(err => console.error('Error loading timeline:', err));
             }
 
             // Call these functions when the main page loads:
