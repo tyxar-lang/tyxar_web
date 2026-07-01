@@ -1,0 +1,91 @@
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
+        <h2>Get in Touch</h2>
+        <div class="contact-content">
+            <form class="contact-form" id="contactForm">
+                <input type="text" id="from_name" placeholder="Your Name" required>
+                <input type="email" id="from_email" placeholder="Your Email" required>
+                <textarea id="message" placeholder="Describe your guitar issue or inquiry" rows="5" required></textarea>
+                <button type="submit" class="submit-button">Send Message</button>
+                <div id="statusMessage" class="status-message"></div>
+            </form>
+            <div class="contact-info">
+                <div class="info-item">
+                    <h3>📞 Phone</h3>
+                    <p>+44 ___________</p>
+                </div>
+                <div class="info-item">
+                    <h3>📍 Location</h3>
+                    <p>123 Music Street<br>Guitar City, PR20 2WS</p>
+                </div>
+                <div class="info-item">
+                    <h3>🕒 Hours</h3>
+                    <p>Mon-Fri: 10am - 6pm<br>Sat: 10am - 4pm<br>Sun: Closed</p>
+                </div>
+            </div>
+        </div>
+      </section>
+
+
+
+<script>const contactForm = document.getElementById('contactForm');
+if (contactForm) {
+    contactForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        
+        // Get form values
+        const fromName = document.getElementById('from_name').value;
+        const fromEmail = document.getElementById('from_email').value;
+        const message = document.getElementById('message').value;
+        const statusMessage = document.getElementById('statusMessage');
+        const submitButton = contactForm.querySelector('.submit-button');
+        
+        // Disable submit button
+        submitButton.disabled = true;
+        submitButton.textContent = 'Sending...';
+        
+        // Clear previous status message
+        statusMessage.classList.remove('success', 'error');
+        statusMessage.textContent = '';
+        
+        // Send email via FormSubmit service (no setup required)
+        fetch('https://formsubmit.co/ajax/tyxarlang@gmail.com', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                name: fromName,
+                email: fromEmail,
+                message: message
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Email sent successfully:', data);
+            
+            // Show success message
+            statusMessage.classList.add('success');
+            statusMessage.textContent = `Thank you, ${fromName}! Your message has been sent successfully.`;
+            
+            // Reset form
+            contactForm.reset();
+            
+            // Reset button
+            submitButton.disabled = false;
+            submitButton.textContent = 'Send Message';
+        })
+        .catch((error) => {
+            console.error('Failed to send email:', error);
+            
+            // Show error message
+            statusMessage.classList.add('error');
+            statusMessage.textContent = 'Failed to send message. Please try again or contact us directly.';
+            
+            // Reset button
+            submitButton.disabled = false;
+            submitButton.textContent = 'Send Message';
+        });
+    });
+}<script/>
