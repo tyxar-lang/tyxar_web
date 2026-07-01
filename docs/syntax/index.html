@@ -27,7 +27,7 @@
                         Annotations, commonly known as <strong>comments</strong>, are crucial for documenting your code.
                         They enable you to explain your logic, document your decision-making process, and help future readers
                         (including your future self—who will stare at this code in six months wondering <em>why on earth</em> you wrote it that way)
-                        understand your reasoning. In Tyxar, comments are completely ignored by the compiler and serve purely as documentation.
+                        understand your reasoning. In Tyxar, comments are completely ignored and serve purely as documentation.
                     </p>
 
                     <h3>Comment Syntax</h3>
@@ -70,11 +70,11 @@ and reasoning. No judgment here. #
 the name is "Alice"
 
 # The following section implements the core
-business logic. We use a digit state to ensure
+business logic. We use a digit type to ensure
 type safety for our calculations. Spent three hours
 debugging this. Don't touch it. It works now.
 I don't know why, but it does. #
-the total is 100</code></pre>
+the total is 100 as a digit</code></pre>
 
                     <h3>Comment Placement and Best Practices</h3>
                     <p>
@@ -150,18 +150,18 @@ write the user_id</code></pre>
                         <strong>Variables</strong> are containers that store data values throughout your program.
                         Think of them as labeled boxes where you can put things for safekeeping and retrieve them later.
                         In Tyxar, all variables must be declared in the <strong><a href="/tyxar_web/docs/terminologies#umbrella">Variables Umbrella</a></strong>,
-                        which lives at the very top of your program—keeping everything organized and easy to find.
+                        which lives at the top of your program—keeping everything organized and easy to find.
                     </p>
                     <p>
                         This approach is refreshingly different from many languages where variables scatter throughout your code
-                        like forgotten coffee cups across a desk. In Tyxar, there's one place to look: the Variables Umbrella.
-                        Want to know what data your program works with? Check the umbrella. It's beautifully organized chaos prevention.
+                        like forgotten coffee cups across a desk. In Tyxar, there's one place to look: the <strong><a href="/tyxar_web/docs/terminologies#umbrella">Variables Umbrella</a></strong>.
+                        Want to know what data your program works with? Check the <strong><a href="/tyxar_web/docs/terminologies#umbrella">Variables Umbrella</a></strong>. It's beautifully organized chaos prevention.
                     </p>
 
                     <h3>The Variables Umbrella Declaration</h3>
                     <p>
-                        All variables must be declared under the Variables Umbrella at the start of your program.
-                        The umbrella heading can take several equivalent forms:
+                        All variables must be declared under the <strong><a href="/tyxar_web/docs/terminologies#umbrella">Variables Umbrella</a></strong> at the start of your program.
+                        The <strong><a href="/tyxar_web/docs/terminologies#umbrella">Umbrella</a></strong> heading can take several equivalent forms:
                     </p>
                     <ul>
                         <li><code>Variables:</code></li>
@@ -177,15 +177,15 @@ write the user_id</code></pre>
                     <h3>Variable Declaration Syntax</h3>
                     <p>
                         Variables in Tyxar follow a natural English pattern. Every variable declaration must begin with
-                        the keyword <strong><code>the</code></strong> (or <strong><code>The</code></strong>—case doesn't matter here).
+                        the keyword <strong><code>the</code></strong> or <strong><code>The</code></strong>.
                         This mimics natural language and makes your code read more like documentation:
                     </p>
                     <p>
                         <strong>Pattern:</strong> <code>the [variable_name] is [value]</code>
                     </p>
                     <pre><code>Variables:
-    the age is ""
-    the name is "Bob"</code></pre>
+    the age is 0
+    the name is "Tyxar"</code></pre>
 
                     <h3>Variable Naming Conventions</h3>
                     <ul>
@@ -194,7 +194,7 @@ write the user_id</code></pre>
                             but must start with a letter.
                         </li>
                         <li>
-                            <strong>Case-sensitive</strong> – <code>the_name</code> and <code>The_Name</code> are different variables
+                            <strong>Case-sensitive</strong> – <code>the name</code> and <code>the Name</code> are different variables
                             (which is why clarity beats cleverness every time).
                         </li>
                         <li>
@@ -202,55 +202,50 @@ write the user_id</code></pre>
                             <code>the_user_age</code>, <code>the_total_purchases</code>
                         </li>
                         <li>
-                            <strong>Be descriptive</strong> – <code>the_user_id</code> is infinitely better than <code>the_x</code>.
+                            <strong>Be descriptive</strong> – <code>the user_id</code> is infinitely better than <code>the x</code>.
                             Your future self will thank you, and code reviewers won't need therapy.
                         </li>
                     </ul>
 
-                    <h3>Specifying States (Optional)</h3>
+                    <h3>Specifying DataTypes (Optional)</h3>
                     <p>
-                        Variables can be assigned specific <strong><a href="/tyxar_web/docs/terminologies#state">States</a></strong>
-                        using the <code>as a</code> keyword. This is optional—Tyxar can infer states automatically—
-                        but explicit states improve code clarity and serve as documentation:
+                        Variables can be assigned specific datatypes
+                        using the <code>as a</code> keyword. This is optional—Tyxar can infer datatypes automatically—
+                        but explicit datatypes improve code clarity and serve as documentation:
                     </p>
                     <p>
-                        <strong>Pattern:</strong> <code>the [name] is [value] as a [state]</code>
+                        <strong>Pattern:</strong> <code>the [name] is [value] as a [datatype]</code>
                     </p>
 
                     <h3>Comprehensive Variables Example</h3>
                     <pre><code>Variables:
-    # Using explicit states for clarity
-    the age is "" as a digit
-    the name is "John" as a phrase
-    the background is 2
-    the num is 1+1*2/3^6</code></pre>
+    # Using explicit datatypes for clarity #
+    the age is 20 as a digit
+    the name is "Tyxar" as a phrase
+    the background is "dark"
+    the result is 1+1*2/3^6</code></pre>
 
-                    <h3>More Complex Examples with All States</h3>
+                    <h3>More Complex Examples with All DataTypes</h3>
                     <pre><code>Variables:
-    # Numeric states
+    # Numeric datatypes #
     the user_age is 25 as a digit
     the user_balance is 3500.50 as a decimal
     
-    # Text states
-    the greeting is "Hello, World!" as a phrase
-    the initial is 'J' as a letter
-    the separator is '|' as a symbol
-    
-    # Special states
-    the max_users is 100 as a constant</code></pre>
+    # Text datatypes #
+    the greeting is "Hello, World!" as a phrase</code></pre>
 
-                    <h3>State Inference vs. Explicit Declaration</h3>
+                    <h3>Datatype Inference vs. Explicit Declaration</h3>
                     <p>
-                        Tyxar is intelligent enough to figure out what state your variables should be.
-                        You can omit the <code>as a [state]</code> part and let Tyxar do the heavy lifting:
+                        Tyxar is intelligent enough to figure out what datatype your variables should be.
+                        You can omit the <code>as a [datatype]</code> part and let Tyxar do the heavy lifting:
                     </p>
                     <pre><code>Variables:
-    # Tyxar automatically figures these out
+    # Tyxar automatically figures these out #
     the count is 42                 (automatically a digit)
     the price is 19.99              (automatically a decimal)
     the message is "Hello"          (automatically a phrase)
     
-    # But being explicit is fine too
+    # But being explicit is fine too #
     the count is 42 as a digit
     the price is 19.99 as a decimal
     the message is "Hello" as a phrase</code></pre>
@@ -263,15 +258,15 @@ write the user_id</code></pre>
                         </li>
                         <li>
                             <strong>Variables can be empty</strong> – You can declare a variable with an empty value:
-                            <code>the name is ""</code> is perfectly valid. Useful for placeholders.
+                            <code>the name is ""</code> is perfectly valid. Useful for placeholders. This is <strong>NOT</strong> None.
                         </li>
                         <li>
                             <strong>Variables can have expressions</strong> – Mathematical calculations are allowed:
                             <code>the total is 1+1*2/3^6</code> works just fine.
                         </li>
                         <li>
-                            <strong>Use state id for debugging</strong> – If you're unsure about a value's state,
-                            use the <code>state id</code> command to check: <code>write the state id for the_variable</code>
+                            <strong>Use datatype  for debugging</strong> – If you're unsure about a value's datatype,
+                            use the <code>datatype</code> command to check: <code>write the datatype of the_variable</code>
                         </li>
                     </ul>
                 </section>
