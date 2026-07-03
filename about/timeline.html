@@ -70,12 +70,12 @@
     overflow-y: hidden;
     scroll-behavior: smooth;
     padding: 40px 0;
-    scrollbar-width: thin;
-    scrollbar-color: var(--timeline-accent-soft) rgba(15, 23, 42, 0.1);
+    scrollbar-width: none;
+    -ms-overflow-style: none;
   }
 
   .timeline-scroll-container::-webkit-scrollbar {
-    height: 6px;
+    display: none;
   }
 
   .timeline-scroll-container::-webkit-scrollbar-track {

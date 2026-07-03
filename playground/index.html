@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="/tyxar_web/images/tyxar.ico" type="image/x-icon">
+    <title>Tyxar Playground</title>
+    <link rel="stylesheet" href="/tyxar_web/styles.css">
+</head>
+<body>
+    <header id="header"></header>
+
+    <main class="playground-page">
+        <section class="playground-hero">
+            <div class="container">
+                <h1>TYXAR Playground</h1>
+                <p>Experiment with the language in a clean, interactive space and see how natural syntax feels in practice.</p>
+                <div class="playground-actions">
+                    <a href="/tyxar_web/" class="btn btn-primary">Back to Home</a>
+                    <a href="/tyxar_web/docs" class="btn btn-secondary">Read Docs</a>
+                </div>
+
+                <div class="playground-card">
+                    <h2>Coming Soon</h2>
+                    <p>The playground experience is being prepared with an editor, live output, and sample programs for beginners and advanced users alike.</p>
+                    <p>In the meantime, explore the docs and sample syntax on the home page.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer id="footer"></footer>
+
+    <script>
+        fetch('/tyxar_web/header.html')
+            .then(function (response) { return response.text(); })
+            .then(function (data) {
+                const header = document.getElementById('header');
+                if (header) header.innerHTML = data;
+            })
+            .catch(function (err) {
+                console.error('Error loading header:', err);
+            });
+
+        fetch('/tyxar_web/footer.html')
+            .then(function (response) { return response.text(); })
+            .then(function (data) {
+                const footer = document.getElementById('footer');
+                if (footer) footer.innerHTML = data;
+            })
+            .catch(function (err) {
+                console.error('Error loading footer:', err);
+            });
+    </script>
+</body>
+</html>
