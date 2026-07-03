@@ -1,91 +1,157 @@
 
-    <!-- Contact Section -->
-    <section id="contact" class="contact">
-        <h2>Get in Touch</h2>
-        <div class="contact-content">
-            <form class="contact-form" id="contactForm">
-                <input type="text" id="from_name" placeholder="Your Name" required>
-                <input type="email" id="from_email" placeholder="Your Email" required>
-                <textarea id="message" placeholder="Describe your guitar issue or inquiry" rows="5" required></textarea>
-                <button type="submit" class="submit-button">Send Message</button>
-                <div id="statusMessage" class="status-message"></div>
-            </form>
-            <div class="contact-info">
-                <div class="info-item">
-                    <h3>📞 Phone</h3>
-                    <p>+44 ___________</p>
-                </div>
-                <div class="info-item">
-                    <h3>📍 Location</h3>
-                    <p>123 Music Street<br>Guitar City, PR20 2WS</p>
-                </div>
-                <div class="info-item">
-                    <h3>🕒 Hours</h3>
-                    <p>Mon-Fri: 10am - 6pm<br>Sat: 10am - 4pm<br>Sun: Closed</p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="/tyxar_web/images/tyxar.ico" type="image/x-icon">
+    <title>TYXAR | Feedback & Suggestions</title>
+    <link rel="stylesheet" href="/tyxar_web/styles.css">
+</head>
+<body>
+    <header id="header"></header>
+
+    <main class="contact-page">
+        <section class="contact-hero">
+            <div class="container">
+                <h1>Feedback, Suggestions & Bug Reports</h1>
+                <p>Share your thoughts, report a problem, or suggest improvements for TYXAR.</p>
+            </div>
+        </section>
+
+        <section class="contact-section">
+            <div class="container">
+                <div class="contact-card">
+                    <form id="contactForm" class="contact-form">
+                        <div class="form-row">
+                            <label for="from_name">Your Name</label>
+                            <input type="text" id="from_name" name="name" required>
+                        </div>
+
+                        <div class="form-row">
+                            <label for="from_email">Your Email</label>
+                            <input type="email" id="from_email" name="email" required>
+                        </div>
+
+                        <div class="form-row">
+                            <label for="topic">Category</label>
+                            <select id="topic" name="topic">
+                                <option value="Feedback">Feedback</option>
+                                <option value="Suggestion">Suggestion</option>
+                                <option value="Bug Report">Bug Report</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+
+                        <div class="form-row" id="customTopicRow" style="display: none;">
+                            <label for="custom_topic">Please specify your topic</label>
+                            <input type="text" id="custom_topic" name="custom_topic" placeholder="e.g. Documentation issue">
+                        </div>
+
+                        <div class="form-row">
+                            <label for="message">Message</label>
+                            <textarea id="message" name="message" rows="6" required></textarea>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary submit-button">Send Message</button>
+                        <p id="statusMessage" class="status-message" aria-live="polite"></p>
+                    </form>
                 </div>
             </div>
-        </div>
-      </section>
+        </section>
+    </main>
 
+    <footer id="footer"></footer>
 
+    <script>
+        const contactForm = document.getElementById('contactForm');
+        const topicSelect = document.getElementById('topic');
+        const customTopicRow = document.getElementById('customTopicRow');
+        const customTopicInput = document.getElementById('custom_topic');
 
-<script>const contactForm = document.getElementById('contactForm');
-if (contactForm) {
-    contactForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        
-        // Get form values
-        const fromName = document.getElementById('from_name').value;
-        const fromEmail = document.getElementById('from_email').value;
-        const message = document.getElementById('message').value;
-        const statusMessage = document.getElementById('statusMessage');
-        const submitButton = contactForm.querySelector('.submit-button');
-        
-        // Disable submit button
-        submitButton.disabled = true;
-        submitButton.textContent = 'Sending...';
-        
-        // Clear previous status message
-        statusMessage.classList.remove('success', 'error');
-        statusMessage.textContent = '';
-        
-        // Send email via FormSubmit service (no setup required)
-        fetch('https://formsubmit.co/ajax/tyxarlang@gmail.com', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                name: fromName,
-                email: fromEmail,
-                message: message
+        if (topicSelect && customTopicRow && customTopicInput) {
+            topicSelect.addEventListener('change', function () {
+                const showCustom = topicSelect.value === 'Other';
+                customTopicRow.style.display = showCustom ? 'flex' : 'none';
+                if (!showCustom) {
+                    customTopicInput.value = '';
+                }
+            });
+        }
+
+        if (contactForm) {
+            contactForm.addEventListener('submit', function (e) {
+                e.preventDefault();
+
+                const fromName = document.getElementById('from_name').value.trim();
+                const fromEmail = document.getElementById('from_email').value.trim();
+                const topic = document.getElementById('topic').value;
+                const customTopic = customTopicInput ? customTopicInput.value.trim() : '';
+                const message = document.getElementById('message').value.trim();
+                const statusMessage = document.getElementById('statusMessage');
+                const submitButton = contactForm.querySelector('.submit-button');
+
+                submitButton.disabled = true;
+                submitButton.textContent = 'Sending...';
+                statusMessage.className = 'status-message';
+                statusMessage.textContent = '';
+
+                fetch('https://formsubmit.co/ajax/tyxarlang@gmail.com', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        name: fromName,
+                        email: fromEmail,
+                        topic: topic === 'Other' && customTopic ? customTopic : topic,
+                        message: message
+                    })
+                })
+                .then(function (response) {
+                    if (!response.ok) throw new Error('Network response was not ok');
+                    return response.json().catch(function () {
+                        return {};
+                    });
+                })
+                .then(function () {
+                    statusMessage.classList.add('success');
+                    statusMessage.textContent = `Thank you, ${fromName}! Your message has been sent.`;
+                    contactForm.reset();
+                    if (customTopicRow) customTopicRow.style.display = 'none';
+                })
+                .catch(function () {
+                    statusMessage.classList.add('error');
+                    statusMessage.textContent = 'Failed to send message. Please try again or contact us directly.';
+                })
+                .finally(function () {
+                    submitButton.disabled = false;
+                    submitButton.textContent = 'Send Message';
+                });
+            });
+        }
+    </script>
+
+    <script>
+        fetch('/tyxar_web/header.html')
+            .then(function (response) { return response.text(); })
+            .then(function (data) {
+                const header = document.getElementById('header');
+                if (header) header.innerHTML = data;
             })
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log('Email sent successfully:', data);
-            
-            // Show success message
-            statusMessage.classList.add('success');
-            statusMessage.textContent = `Thank you, ${fromName}! Your message has been sent successfully.`;
-            
-            // Reset form
-            contactForm.reset();
-            
-            // Reset button
-            submitButton.disabled = false;
-            submitButton.textContent = 'Send Message';
-        })
-        .catch((error) => {
-            console.error('Failed to send email:', error);
-            
-            // Show error message
-            statusMessage.classList.add('error');
-            statusMessage.textContent = 'Failed to send message. Please try again or contact us directly.';
-            
-            // Reset button
-            submitButton.disabled = false;
-            submitButton.textContent = 'Send Message';
-        });
-    });
-}<script/>
+            .catch(function (err) {
+                console.error('Error loading header:', err);
+            });
+
+        fetch('/tyxar_web/footer.html')
+            .then(function (response) { return response.text(); })
+            .then(function (data) {
+                const footer = document.getElementById('footer');
+                if (footer) footer.innerHTML = data;
+            })
+            .catch(function (err) {
+                console.error('Error loading footer:', err);
+            });
+    </script>
+</body>
+</html>

@@ -110,15 +110,14 @@
                 <div class="code-example">
                     <pre><code>
 Variables:
-    the age is "" as a digit
+    the age is 0 as a digit
     the name is "" as a phrase
+    the language is "Tyxar" and a constant
 
-input to change the name "'Hello, User!
-Please input your name: '"
+write "Hello! And welcome to the Age Verification Engine"
+input to change the name "Please input your name: "
 
-write "Hello, [the name]!"
-
-input the age "Please input your current age: "
+input to change the age "Hello, [the name]! Please input your current age: "
 
 if the age is less than 5, then
     write "[the name], you should be playing with toys :)"
@@ -131,8 +130,13 @@ if the age = 18, then
     Are you ready for adulthood?'"
 
 if the age > 18, then
-    write "'Dear Sir/Madam,
+    write "'[the name],
     How are you coping with life?'"
+
+if the age > 200, then
+    write "Wait.. you should be dead!" 
+
+write "This program was created using [the language]"
 
                     </code></pre>
                 </div>
