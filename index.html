@@ -54,6 +54,19 @@
             text-decoration: none;
             margin-left: 5px;
         }
+        .hero-meta {
+            max-width: 800px;
+            margin: 24px auto 0;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .hero-meta .latest-update {
+            margin: 0;
+        }
+        .hero-meta .version-info {
+            margin-top: 0;
+        }
     </style>
 </head>
 
@@ -77,55 +90,56 @@
                         <a href="/tyxar_web/docs" class="btn btn-secondary">Documentation</a>
                     </div>
 
-                    <!-- Latest Update Preview -->
-                    <section class="latest-update" style="margin:40px auto 20px; max-width:800px;">
-                        <div class="container">
-                            <h2><u>Latest Update</u></h2>
-                            <div id="update-preview">
-                                <!-- JavaScript will inject the first update card preview here -->
-                            </div>
+                    <div class="code-example">
+                        <div class="code-example-header">
+                            <span class="code-example-badge">Console Preview</span>
                         </div>
-                    </section>
-
-                    <div class="version-info" style="margin-top: 30px; font-size: 15px; opacity: 0.9;">
-                        Latest stable versions: <br>
-                        Tyxar <strong>v1.0.0</strong> • To Be Released Mid 2026 •
-                        <a href="/tyxar_web/releases" style="color: var(--accent-blue); text-decoration: underline;">
-                            Other Releases
-                        </a> •
-                        <a href="/tyxar_web/docs/changelog#1.0.0" style="color: var(--accent-blue); text-decoration: underline;">
-                            View Changelog
-                        </a> <br>
-                    
-                        BLADE <strong>v1.0.0</strong> • To Be Released Mid 2026 •
-                        <a href="/tyxar_web/releases" style="color: var(--accent-blue); text-decoration: underline;">
-                            Other Releases
-                        </a> •
-                        <a href="/tyxar_web/docs/changelog#1.0.0" style="color: var(--accent-blue); text-decoration: underline;">
-                            View Changelog
-                        </a>
-                    </div>
-                    
-                </div>
-                <div class="code-example">
-                    <div class="code-example-header">
-                        <span class="code-example-badge">Console Preview</span>
-                    </div>
-                    <div class="code-example-body">
-                        <pre><code>Variables:
+                        <div class="code-example-body">
+                            <pre><code>Variables:
     the count is 1 as a digit
 
 change the count to 7
 write the original value of the count
 write the datatype of the count</code></pre>
-                    </div>
-                    <div class="code-example-footer">
-                        <div class="code-example-tags">
-                            <span class="code-example-tag">Natural syntax</span>
-                            <span class="code-example-tag">Readable</span>
-                            <span class="code-example-tag">Beginner-friendly</span>
                         </div>
-                        <a href="/tyxar_web/playground" class="btn btn-outline">Open Playground</a>
+                        <div class="code-example-footer">
+                            <div class="code-example-tags">
+                                <span class="code-example-tag">Natural syntax</span>
+                                <span class="code-example-tag">Readable</span>
+                                <span class="code-example-tag">Beginner-friendly</span>
+                            </div>
+                            <a href="/tyxar_web/playground" class="btn btn-outline">Open Playground</a>
+                        </div>
+                    </div>
+
+                    <div class="hero-meta">
+                        <div class="version-info" style="font-size: 15px; opacity: 0.9;">
+                            Latest stable versions: <br>
+                            Tyxar <strong>v1.0.0</strong> • To Be Released Mid 2026 •
+                            <a href="/tyxar_web/releases" style="color: var(--accent-blue); text-decoration: underline;">
+                                Other Releases
+                            </a> •
+                            <a href="/tyxar_web/docs/changelog#1.0.0" style="color: var(--accent-blue); text-decoration: underline;">
+                                View Changelog
+                            </a> <br>
+                        
+                            BLADE <strong>v1.0.0</strong> • To Be Released Mid 2026 •
+                            <a href="/tyxar_web/releases" style="color: var(--accent-blue); text-decoration: underline;">
+                                Other Releases
+                            </a> •
+                            <a href="/tyxar_web/docs/changelog#1.0.0" style="color: var(--accent-blue); text-decoration: underline;">
+                                View Changelog
+                            </a>
+                        </div>
+
+                        <section class="latest-update">
+                            <div class="container">
+                                <h2><u>Latest Update</u></h2>
+                                <div id="update-preview">
+                                    <!-- JavaScript will inject the first update card preview here -->
+                                </div>
+                            </div>
+                        </section>
                     </div>
                 </div>
             </div>
