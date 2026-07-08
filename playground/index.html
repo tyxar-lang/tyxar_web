@@ -22,14 +22,20 @@
                 </div>
 
                 <div class="playground-card">
-                    <div class="playground-toolbar">
-                        <h2>Try Tyxar</h2>
-                        <button id="runButton" class="btn btn-primary">Run</button>
+                    <h2>Try Tyxar</h2>
+                    <p>Write a short example below and run it to see the result.</p>
+
+                    <div class="playground-editor-shell">
+                        <div class="playground-editor-toolbar">
+                            <strong>Editor</strong>
+                            <button class="btn btn-primary" id="runButton" type="button">Run</button>
+                        </div>
+                        <div id="monacoEditor" class="playground-editor"></div>
                     </div>
-                    <div id="editor" class="playground-editor"></div>
-                    <div class="playground-output">
-                        <h3>Output</h3>
-                        <pre id="outputPanel">Run your sample to see the result here.</pre>
+
+                    <div class="playground-output" id="playgroundOutput">
+                        <span class="playground-output-label">Output</span>
+                        <div>Run your code to see the result here.</div>
                     </div>
                 </div>
             </div>
@@ -59,7 +65,6 @@
                 console.error('Error loading footer:', err);
             });
 
-        let monacoEditor;
         const sampleCode = `Variables:
     the count is 1 as a digit
 
@@ -67,46 +72,48 @@ change the count to 7
 write the original value of the count
 write the datatype of the count`;
 
-        require.config({ paths: { vs: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.52.2/min/vs' } });
+        let editor;
 
-        require(['vs/editor/editor.main'], function () {
-            monacoEditor = monaco.editor.create(document.getElementById('editor'), {
-                value: sampleCode,
-                language: 'plaintext',
-                theme: 'vs-dark',
-                automaticLayout: true,
-                minimap: { enabled: false },
-                fontSize: 16,
-                lineNumbers: 'on',
-                roundedSelection: true,
-                scrollBeyondLastLine: false,
-                padding: { top: 16, bottom: 16 },
-                glyphMargin: false,
-                scrollbar: {
-                    vertical: 'auto',
-                    horizontal: 'auto'
-                }
+        function initMonaco() {
+            require.config({ paths: { vs: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.52.2/min/vs' } });
+            require(['vs/editor/editor.main'], function () {
+                editor = monaco.editor.create(document.getElementById('monacoEditor'), {
+                    value: sampleCode,
+                    language: 'plaintext',
+                    automaticLayout: true,
+                    minimap: { enabled: false },
+                    scrollBeyondLastLine: false,
+                    theme: 'vs',
+                    fontSize: 15,
+                    lineNumbersMinChars: 3,
+                    padding: { top: 16, bottom: 16 },
+                    renderLineHighlight: 'none',
+                    overviewRulerLanes: 0,
+                    guides: { indentation: false },
+                    contextmenu: false
+                });
+
+                document.getElementById('runButton').addEventListener('click', function () {
+                    const code = editor.getValue();
+                    document.getElementById('playgroundOutput').innerHTML = '<span class="playground-output-label">Output</span><div>' + escapeHtml(code) + '</div>';
+                });
             });
-        });
+        }
 
-        document.getElementById('runButton').addEventListener('click', function () {
-            const outputPanel = document.getElementById('outputPanel');
-            const code = monacoEditor ? monacoEditor.getValue() : sampleCode;
-            const lines = code.split(/\n/).filter(function (line) { return line.trim() !== ''; });
-            const output = [];
+        function escapeHtml(value) {
+            return value
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
 
-            if (lines.some(function (line) { return /original value/i.test(line); })) {
-                output.push('Original value of the count: 7');
-            }
-            if (lines.some(function (line) { return /datatype/i.test(line); })) {
-                output.push('Datatype of the count: digit');
-            }
-            if (output.length === 0) {
-                output.push('Run your sample to see the result here.');
-            }
-
-            outputPanel.textContent = output.join('\n');
-        });
+        if (window.require) {
+            initMonaco();
+        } else {
+            window.addEventListener('load', initMonaco);
+        }
     </script>
 </body>
 </html>
