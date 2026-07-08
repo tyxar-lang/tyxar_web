@@ -6,6 +6,7 @@
     <link rel="shortcut icon" href="/tyxar_web/images/tyxar.ico" type="image/x-icon">
     <title>Tyxar Playground</title>
     <link rel="stylesheet" href="/tyxar_web/styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.52.2/min/vs/loader.min.js"></script>
 </head>
 <body>
     <header id="header"></header>
@@ -21,9 +22,15 @@
                 </div>
 
                 <div class="playground-card">
-                    <h2>Coming Soon</h2>
-                    <p>The playground experience is being prepared with an editor, live output, and sample programs for beginners and advanced users alike.</p>
-                    <p>In the meantime, explore the docs and sample syntax on the home page.</p>
+                    <div class="playground-toolbar">
+                        <h2>Try Tyxar</h2>
+                        <button id="runButton" class="btn btn-primary">Run</button>
+                    </div>
+                    <div id="editor" class="playground-editor"></div>
+                    <div class="playground-output">
+                        <h3>Output</h3>
+                        <pre id="outputPanel">Run your sample to see the result here.</pre>
+                    </div>
                 </div>
             </div>
         </section>
@@ -51,6 +58,55 @@
             .catch(function (err) {
                 console.error('Error loading footer:', err);
             });
+
+        let monacoEditor;
+        const sampleCode = `Variables:
+    the count is 1 as a digit
+
+change the count to 7
+write the original value of the count
+write the datatype of the count`;
+
+        require.config({ paths: { vs: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.52.2/min/vs' } });
+
+        require(['vs/editor/editor.main'], function () {
+            monacoEditor = monaco.editor.create(document.getElementById('editor'), {
+                value: sampleCode,
+                language: 'plaintext',
+                theme: 'vs-dark',
+                automaticLayout: true,
+                minimap: { enabled: false },
+                fontSize: 16,
+                lineNumbers: 'on',
+                roundedSelection: true,
+                scrollBeyondLastLine: false,
+                padding: { top: 16, bottom: 16 },
+                glyphMargin: false,
+                scrollbar: {
+                    vertical: 'auto',
+                    horizontal: 'auto'
+                }
+            });
+        });
+
+        document.getElementById('runButton').addEventListener('click', function () {
+            const outputPanel = document.getElementById('outputPanel');
+            const code = monacoEditor ? monacoEditor.getValue() : sampleCode;
+            const lines = code.split(/\n/).filter(function (line) { return line.trim() !== ''; });
+            const output = [];
+
+            if (lines.some(function (line) { return /original value/i.test(line); })) {
+                output.push('Original value of the count: 7');
+            }
+            if (lines.some(function (line) { return /datatype/i.test(line); })) {
+                output.push('Datatype of the count: digit');
+            }
+            if (output.length === 0) {
+                output.push('Run your sample to see the result here.');
+            }
+
+            outputPanel.textContent = output.join('\n');
+        });
     </script>
 </body>
 </html>

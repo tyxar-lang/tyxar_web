@@ -293,21 +293,55 @@ body {
     margin-top: 2rem;
 }
 
-.playground-card h2 {
-    font-size: 1.4rem;
-    color: var(--metal-dark);
-    margin-bottom: 12px;
+.playground-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
 }
 
-.playground-card p {
-    color: var(--metal-medium);
-    margin-bottom: 16px;
+.playground-toolbar h2 {
+    font-size: 1.4rem;
+    color: var(--metal-dark);
+    margin: 0;
 }
 
 .playground-actions {
     display: flex;
     gap: 12px;
     flex-wrap: wrap;
+}
+
+.playground-editor {
+    height: 320px;
+    border-radius: 14px;
+    overflow: hidden;
+    border: 1px solid #d9e2ec;
+    background: #0f172a;
+}
+
+.playground-output {
+    margin-top: 16px;
+    padding: 16px;
+    border-radius: 14px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+}
+
+.playground-output h3 {
+    font-size: 0.95rem;
+    margin-bottom: 8px;
+    color: var(--metal-dark);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+.playground-output pre {
+    margin: 0;
+    font-family: 'Courier New', monospace;
+    color: var(--metal-dark);
+    white-space: pre-wrap;
 }
 
 @media (max-width: 640px) {
@@ -322,6 +356,15 @@ body {
 
     .playground-card {
         padding: 1.25rem;
+    }
+
+    .playground-toolbar {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .playground-editor {
+        height: 280px;
     }
 }
 
