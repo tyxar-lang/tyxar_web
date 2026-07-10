@@ -74,6 +74,31 @@ write the datatype of the count`;
 
         let editor;
         let currentCode = sampleCode;
+        const apiBaseUrl = (new URLSearchParams(window.location.search).get('api') || 'https://127.0.0.1:8000').replace(/\/$/, '');
+
+        async function runCode(code) {
+            const response = await fetch(`${apiBaseUrl}/run`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ code })
+            });
+
+            if (!response.ok) {
+                throw new Error('The run request failed.');
+            }
+
+            return response.json();
+        }
+
+        async function getOutput(sessionId) {
+            const response = await fetch(`${apiBaseUrl}/output/${sessionId}`);
+
+            if (!response.ok) {
+                throw new Error('The output request failed.');
+            }
+
+            return response.json();
+        }
 
         function initMonaco() {
             require.config({ paths: { vs: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.52.2/min/vs' } });
@@ -97,30 +122,23 @@ write the datatype of the count`;
                 editor.onDidChangeModelContent(function () {
                     currentCode = editor.getValue();
                 });
-                let session_id;
-                async function runCode() {
-                    const responce = await fetch("https://127.0.0.1:8000/run", {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json"
-                        },
-                        body: JSON.stringify({ code: currentCode })
-                    });
-                    const data = await response.json();
-                    session_id = data.session_id;
-                       }
-                
-                async function getOutput() {
-                    const response = await fetch(`https://127.0.0.1:8000/output/${session_id}`);
-                    const returnedData = await response.json();
-                    console.log(returnedData.output);}
-                    getOutput();
-                const data =  response.json();
-                document.getElementById('runButton').addEventListener('click', function () {
+
+                document.getElementById('runButton').addEventListener('click', async function () {
                     const output = document.getElementById('playgroundOutput');
                     output.hidden = false;
                     output.classList.remove('is-hidden');
-                    output.querySelector('div').textContent = "Feature Coming Soon! The Tyxar Playground is still under development, and the execution feature will be available in a future update.";
+                    output.querySelector('div').textContent = 'Running...';
+
+                    try {
+                        const code = (editor && editor.getValue ? editor.getValue() : currentCode || '').trim();
+                        const runResult = await runCode(code);
+                        const sessionId = runResult.session_id || runResult.sessionId || runResult.id || '';
+                        const outputResult = await getOutput(sessionId);
+                        const preview = outputResult.output ?? outputResult.result ?? outputResult.message ?? JSON.stringify(outputResult, null, 2);
+                        output.querySelector('div').textContent = typeof preview === 'string' ? preview : JSON.stringify(preview, null, 2);
+                    } catch (error) {
+                        output.querySelector('div').textContent = error.message || 'The playground could not fetch a response.';
+                    }
                 });
             });
         }
@@ -135,8 +153,3 @@ write the datatype of the count`;
     </script>
 </body>
 </html>
-
-
-<script>
-    
-</script>
