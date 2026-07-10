@@ -81,6 +81,7 @@
         }
 
         .scroll-nav-btn {
+            display: none;
             flex-shrink: 0;
             width: 40px;
             height: 40px;
@@ -368,6 +369,12 @@
 
         /* Responsive */
         @media (max-width: 768px) {
+            .scroll-nav-btn {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+            }
+
             .updates-hero h1 {
                 font-size: 2em;
             }
@@ -456,7 +463,7 @@
             <!-- Concern Filter - More Distinctive -->
             <div class="concern-filter-section">
                 <label class="concern-filter-label">Filter by Product</label>
-                <div class="filter-scroll-wrapper">
+                <div class="filter-scroll-wrapper concern-scroll-wrapper">
                     <button class="scroll-nav-btn" type="button" data-target="concernFilters" aria-label="Scroll left">←</button>
                     <div class="concern-filters" id="concernFilters">
                         <button class="concern-btn active all-active" onclick="filterByConcern('all', this)">Tyxar & BLADE</button>
@@ -469,7 +476,6 @@
 
             <!-- Category Filter -->
             <div class="filter-scroll-wrapper">
-                <button class="scroll-nav-btn" type="button" data-target="categoryFilters" aria-label="Scroll left">←</button>
                 <div class="updates-filter" id="categoryFilters">
                     <button class="filter-btn active" onclick="filterByCategory('all', this)">All</button>
                     <button class="filter-btn" onclick="filterByCategory('announcement', this)">Announcements</button>
@@ -478,7 +484,6 @@
                     <button class="filter-btn" onclick="filterByCategory('bug', this)">Bug Fixes</button>
                     <button class="filter-btn" onclick="filterByCategory('whats-next', this)">What's Next</button>
                 </div>
-                <button class="scroll-nav-btn" type="button" data-target="categoryFilters" aria-label="Scroll right">→</button>
             </div>
 
             <!-- Updates -->
