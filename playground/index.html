@@ -74,7 +74,7 @@ write the datatype of the count`;
 
         let editor;
         let currentCode = sampleCode;
-        const apiBaseUrl = (new URLSearchParams(window.location.search).get('api') || 'https://127.0.0.1:8000').replace(/\/$/, '');
+        const apiBaseUrl = 'http://127.0.0.1:8000';
 
         async function runCode(code) {
             const response = await fetch(`${apiBaseUrl}/run`, {
