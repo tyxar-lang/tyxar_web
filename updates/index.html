@@ -59,10 +59,44 @@
             display: flex;
             flex-direction: row;
             gap: 12px;
-            justify-content: center;
+            align-items: center;
             flex-wrap: nowrap;
             width: 100%;
-            overflow: visible;
+            overflow-x: auto;
+            scroll-behavior: smooth;
+            padding: 6px 0;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        .concern-filters::-webkit-scrollbar {
+            display: none;
+        }
+
+        .filter-scroll-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            width: 100%;
+        }
+
+        .scroll-nav-btn {
+            flex-shrink: 0;
+            width: 40px;
+            height: 40px;
+            border: 1px solid #cbd5e0;
+            border-radius: 50%;
+            background: white;
+            color: #2d3748;
+            cursor: pointer;
+            font-size: 1.1rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+            transition: all 0.2s ease;
+        }
+
+        .scroll-nav-btn:hover {
+            background: #f7fafc;
+            transform: translateY(-1px);
         }
 
         /* Sci-Fi Hexagonal Button Shape */
@@ -175,9 +209,17 @@
             flex-direction: row;
             gap: 10px;
             margin-bottom: 40px;
-            flex-wrap: wrap;
+            flex-wrap: nowrap;
             justify-content: center;
             overflow-x: auto;
+            scroll-behavior: smooth;
+            padding: 6px 0;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        .updates-filter::-webkit-scrollbar {
+            display: none;
         }
 
         .filter-btn {
@@ -414,21 +456,29 @@
             <!-- Concern Filter - More Distinctive -->
             <div class="concern-filter-section">
                 <label class="concern-filter-label">Filter by Product</label>
-                <div class="concern-filters">
-                    <button class="concern-btn active all-active" onclick="filterByConcern('all')">Tyxar & BLADE</button>
-                    <button class="concern-btn" onclick="filterByConcern('tyxar')">Tyxar</button>
-                    <button class="concern-btn" onclick="filterByConcern('blade')">BLADE</button>
+                <div class="filter-scroll-wrapper">
+                    <button class="scroll-nav-btn" type="button" data-target="concernFilters" aria-label="Scroll left">←</button>
+                    <div class="concern-filters" id="concernFilters">
+                        <button class="concern-btn active all-active" onclick="filterByConcern('all', this)">Tyxar & BLADE</button>
+                        <button class="concern-btn" onclick="filterByConcern('tyxar', this)">Tyxar</button>
+                        <button class="concern-btn" onclick="filterByConcern('blade', this)">BLADE</button>
+                    </div>
+                    <button class="scroll-nav-btn" type="button" data-target="concernFilters" aria-label="Scroll right">→</button>
                 </div>
             </div>
 
             <!-- Category Filter -->
-            <div class="updates-filter">
-                <button class="filter-btn active" onclick="filterByCategory('all')">All</button>
-                <button class="filter-btn" onclick="filterByCategory('announcement')">Announcements</button>
-                <button class="filter-btn" onclick="filterByCategory('release')">Releases</button>
-                <button class="filter-btn" onclick="filterByCategory('feature')">Features</button>
-                <button class="filter-btn" onclick="filterByCategory('bug')">Bug Fixes</button>
-                <button class="filter-btn" onclick="filterByCategory('whats-next')">What's Next</button>
+            <div class="filter-scroll-wrapper">
+                <button class="scroll-nav-btn" type="button" data-target="categoryFilters" aria-label="Scroll left">←</button>
+                <div class="updates-filter" id="categoryFilters">
+                    <button class="filter-btn active" onclick="filterByCategory('all', this)">All</button>
+                    <button class="filter-btn" onclick="filterByCategory('announcement', this)">Announcements</button>
+                    <button class="filter-btn" onclick="filterByCategory('release', this)">Releases</button>
+                    <button class="filter-btn" onclick="filterByCategory('feature', this)">Features</button>
+                    <button class="filter-btn" onclick="filterByCategory('bug', this)">Bug Fixes</button>
+                    <button class="filter-btn" onclick="filterByCategory('whats-next', this)">What's Next</button>
+                </div>
+                <button class="scroll-nav-btn" type="button" data-target="categoryFilters" aria-label="Scroll right">→</button>
             </div>
 
             <!-- Updates -->
@@ -599,34 +649,50 @@
         let currentConcern = 'all';
         let currentCategory = 'all';
 
-        function filterByConcern(concern) {
+        function filterByConcern(concern, button) {
             currentConcern = concern;
             updateFilters();
 
-            // Update button states
             const buttons = document.querySelectorAll('.concern-btn');
             buttons.forEach(btn => {
                 btn.classList.remove('active', 'all-active', 'tyxar-active', 'blade-active');
             });
-            event.target.classList.add('active');
-            if (concern === 'all') {
-                event.target.classList.add('all-active');
-            } else if (concern === 'tyxar') {
-                event.target.classList.add('tyxar-active');
-            } else if (concern === 'blade') {
-                event.target.classList.add('blade-active');
+            if (button) {
+                button.classList.add('active');
+                if (concern === 'all') {
+                    button.classList.add('all-active');
+                } else if (concern === 'tyxar') {
+                    button.classList.add('tyxar-active');
+                } else if (concern === 'blade') {
+                    button.classList.add('blade-active');
+                }
             }
         }
 
-        function filterByCategory(category) {
+        function filterByCategory(category, button) {
             currentCategory = category;
             updateFilters();
 
-            // Update button states
             const buttons = document.querySelectorAll('.updates-filter .filter-btn');
             buttons.forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
+            if (button) {
+                button.classList.add('active');
+            }
         }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('.scroll-nav-btn').forEach(button => {
+                button.addEventListener('click', function () {
+                    const targetId = button.getAttribute('data-target');
+                    const track = document.getElementById(targetId);
+                    if (!track) return;
+
+                    const direction = button.getAttribute('aria-label') === 'Scroll left' ? -1 : 1;
+                    const distance = Math.max(180, Math.floor(track.clientWidth * 0.8));
+                    track.scrollBy({ left: direction * distance, behavior: 'smooth' });
+                });
+            });
+        });
 
         function updateFilters() {
             const cards = document.querySelectorAll('.update-card');
