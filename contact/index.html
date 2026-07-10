@@ -63,6 +63,7 @@
 
     <footer id="footer"></footer>
 
+    <script src="/tyxar_web/script.js"></script>
     <script>
         const contactForm = document.getElementById('contactForm');
         const topicSelect = document.getElementById('topic');
@@ -137,7 +138,14 @@
             .then(function (response) { return response.text(); })
             .then(function (data) {
                 const header = document.getElementById('header');
-                if (header) header.innerHTML = data;
+                if (header) {
+                    header.innerHTML = data;
+                    if (window.initializeHeaderSearch) {
+                        setTimeout(function () {
+                            window.initializeHeaderSearch();
+                        }, 100);
+                    }
+                }
             })
             .catch(function (err) {
                 console.error('Error loading header:', err);
