@@ -356,6 +356,10 @@ body {
     white-space: pre-wrap;
 }
 
+.playground-output.is-hidden {
+    display: none;
+}
+
 .playground-output-label {
     display: block;
     margin-bottom: 0.5rem;

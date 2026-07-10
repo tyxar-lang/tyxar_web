@@ -33,9 +33,9 @@
                         <div id="monacoEditor" class="playground-editor"></div>
                     </div>
 
-                    <div class="playground-output" id="playgroundOutput">
+                    <div class="playground-output is-hidden" id="playgroundOutput" hidden>
                         <span class="playground-output-label">Output</span>
-                        <div>Feature coming soon.</div>
+                        <div>coming soon!</div>
                     </div>
                 </div>
             </div>
@@ -94,8 +94,10 @@ write the datatype of the count`;
                 });
 
                 document.getElementById('runButton').addEventListener('click', function () {
-                    const code = editor.getValue();
-                    document.getElementById('playgroundOutput').innerHTML = '<span class="playground-output-label">Output</span><div>' + escapeHtml(code) + '</div>';
+                    const output = document.getElementById('playgroundOutput');
+                    output.hidden = false;
+                    output.classList.remove('is-hidden');
+                    output.querySelector('div').textContent = 'coming soon!';
                 });
             });
         }
