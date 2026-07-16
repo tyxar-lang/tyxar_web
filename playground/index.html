@@ -131,17 +131,135 @@ write the datatype of the count`;
             });
         }
 
+        function escapeHtml(text) {
+            return text
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;');
+        }
+
+        function parseAnsiToHtml(text) {
+            const ansiRegex = /\u001b\[([0-9;]*)m/g;
+            const styleState = {
+                color: '',
+                bold: false,
+                underline: false
+            };
+            const colorMap = {
+                30: '#000000',
+                31: '#ef4444',
+                32: '#22c55e',
+                33: '#eab308',
+                34: '#3b82f6',
+                35: '#d946ef',
+                36: '#06b6d4',
+                37: '#f8fafc',
+                90: '#94a3b8',
+                91: '#f87171',
+                92: '#4ade80',
+                93: '#facc15',
+                94: '#60a5fa',
+                95: '#e879f9',
+                96: '#22d3ee',
+                97: '#ffffff'
+            };
+
+            let result = '';
+            let lastIndex = 0;
+            let match;
+
+            function applyStyle(codes) {
+                if (!codes.length) {
+                    styleState.color = '';
+                    styleState.bold = false;
+                    styleState.underline = false;
+                    return;
+                }
+
+                codes.forEach(function (code) {
+                    switch (code) {
+                        case '0':
+                            styleState.color = '';
+                            styleState.bold = false;
+                            styleState.underline = false;
+                            break;
+                        case '1':
+                            styleState.bold = true;
+                            break;
+                        case '22':
+                            styleState.bold = false;
+                            break;
+                        case '4':
+                            styleState.underline = true;
+                            break;
+                        case '24':
+                            styleState.underline = false;
+                            break;
+                        case '39':
+                            styleState.color = '';
+                            break;
+                        default:
+                            if (colorMap[code]) {
+                                styleState.color = colorMap[code];
+                            }
+                            break;
+                    }
+                });
+            }
+
+            function createSpan(content) {
+                const styles = [];
+
+                if (styleState.bold) {
+                    styles.push('font-weight: 700;');
+                }
+
+                if (styleState.underline) {
+                    styles.push('text-decoration: underline;');
+                }
+
+                if (styleState.color) {
+                    styles.push('color: ' + styleState.color + ';');
+                }
+
+                if (!styles.length) {
+                    return escapeHtml(content);
+                }
+
+                return '<span style="' + styles.join(' ') + '">' + escapeHtml(content) + '</span>';
+            }
+
+            while ((match = ansiRegex.exec(text))) {
+                const plain = text.slice(lastIndex, match.index);
+                if (plain) {
+                    result += createSpan(plain);
+                }
+
+                const codes = match[1] ? match[1].split(';').filter(Boolean) : [];
+                applyStyle(codes);
+                lastIndex = match.index + match[0].length;
+            }
+
+            const tail = text.slice(lastIndex);
+            if (tail) {
+                result += createSpan(tail);
+            }
+
+            return result;
+        }
+
         function appendOutput(text) {
             if (!text) {
                 return;
             }
 
-            terminal.textContent += text;
+            terminal.insertAdjacentHTML('beforeend', parseAnsiToHtml(text));
             terminal.scrollTop = terminal.scrollHeight;
         }
 
         function clearTerminal() {
-            terminal.textContent = '';
+            terminal.innerHTML = '';
             terminal.scrollTop = 0;
         }
 
