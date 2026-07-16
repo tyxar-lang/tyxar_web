@@ -28,19 +28,18 @@
             line-height: 1.6;
         }
 
-        .playground-input-row {
-            display: flex;
-            gap: 0.75rem;
-            align-items: center;
-        }
-
         .playground-terminal-input {
-            flex: 1;
+            width: 100%;
+            margin-top: 0.5rem;
             padding: 0.8rem 0.95rem;
-            border: 1px solid #d9d9d9;
+            border: 1px solid #475569;
             border-radius: 8px;
+            background: #020617;
+            color: #f8fafc;
             font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
             font-size: 0.95rem;
+            outline: none;
+            box-sizing: border-box;
         }
     </style>
 </head>
@@ -71,10 +70,7 @@
 
                     <div class="playground-terminal-shell">
                         <div class="playground-terminal" id="terminal" aria-live="polite"></div>
-                        <div class="playground-input-row">
-                            <input id="terminalInput" class="playground-terminal-input" autocomplete="off" spellcheck="false" type="text" hidden>
-                            <button id="sendInput" class="btn btn-primary" type="button" hidden>Send</button>
-                        </div>
+                        <input id="terminalInput" class="playground-terminal-input" autocomplete="off" spellcheck="false" type="text" hidden>
                     </div>
                 </div>
             </div>
@@ -119,7 +115,6 @@ write the datatype of the count`;
 
         const terminal = document.getElementById('terminal');
         const terminalInput = document.getElementById('terminalInput');
-        const sendButton = document.getElementById('sendInput');
         const runButton = document.getElementById('runButton');
 
         function sleep(ms) {
@@ -144,7 +139,6 @@ write the datatype of the count`;
 
         function setInputVisible(visible) {
             terminalInput.hidden = !visible;
-            sendButton.hidden = !visible;
 
             if (visible) {
                 terminalInput.focus();
@@ -227,7 +221,12 @@ write the datatype of the count`;
 
                     if (outputResult && outputResult.output && outputResult.output.length) {
                         appendOutput(outputResult.output);
+                    }
+
+                    if (outputResult && !outputResult.finished) {
                         setInputVisible(true);
+                    } else {
+                        setInputVisible(false);
                     }
 
                     if (outputResult && outputResult.finished) {
@@ -272,10 +271,6 @@ write the datatype of the count`;
                     if (!isRunning) {
                         startExecution();
                     }
-                });
-
-                sendButton.addEventListener('click', function () {
-                    sendInput();
                 });
 
                 terminalInput.addEventListener('keydown', function (event) {
