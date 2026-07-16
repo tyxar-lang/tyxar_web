@@ -195,7 +195,6 @@ write the datatype of the count`;
 
             try {
                 await postInput(currentSession, value);
-                appendOutput(value + '\n');
                 terminalInput.value = '';
             } catch (error) {
                 appendOutput('Connection lost.');
