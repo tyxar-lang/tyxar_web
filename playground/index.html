@@ -7,6 +7,42 @@
     <title>Tyxar Playground</title>
     <link rel="stylesheet" href="/tyxar_web/styles.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.52.2/min/vs/loader.min.js"></script>
+    <style>
+        .playground-terminal-shell {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .playground-terminal {
+            min-height: 220px;
+            max-height: 360px;
+            padding: 1rem;
+            border: 1px solid #d9d9d9;
+            border-radius: 10px;
+            background: #0f172a;
+            color: #f8fafc;
+            white-space: pre-wrap;
+            font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+            overflow-y: auto;
+            line-height: 1.6;
+        }
+
+        .playground-input-row {
+            display: flex;
+            gap: 0.75rem;
+            align-items: center;
+        }
+
+        .playground-terminal-input {
+            flex: 1;
+            padding: 0.8rem 0.95rem;
+            border: 1px solid #d9d9d9;
+            border-radius: 8px;
+            font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+            font-size: 0.95rem;
+        }
+    </style>
 </head>
 <body>
     <header id="header"></header>
@@ -33,9 +69,12 @@
                         <div id="monacoEditor" class="playground-editor"></div>
                     </div>
 
-                    <div class="playground-output is-hidden" id="playgroundOutput" hidden>
-                        <span class="playground-output-label">Output</span>
-                        <div>coming soon!</div>
+                    <div class="playground-terminal-shell">
+                        <div class="playground-terminal" id="terminal" aria-live="polite"></div>
+                        <div class="playground-input-row">
+                            <input id="terminalInput" class="playground-terminal-input" autocomplete="off" spellcheck="false" type="text" hidden>
+                            <button id="sendInput" class="btn btn-primary" type="button" hidden>Send</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -74,7 +113,43 @@ write the datatype of the count`;
 
         let editor;
         let currentCode = sampleCode;
+        let currentSession = null;
+        let isRunning = false;
         const apiBaseUrl = 'http://127.0.0.1:8000';
+
+        const terminal = document.getElementById('terminal');
+        const terminalInput = document.getElementById('terminalInput');
+        const sendButton = document.getElementById('sendInput');
+        const runButton = document.getElementById('runButton');
+
+        function sleep(ms) {
+            return new Promise(function (resolve) {
+                setTimeout(resolve, ms);
+            });
+        }
+
+        function appendOutput(text) {
+            if (!text) {
+                return;
+            }
+
+            terminal.textContent += text;
+            terminal.scrollTop = terminal.scrollHeight;
+        }
+
+        function clearTerminal() {
+            terminal.textContent = '';
+            terminal.scrollTop = 0;
+        }
+
+        function setInputVisible(visible) {
+            terminalInput.hidden = !visible;
+            sendButton.hidden = !visible;
+
+            if (visible) {
+                terminalInput.focus();
+            }
+        }
 
         async function runCode(code) {
             const response = await fetch(`${apiBaseUrl}/run`, {
@@ -84,7 +159,7 @@ write the datatype of the count`;
             });
 
             if (!response.ok) {
-                throw new Error('The run request failed.');
+                throw new Error('Connection lost.');
             }
 
             return response.json();
@@ -94,10 +169,80 @@ write the datatype of the count`;
             const response = await fetch(`${apiBaseUrl}/output/${sessionId}`);
 
             if (!response.ok) {
-                throw new Error('The output request failed.');
+                throw new Error('Connection lost.');
             }
 
             return response.json();
+        }
+
+        async function postInput(sessionId, inputValue) {
+            const response = await fetch(`${apiBaseUrl}/input`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ session_id: sessionId, input: inputValue })
+            });
+
+            if (!response.ok) {
+                throw new Error('Connection lost.');
+            }
+
+            return response.json();
+        }
+
+        async function sendInput() {
+            if (!currentSession) {
+                return;
+            }
+
+            const value = terminalInput.value;
+            if (!value) {
+                return;
+            }
+
+            try {
+                await postInput(currentSession, value);
+                appendOutput(value + '\n');
+                terminalInput.value = '';
+            } catch (error) {
+                appendOutput('Connection lost.');
+            } finally {
+                setInputVisible(false);
+            }
+        }
+
+        async function startExecution() {
+            const code = (editor && editor.getValue ? editor.getValue() : currentCode || '').trim();
+            currentSession = null;
+            isRunning = true;
+            runButton.disabled = true;
+            clearTerminal();
+            setInputVisible(false);
+
+            try {
+                const runResult = await runCode(code);
+                currentSession = runResult.session_id || runResult.sessionId || runResult.id || '';
+
+                while (true) {
+                    const outputResult = await getOutput(currentSession);
+
+                    if (outputResult && outputResult.output && outputResult.output.length) {
+                        appendOutput(outputResult.output);
+                        setInputVisible(true);
+                    }
+
+                    if (outputResult && outputResult.finished) {
+                        break;
+                    }
+
+                    await sleep(75);
+                }
+            } catch (error) {
+                appendOutput(error.message || 'Connection lost.');
+            } finally {
+                isRunning = false;
+                runButton.disabled = false;
+                setInputVisible(false);
+            }
         }
 
         function initMonaco() {
@@ -123,27 +268,24 @@ write the datatype of the count`;
                     currentCode = editor.getValue();
                 });
 
-                document.getElementById('runButton').addEventListener('click', async function () {
-                    const output = document.getElementById('playgroundOutput');
-                    output.hidden = false;
-                    output.classList.remove('is-hidden');
-                    output.querySelector('div').textContent = 'Running...';
+                runButton.addEventListener('click', function () {
+                    if (!isRunning) {
+                        startExecution();
+                    }
+                });
 
-                    try {
-                        const code = (editor && editor.getValue ? editor.getValue() : currentCode || '').trim();
-                        const runResult = await runCode(code);
-                        const sessionId = runResult.session_id || runResult.sessionId || runResult.id || '';
-                        const outputResult = await getOutput(sessionId);
-                        const preview = outputResult.output ?? outputResult.result ?? outputResult.message ?? JSON.stringify(outputResult, null, 2);
-                        output.querySelector('div').textContent = typeof preview === 'string' ? preview : JSON.stringify(preview, null, 2);
-                    } catch (error) {
-                        output.querySelector('div').textContent = error.message || 'The playground could not fetch a response.';
+                sendButton.addEventListener('click', function () {
+                    sendInput();
+                });
+
+                terminalInput.addEventListener('keydown', function (event) {
+                    if (event.key === 'Enter') {
+                        event.preventDefault();
+                        sendInput();
                     }
                 });
             });
         }
-
-       
 
         if (window.require) {
             initMonaco();
