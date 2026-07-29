@@ -32,9 +32,9 @@
             Redirecting to the homepage in 5 seconds...
         </p>
 
-        <footer id="footer"></footer>
+        
     </div>
-
+    <footer id="footer"></footer>
     <script>
 
         let seconds = 5;
@@ -60,6 +60,27 @@
 
     </script>
     <script src="/tyxar_web/script.js"></script>
+    <script>
+        fetch('/tyxar_web/header.html')
+                .then(function (response) { return response.text(); })
+                .then(function (data) {
+                    const header = document.getElementById('header');
+                    if (header) header.innerHTML = data;
+                })
+                .catch(function (err) {
+                    console.error('Error loading header:', err);
+                });
+
+            fetch('/tyxar_web/footer.html')
+                .then(function (response) { return response.text(); })
+                .then(function (data) {
+                    const footer = document.getElementById('footer');
+                    if (footer) footer.innerHTML = data;
+                })
+                .catch(function (err) {
+                    console.error('Error loading footer:', err);
+                });
+    </script>
 
 </body>
 
