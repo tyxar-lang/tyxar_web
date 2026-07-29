@@ -31,6 +31,84 @@ body {
     scroll-behavior: smooth;
 }
 
+.error-page {
+    min-height: 100vh;
+
+    display: flex;
+    flex-direction: column;
+
+    justify-content: center;
+    align-items: center;
+
+    text-align: center;
+
+    padding: 2rem;
+
+    animation: fadeIn .6s ease;
+}
+
+.error-page .logo {
+    width: 140px;
+    margin-bottom: 2rem;
+}
+
+.error-page h1 {
+    font-size: 7rem;
+    margin: 0;
+    background: var(--gradient-accent);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.error-page h2 {
+    margin: .5rem 0 1rem;
+    color: var(--text-light);
+}
+
+.error-page p {
+    color: var(--metal-light);
+    max-width: 600px;
+    line-height: 1.7;
+}
+
+.home-button {
+    margin-top: 2rem;
+
+    padding: 14px 34px;
+
+    border-radius: 10px;
+
+    color: white;
+
+    text-decoration: none;
+
+    background: var(--gradient-accent);
+
+    transition: .25s ease;
+}
+
+.home-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 24px rgba(66, 153, 225, .35);
+}
+
+#countdown {
+    margin-top: 1.5rem;
+    font-size: .95rem;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
 .container {
     width: 100%;
     max-width: 1200px;
