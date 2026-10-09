@@ -206,24 +206,25 @@ write the user_id</code></pre>
                             Your future self will thank you, and code reviewers won't need therapy.
                         </li>
                     </ul>
-
-                    <h3>Specifying <a href="/tyxar_web/docs/syntax/#data-types">DataTypes</a> (Optional)</h3>
-                    <p>
-                        Variables can be assigned specific datatypes
-                        using the <code>as a</code> keyword. This is optional—Tyxar can infer datatypes automatically—
-                        but explicit datatypes improve code clarity and serve as documentation:
-                    </p>
-                    <p>
-                        <strong>Pattern:</strong> <code>the [name] is [value] as a [datatype]</code>
-                    </p>
-
-                    <h3>Comprehensive Variables Example</h3>
+                                        <h3>Comprehensive Variables Example</h3>
                     <pre><code>Variables:
     # Using explicit datatypes for clarity #
     the age is 20 as a digit
     the name is "Tyxar" as a phrase
     the background is "dark"
     the result is 1+1*2/3^6</code></pre>
+
+                    <h3>Specifying <a href="/tyxar_web/docs/syntax/#data-types">DataTypes</a> (Optional)</h3>
+                    <p>
+                        Variables can be assigned specific datatypes
+                        using the <code>as a</code> keyword. This is optional—Tyxar can infer datatypes automatically—
+                        but explicit datatypes stops Tyxar from guessing, improves code clarity and serve as documentation:
+                    </p>
+                    <p>
+                        <strong>Pattern:</strong> <code>the [variable_name] is [value] as a [datatype]</code>
+                    </p>
+
+
 
                     <h3>More Complex Examples with All DataTypes</h3>
                     <pre><code>Variables:
