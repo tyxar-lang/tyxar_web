@@ -13,9 +13,46 @@
             color: #607DF0;
         }
 
+        .video-jump {
+            display: inline-block;
+            margin: 0 0 20px;
+            padding: 12px 18px;
+            border-radius: 4px;
+            background: var(--accent-blue);
+            color: #fff !important;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .video-jump:hover,
+        .video-jump:focus-visible {
+            filter: brightness(0.9);
+            text-decoration: underline;
+        }
+
+        .video-feature {
+            padding: 24px;
+            border: 1px solid #b9d0ed;
+            border-left: 6px solid var(--accent-blue);
+            border-radius: 6px;
+            background: #f2f7fc;
+        }
+
+        .video-feature h2 {
+            margin-top: 0;
+            padding-top: 0;
+        }
+
+        .video-feature .video-intro {
+            max-width: 72ch;
+            font-size: 18px;
+        }
+
         .video-frame {
             aspect-ratio: 16 / 9;
             width: 100%;
+            overflow: hidden;
+            border-radius: 4px;
         }
 
         .video-frame iframe {
@@ -38,7 +75,7 @@
             <div class="content-wrapper">
                 <div class="documentation-header">
                     <h1>Tyxar Documentation</h1>
-                    <p><a href="#documentation-video">Watch the video</a></p>
+                    <a class="video-jump" href="#documentation-video">Start with the video</a>
                     <p class="lead">Welcome to the comprehensive and authoritative documentation repository for the Tyxar 
                         programming language. This resource has been meticulously curated to serve as your definitive guide, 
                         whether you are embarking on your initial programming journey or leveraging extensive industry experience. 
@@ -112,12 +149,13 @@
             </div>
             </section>
 
-            <section id="documentation-video" aria-labelledby="documentation-video-heading">
-                <h2 id="documentation-video-heading">Tyxar Video</h2>
+            <section id="documentation-video" class="video-feature" aria-labelledby="documentation-video-heading">
+                <h2 id="documentation-video-heading">See Tyxar in Context</h2>
+                <p class="video-intro">Use this video as a visual starting point for the Tyxar topics gathered on this page. It pairs with the written guides: begin with the fundamentals, then explore setup, the Blade development environment, language syntax, and the command-line tools in more detail. The FAQ and changelog are here when you need answers or version-specific updates.</p>
                 <div class="video-frame">
                     <iframe
                         src="https://www.youtube-nocookie.com/embed/pviSF63xyvs"
-                        title="Tyxar video"
+                        title="An introduction to Tyxar"
                         loading="lazy"
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                         referrerpolicy="strict-origin-when-cross-origin"
