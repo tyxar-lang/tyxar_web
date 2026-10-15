@@ -12,6 +12,17 @@
             text-decoration: none;
             color: #607DF0;
         }
+
+        .video-frame {
+            aspect-ratio: 16 / 9;
+            width: 100%;
+        }
+
+        .video-frame iframe {
+            border: 0;
+            height: 100%;
+            width: 100%;
+        }
     </style>
 </head>
 
@@ -27,6 +38,7 @@
             <div class="content-wrapper">
                 <div class="documentation-header">
                     <h1>Tyxar Documentation</h1>
+                    <p><a href="#documentation-video">Watch the video</a></p>
                     <p class="lead">Welcome to the comprehensive and authoritative documentation repository for the Tyxar 
                         programming language. This resource has been meticulously curated to serve as your definitive guide, 
                         whether you are embarking on your initial programming journey or leveraging extensive industry experience. 
@@ -98,6 +110,20 @@
                                    impact your development practice.</p>
                     </div>
             </div>
+            </section>
+
+            <section id="documentation-video" aria-labelledby="documentation-video-heading">
+                <h2 id="documentation-video-heading">Tyxar Video</h2>
+                <div class="video-frame">
+                    <iframe
+                        src="https://www.youtube-nocookie.com/embed/pviSF63xyvs"
+                        title="Tyxar video"
+                        loading="lazy"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        referrerpolicy="strict-origin-when-cross-origin"
+                        allowfullscreen>
+                    </iframe>
+                </div>
             </section>
             </div>
             </div>
