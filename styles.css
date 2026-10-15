@@ -329,13 +329,13 @@ body {
 }
 
 .code-example .btn-outline {
-    border-color: #63b3ed;
-    color: #63b3ed;
-    background: rgba(99, 179, 237, 0.08);
+    border-color: var(--accent-blue);
+    color: var(--accent-blue);
+    background: color-mix(in srgb, var(--accent-blue) 8%, transparent);
 }
 
 .code-example .btn-outline:hover {
-    background: rgba(99, 179, 237, 0.16);
+    background: var(--gradient-accent);
     color: white;
 }
 
